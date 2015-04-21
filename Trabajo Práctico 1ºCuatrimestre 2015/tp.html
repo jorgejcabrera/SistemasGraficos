@@ -117,6 +117,7 @@
 
     var mvMatrix = mat4.create();
     var pMatrix = mat4.create();
+	//var scalator = vec3.create();
 
     function setMatrixUniforms() {
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
