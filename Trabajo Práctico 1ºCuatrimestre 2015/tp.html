@@ -134,6 +134,7 @@
 		posicionVisionZ = 0.0;
 		actualCubo = [1.5, 0.0, -7.0];
 		actualTriangulo = [-1.5, 0.0, -7.0];
+		actualCuadrado = [-4.5,0.0,-7.0];
 	}
 	
     function drawScene() {
@@ -152,6 +153,11 @@
 		actualTriangulo[1] = actualTriangulo[1] + actualMovimiento[1];
 		actualTriangulo[2] = actualTriangulo[2] + actualMovimiento[2];
 		
+		actualCuadrado[0] = actualCuadrado[0] + actualMovimiento[0];
+		actualCuadrado[1] = actualCuadrado[1] + actualMovimiento[1];
+		actualCuadrado[2] = actualCuadrado[2] + actualMovimiento[2];
+
+		drawSquare(actualCuadrado)
 		drawTriangle(actualTriangulo);
 		drawCube(actualCubo);
     }
