@@ -8,19 +8,21 @@ function drawTriangle (where) {
 	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
 }
 
-function drawSquare (where) {
+function drawSquare (where,scalator) {
 	mat4.identity(mvMatrix);
+	
 
 	mat4.translate(mvMatrix, where);
+	mat4.rotate(mvMatrix, degToRad(ticker), [1, 1, 1]);
+	mat4.scale(mvMatrix,scalator);
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	setMatrixUniforms();
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
 }
 
-function drawCube (where) {
+function drawCube (where,scalator) {
 	mat4.identity(mvMatrix);
-	scalator = [0.5, 1.0, 1.0];
 	
 	//notar que el orden es importante, para OpenGL y WebGL el orden es TRASLADAR, ROTAR luego PROPORCIONAR
 	mat4.translate(mvMatrix, where);	
