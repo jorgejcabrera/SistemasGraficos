@@ -20,7 +20,7 @@ function drawSquare (where) {
 
 function drawCube (where) {
 	mat4.identity(mvMatrix);
-	scalator = [1.0, 2.0, 1.0];
+	scalator = [0.5, 1.0, 1.0];
 	
 	//notar que el orden es importante, para OpenGL y WebGL el orden es TRASLADAR, ROTAR luego PROPORCIONAR
 	mat4.translate(mvMatrix, where);	
