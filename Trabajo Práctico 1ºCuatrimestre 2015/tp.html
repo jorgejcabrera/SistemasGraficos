@@ -5,15 +5,15 @@
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
 <!-- Acá indicamos las librerías a usar: -->
-<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="src/utils/glMatrix-0.9.5.min.js"></script>
 <script type="text/javascript" src="initBuffers.js"></script>
 <script type="text/javascript" src="drawShapes.js"></script>
 <!-- El shapes.js tiene las formas que usaremos, como el cubo -->
 <script type="text/javascript" src="shapes.js"></script>
 <!-- Para utilizar el requestAnimFrame() -->
-<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="src/utils/webgl-utils.js"></script>
 <!-- Para los controles del teclado -->
-<script type="text/javascript" src="keyboard-and-mouse-support.js"></script>
+<script type="text/javascript" src="src/utils/keyboard-and-mouse-support.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -194,10 +194,10 @@
 
 <body onload="webGLStart();">
     <canvas id="lesson01-canvas" style="border: none;" width="1400" height="640"></canvas>
-	Controles de cámara:<br/>
-	A/D mover cámara a izquierda o derecha.<br/>
-	W/S mover cámara hacia arriba o abajo.<br/>
-	Q/E alejar o acercar cámara.<br/>
+	<div>Controles de cámara:</div>
+	<div>A/D mover cámara a izquierda o derecha.</div>
+	<div>W/S mover cámara hacia arriba o abajo.<div>
+	<div>Q/E alejar o acercar cámara.<div>
 </body>
 
 </html>
