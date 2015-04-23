@@ -137,8 +137,8 @@
 		posicionVisionY = 0.0;
 		posicionVisionZ = 0.0;
 		actualCubo = [1.5, 0.0, -7.0];
-		actualPiramide = [-1.5, 0.0, -7.0];
-		actualCuadrado = [-4.5,0.0,-7.0];
+		primerPiramide = [-1.5, 0.0, -7.0];
+		segundoCuadrado = [-4.5,0.0,-7.0];
 	}
 	
     function drawScene() {
@@ -153,16 +153,16 @@
 		actualCubo[1] = actualCubo[1] + actualMovimiento[1];
 		actualCubo[2] = actualCubo[2] + actualMovimiento[2];
 		
-		actualPiramide[0] = actualPiramide[0] + actualMovimiento[0];
-		actualPiramide[1] = actualPiramide[1] + actualMovimiento[1];
-		actualPiramide[2] = actualPiramide[2] + actualMovimiento[2];
+		primerPiramide[0] = primerPiramide[0] + actualMovimiento[0];
+		primerPiramide[1] = primerPiramide[1] + actualMovimiento[1];
+		primerPiramide[2] = primerPiramide[2] + actualMovimiento[2];
 		
-		actualCuadrado[0] = actualCuadrado[0] + actualMovimiento[0];
-		actualCuadrado[1] = actualCuadrado[1] + actualMovimiento[1];
-		actualCuadrado[2] = actualCuadrado[2] + actualMovimiento[2];
+		segundoCuadrado[0] = segundoCuadrado[0] + actualMovimiento[0];
+		segundoCuadrado[1] = segundoCuadrado[1] + actualMovimiento[1];
+		segundoCuadrado[2] = segundoCuadrado[2] + actualMovimiento[2];
 
-		drawSquare(actualCuadrado,[0.5,0.5,0.5])
-		drawPyramid(actualPiramide,[0.5,0.5,0.5]);
+		drawPyramid(segundoCuadrado,[1.1,0.5,0.5])
+		drawPyramid(primerPiramide,[0.5,0.5,0.5]);
 		drawCube(actualCubo,[0.5, 1.0, 1.0]);
     }
 	
