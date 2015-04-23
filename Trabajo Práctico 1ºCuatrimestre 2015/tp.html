@@ -12,7 +12,8 @@
 <script type="text/javascript" src="shapes.js"></script>
 <!-- Para utilizar el requestAnimFrame() -->
 <script type="text/javascript" src="webgl-utils.js"></script>
-
+<!-- Para los controles del teclado -->
+<script type="text/javascript" src="keyboard-and-mouse-support.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     precision mediump float;
@@ -117,22 +118,42 @@
 
     var mvMatrix = mat4.create();
     var pMatrix = mat4.create();
-	//var scalator = vec3.create();
 
     function setMatrixUniforms() {
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
     }
+	
+	var posicionVisionX;
+	var posicionVisionY;
+	var posicionVisionZ;
 
-
+	function initVariables () {		
+		posicionVisionX = 0.0;
+		posicionVisionY = 0.0;
+		posicionVisionZ = 0.0;
+		actualCubo = [1.5, 0.0, -7.0];
+		actualTriangulo = [-1.5, 0.0, -7.0];
+	}
+	
     function drawScene() {
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);	
 		
-		drawTriangle([-1.5, 0.0, -7.0]);
-		drawCube([1.5, 0.0, -7.0]);
+		actualMovimiento = [posicionVisionX, posicionVisionY,posicionVisionZ];
+		
+		actualCubo[0] = actualCubo[0] + actualMovimiento[0];
+		actualCubo[1] = actualCubo[1] + actualMovimiento[1];
+		actualCubo[2] = actualCubo[2] + actualMovimiento[2];
+		
+		actualTriangulo[0] = actualTriangulo[0] + actualMovimiento[0];
+		actualTriangulo[1] = actualTriangulo[1] + actualMovimiento[1];
+		actualTriangulo[2] = actualTriangulo[2] + actualMovimiento[2];
+		
+		drawTriangle(actualTriangulo);
+		drawCube(actualCubo);
     }
 	
 	var ticker = 0.0;
@@ -142,6 +163,7 @@
 	
 	function tick() {
 		requestAnimFrame(tick);
+		handleKeyPresses();
         drawScene();
         animate();
 	}
@@ -151,9 +173,14 @@
         initGL(canvas);
         initShaders();
         initBuffers();
+		initVariables();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
+		
+		//Agregando soporte para el movimiento con teclado(¿Y mouse también?):
+		document.onkeydown = handleKeyDown;
+        document.onkeyup = handleKeyUp;
 
 		tick();
     }
@@ -166,7 +193,11 @@
 
 
 <body onload="webGLStart();">
-    <canvas id="lesson01-canvas" style="border: none;" width="1400" height="740"></canvas>
+    <canvas id="lesson01-canvas" style="border: none;" width="1400" height="640"></canvas>
+	Controles de cámara:<br/>
+	A/D mover cámara a izquierda o derecha.<br/>
+	W/S mover cámara hacia arriba o abajo.<br/>
+	Q/E alejar o acercar cámara.<br/>
 </body>
 
 </html>

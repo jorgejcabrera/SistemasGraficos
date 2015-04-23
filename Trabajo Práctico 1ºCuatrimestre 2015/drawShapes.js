@@ -20,9 +20,12 @@ function drawSquare (where) {
 
 function drawCube (where) {
 	mat4.identity(mvMatrix);
+	scalator = [1.0, 2.0, 1.0];
 	
-	mat4.translate(mvMatrix, where);
+	//notar que el orden es importante, para OpenGL y WebGL el orden es TRASLADAR, ROTAR luego PROPORCIONAR
+	mat4.translate(mvMatrix, where);	
 	mat4.rotate(mvMatrix, degToRad(ticker), [0, 1, 0]);
+	mat4.scale(mvMatrix,scalator);
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
