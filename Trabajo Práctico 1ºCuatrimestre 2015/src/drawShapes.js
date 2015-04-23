@@ -26,11 +26,23 @@ function drawCube (where,scalator) {
 	
 	//notar que el orden es importante, para OpenGL y WebGL el orden es TRASLADAR, ROTAR luego PROPORCIONAR
 	mat4.translate(mvMatrix, where);	
-	mat4.rotate(mvMatrix, degToRad(ticker), [0, 1, 0]);
+	//mat4.rotate(mvMatrix, degToRad(ticker), [0, 1, 0]);
 	mat4.scale(mvMatrix,scalator);
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 	setMatrixUniforms();
 	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
+
+function drawPyramid(where,scalator){
+	mat4.identity(mvMatrix);
+	
+	mat4.translate(mvMatrix, where);
+	//mat4.rotate(mvMatrix, degToRad(ticker), [1, 1, 1]);
+	mat4.scale(mvMatrix,scalator);
+	gl.bindBuffer(gl.ARRAY_BUFFER, pyramidVertexPositionBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, pyramidVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	setMatrixUniforms();
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, pyramidVertexPositionBuffer.numItems);
 }

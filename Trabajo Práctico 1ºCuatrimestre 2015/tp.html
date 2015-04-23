@@ -16,6 +16,10 @@
 <script type="text/javascript" src="src/utils/keyboard-and-mouse-support.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+
     precision mediump float;
 
     void main(void) {
@@ -50,7 +54,7 @@
         } catch (e) {
         }
         if (!gl) {
-            alert("Could not initialise WebGL, sorry :-(");
+            alert("imposible iniciar webGL");
         }
     }
 
@@ -133,7 +137,7 @@
 		posicionVisionY = 0.0;
 		posicionVisionZ = 0.0;
 		actualCubo = [1.5, 0.0, -7.0];
-		actualTriangulo = [-1.5, 0.0, -7.0];
+		actualPiramide = [-1.5, 0.0, -7.0];
 		actualCuadrado = [-4.5,0.0,-7.0];
 	}
 	
@@ -149,16 +153,16 @@
 		actualCubo[1] = actualCubo[1] + actualMovimiento[1];
 		actualCubo[2] = actualCubo[2] + actualMovimiento[2];
 		
-		actualTriangulo[0] = actualTriangulo[0] + actualMovimiento[0];
-		actualTriangulo[1] = actualTriangulo[1] + actualMovimiento[1];
-		actualTriangulo[2] = actualTriangulo[2] + actualMovimiento[2];
+		actualPiramide[0] = actualPiramide[0] + actualMovimiento[0];
+		actualPiramide[1] = actualPiramide[1] + actualMovimiento[1];
+		actualPiramide[2] = actualPiramide[2] + actualMovimiento[2];
 		
 		actualCuadrado[0] = actualCuadrado[0] + actualMovimiento[0];
 		actualCuadrado[1] = actualCuadrado[1] + actualMovimiento[1];
 		actualCuadrado[2] = actualCuadrado[2] + actualMovimiento[2];
 
 		drawSquare(actualCuadrado,[0.5,0.5,0.5])
-		drawTriangle(actualTriangulo);
+		drawPyramid(actualPiramide,[0.5,0.5,0.5]);
 		drawCube(actualCubo,[0.5, 1.0, 1.0]);
     }
 	
