@@ -7,8 +7,8 @@ function triangle () {
 		 1.0, -1.0,  0.0
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	triangleVertexPositionBuffer.itemSize = 3;
-	triangleVertexPositionBuffer.numItems = 3;
+	triangleVertexPositionBuffer.itemSize = 3;		/*puntos correspondientes a cada vertice*/
+	triangleVertexPositionBuffer.numItems = 3;		/*cantidad de vertices*/
 }
 
 function square () {
@@ -56,18 +56,4 @@ function cube () {
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 	cubeVertexIndexBuffer.itemSize = 1;
 	cubeVertexIndexBuffer.numItems = 36;
-}
-
-function cube2 () {
-	cube2VertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, cube2VertexPositionBuffer);
-		var vertices = [
-		-1.0,	1.0,	0.0,
-		1.0,	1.0,	0.0,
-		-1.0,	-1.0,	0.0,
-		1.0,	-1.0,	0.0
-	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	cube2VertexPositionBuffer.itemSize = 3;
-	cube2VertexPositionBuffer.numItems = 4;
 }
