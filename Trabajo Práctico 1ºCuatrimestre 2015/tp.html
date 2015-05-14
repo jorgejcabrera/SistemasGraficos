@@ -5,7 +5,7 @@
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
 <!-- Acá indicamos las librerías a usar: -->
-<script type="text/javascript" src="src/utils/glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="src/utils/gl-matrix.js"></script>
 <script type="text/javascript" src="src/initBuffers.js"></script>
 <script type="text/javascript" src="src/drawShapes.js"></script>
 <!-- El shapes.js tiene las formas que usaremos, como el cubo -->
@@ -34,14 +34,15 @@
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
 	attribute vec2 aTextureCoord;
-	
-    uniform mat4 uMVMatrix;
+
+    uniform mat4 uMMatrix;	
+    uniform mat4 uVMatrix;
     uniform mat4 uPMatrix;
 	
 	varying vec2 vTextureCoord;
 
     void main(void) {
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyecciñon y la matriz de model-view
+        gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyecciñon y la matriz de model-view
 		vTextureCoord = aTextureCoord;
     }
 </script>
@@ -127,17 +128,18 @@
 		gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-		shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+        shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
+		shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
     }
 
-
-    var mvMatrix = mat4.create();
+    var mMatrix = mat4.create();
+    var vMatrix = mat4.create();
     var pMatrix = mat4.create();
 
     function setMatrixUniforms() {
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+        gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
+        gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
     }
 	
 	var posicionVisionX;
@@ -148,7 +150,7 @@
 		posicionVisionX = 0.0;
 		posicionVisionY = 0.0;
 		posicionVisionZ = 0.0;
-		actualCubo = [1.5, 0.0, -7.0];
+		actualCubo = [0.0, 0.0, 0.0];
 		primerPiramide = [-1.5, 0.0, -7.0];
 		triangulo = [-4.5,0.0,-7.0];
 	}
@@ -157,7 +159,7 @@
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);	
+        mat4.perspective(pMatrix,70, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);	
 		
 		actualMovimiento = [posicionVisionX, posicionVisionY,posicionVisionZ];
 		
@@ -175,12 +177,26 @@
 
 		//drawTriangle(triangulo,[1.1,0.5,0.5])
 		//drawPyramid(primerPiramide,[0.5,0.5,0.5]);
-		drawCube(actualCubo,[1.0, 1.0, 1.0]);		
+		//drawCube(actualCubo,[20.0, 20.0, 20.0]);
+		//drawCube([1.0, 1.0, 1.0],[1.0, 1.0, 1.0]);
+		//drawCube([1.0, 1.0, -1.0],[1.0, 1.0, 1.0]);
+		//drawCube([1.0, -1.0, 1.0],[1.0, 1.0, 1.0]);
+		//drawCube([1.0, -1.0, -1.0],[1.0, 1.0, 1.0]);
+		//drawCube([-1.0, 1.0, 1.0],[1.0, 1.0, 1.0]);
+		drawCube([1.0, 1.0, -3.0],[0.2, 0.2, 0.2]);
+		//drawCube([-1.0, -1.0, 1.0],[20.0, 20.0, 20.0]);
+		//drawCube([-1.0, -1.0, -1.0],[20.0, 20.0, 20.0]);
+		//drawCube([2.0, 2.0, 2.0],[20.0, 20.0, 20.0]);
+		//drawCube([2.0, 2.0, -2.0],[20.0, 20.0, 20.0]);
+		//drawCube([2.0, -2.0, 2.0],[20.0, 20.0, 20.0]);
+		//drawCube([2.0, -2.0, -2.0],[20.0, 20.0, 20.0]);
+		//drawCube([-2.0, 2.0, 2.0],[20.0, 20.0, 20.0]);
+		//drawCube([-2.0, 2.0, -2.0],[20.0, 20.0, 20.0]);		
     }
 	
 	var ticker = 0.0;
 	function animate() {
-		ticker += 0.51;
+		ticker += 0.7;
 	}
 	
 	function tick() {

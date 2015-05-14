@@ -15,21 +15,21 @@ function handleKeyPresses(){
 	if (currentlyPressedKeys[65] || currentlyPressedKeys[68]) {
 	//Mover a izquierda o derecha
 		if (currentlyPressedKeys[65]){
-			posicionVisionX = -0.02;
-		} else {posicionVisionX = 0.02;}		
-	} else {posicionVisionX = 0;}
+			posicionVisionX += -0.02;
+		} else {posicionVisionX += 0.02;}		
+	} //else {posicionVisionX = 0;}
 	
 	if (currentlyPressedKeys[83] || currentlyPressedKeys[87]) {
 		//Mover hacia arriba o abajo
 		if (currentlyPressedKeys[83]){
-			posicionVisionY = -0.02;
-		} else {posicionVisionY = 0.02;}
-	} else {posicionVisionY = 0;}
+			posicionVisionY += -0.02;
+		} else {posicionVisionY += 0.02;}
+	}// else {posicionVisionY = 0;}
 	
 	if (currentlyPressedKeys[81] || currentlyPressedKeys[69]) {
 		//Alejarse o acercarse
 		if (currentlyPressedKeys[81]) {
-			posicionVisionZ = -0.02;
-		} else {posicionVisionZ = 0.02;}	
-	} else {posicionVisionZ = 0;}
+			posicionVisionZ += -0.02;
+		} else {posicionVisionZ += 0.02;}	
+	}// else {posicionVisionZ = 0;}
 }
