@@ -21,20 +21,28 @@
     #endif
 
     precision mediump float;
+	
+	varying vec2 vTextureCoord; 
+	
+	uniform sampler2D uSampler; 
 
     void main(void) {
-        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);	//color por default blanco?
-    }
+		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)); 
+}
 </script>
 
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
-
+	attribute vec2 aTextureCoord;
+	
     uniform mat4 uMVMatrix;
     uniform mat4 uPMatrix;
+	
+	varying vec2 vTextureCoord;
 
     void main(void) {
         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyecciñon y la matriz de model-view
+		vTextureCoord = aTextureCoord;
     }
 </script>
 
@@ -114,9 +122,13 @@
 
         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+		
+		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+		gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+		shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
     }
 
 
@@ -161,9 +173,9 @@
 		triangulo[1] = triangulo[1] + actualMovimiento[1];
 		triangulo[2] = triangulo[2] + actualMovimiento[2];
 
-		drawTriangle(triangulo,[1.1,0.5,0.5])
-		drawPyramid(primerPiramide,[0.5,0.5,0.5]);
-		drawCube(actualCubo,[0.5, 1.0, 1.0]);
+		//drawTriangle(triangulo,[1.1,0.5,0.5])
+		//drawPyramid(primerPiramide,[0.5,0.5,0.5]);
+		drawCube(actualCubo,[1.0, 1.0, 1.0]);		
     }
 	
 	var ticker = 0.0;
@@ -184,6 +196,7 @@
         initShaders();
         initBuffers();
 		initVariables();
+		initTexture();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
