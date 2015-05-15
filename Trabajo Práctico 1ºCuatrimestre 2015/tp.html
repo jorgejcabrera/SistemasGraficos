@@ -10,6 +10,7 @@
 <script type="text/javascript" src="src/drawShapes.js"></script>
 <!-- El shapes.js tiene las formas que usaremos, como el cubo -->
 <script type="text/javascript" src="src/shapes.js"></script>
+<script type="text/javascript" src="src/drawObjects.js"></script>
 <!-- Para utilizar el requestAnimFrame() -->
 <script type="text/javascript" src="src/utils/webgl-utils.js"></script>
 <!-- Para los controles del teclado -->
@@ -175,6 +176,7 @@
 		triangulo[1] = triangulo[1] + actualMovimiento[1];
 		triangulo[2] = triangulo[2] + actualMovimiento[2];
 
+        drawWallCrane()
 		//drawTriangle(triangulo,[1.1,0.5,0.5])
 		//drawPyramid(primerPiramide,[0.5,0.5,0.5]);
 		//drawCube(actualCubo,[20.0, 20.0, 20.0]);
@@ -183,7 +185,7 @@
 		//drawCube([1.0, -1.0, 1.0],[1.0, 1.0, 1.0]);
 		//drawCube([1.0, -1.0, -1.0],[1.0, 1.0, 1.0]);
 		//drawCube([-1.0, 1.0, 1.0],[1.0, 1.0, 1.0]);
-		drawCube([1.0, 1.0, -3.0],[0.2, 0.2, 0.2]);
+		//drawCube([1.0, 1.0, -3.0],[0.2, 0.2, 0.2]);
 		//drawCube([-1.0, -1.0, 1.0],[20.0, 20.0, 20.0]);
 		//drawCube([-1.0, -1.0, -1.0],[20.0, 20.0, 20.0]);
 		//drawCube([2.0, 2.0, 2.0],[20.0, 20.0, 20.0]);
