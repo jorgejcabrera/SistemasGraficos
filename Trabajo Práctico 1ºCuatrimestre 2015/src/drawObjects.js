@@ -1,10 +1,16 @@
 
-function drawWallCrane(){
-	drawCube([1.0, 1.0, 1.0],[0.3, 0.3, 0.3]);
-	drawCube([1.0, 1.60, 1.0],[0.3, 0.3, 0.3]);
-	drawCube([1.0, 2.2, 1.0],[0.3, 0.3, 0.3]);
-	drawCube([1.0, 2.8, 1.0],[0.3, 0.3, 0.3]);
-	//drawCube([-1.0, 1.0, 1.0],[1.0, 1.0, 1.0]);
-	//drawCube([1.0, 1.0, -3.0],[0.2, 0.2, 0.2]);
+//la posY indica la posicion de donde se empieza a dibujar el muro
+function drawWallCrane(posX,posY,posZ){
+	drawCube([posX, posY, posZ],[0.15, 0.3, 0.2]);
+	drawCube([posX, posY+0.6*1, posZ],[0.15, 0.3, 0.2]);
+	drawCube([posX, posY+0.6*2, posZ],[0.15, 0.3, 0.2]);
+	drawCube([posX, posY+0.6*3, posZ],[0.15, 0.3, 0.2]);
+	drawCube([posX, posY+0.6*4, posZ],[0.15, 0.3, 0.2]);
+	
+	drawCube([-posX, posY, posZ],[0.15, 0.3, 0.2]);
+	drawCube([-posX, posY+0.6*1, posZ],[0.15, 0.3, 0.2]);
+	drawCube([-posX, posY+0.6*2, posZ],[0.15, 0.3, 0.2]);
+	drawCube([-posX, posY+0.6*3, posZ],[0.15, 0.3, 0.2]);
+	drawCube([-posX, posY+0.6*4, posZ],[0.15, 0.3, 0.2]);
 }
 
