@@ -25,7 +25,7 @@ function drawPyramid(where,scalator){
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
 function drawShaper3D(where,scalator,buffer,animation,texture){
 	//Math.cos(degToRad(ticker))*
-	mat4.lookAt(vMatrix,[posicionVisionX+5,posicionVisionY,posicionVisionZ],[0.0,0.0,0.0],[0.0,-1.0,0.0]);
+	mat4.lookAt(vMatrix,cameraPosition,[0.0,0.0,0.0],[0.0,0.0,1.0]);
 	
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix,mMatrix, where);
