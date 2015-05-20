@@ -12,26 +12,33 @@ function handleKeyUp(event) {
 //Al estar adentro del tick, se llamaria siempre
 //Los codigos de las teclas fueron sacados de esta página http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 function handleKeyPresses(){
-var normalizedCamera= vec3.create();
+	var normalizedCamera= vec3.create();
 	if (currentlyPressedKeys[65] || currentlyPressedKeys[68]) {
 	//Mover a izquierda o derecha
 		if (currentlyPressedKeys[65]){
 			phiAngle += degToRad(1);			
 		}
 		if (currentlyPressedKeys[68]) {
-			phiAngle -= degToRad(1);	
+			phiAngle -= degToRad(1);			
 		}	
-	vec3.set(normalizedCamera,Math.cos(phiAngle),Math.sin(phiAngle),0);	//TODO acá está mal el cero en z, en z debería ir la posición que tiene en Z actualmente
+	vec3.set(normalizedCamera,Math.cos(phiAngle),Math.sin(phiAngle),cameraPosition[2]);	//TODO acá está mal el cero en z, en z debería ir la posición que tiene en Z actualmente
 	vec3.normalize(normalizedCamera,normalizedCamera);
 	vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
 	} 
 	
 	if (currentlyPressedKeys[83] || currentlyPressedKeys[87]) {
+		var normalizedCamera= vec3.create();
 		//Mover hacia arriba o abajo
-		if (currentlyPressedKeys[83]){
-			vec3.add(cameraPosition,cameraPosition,[0.0,0.1,0.0]);
-		} else {vec3.add(cameraPosition,cameraPosition,[0.0,-0.1,0.0]);}
-	}// else {posicionVisionY = 0;}
+		if (currentlyPressedKeys[83] && thetaAngle >= degToRad(1)){
+			thetaAngle -= degToRad(1);
+		}
+		if (currentlyPressedKeys[87] && thetaAngle <= degToRad(150)) {
+			thetaAngle += degToRad(1);
+		}
+		vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));	//TODO acá está mal el cero en z, en z debería ir la posición que tiene en Z actualmente
+		vec3.normalize(normalizedCamera,normalizedCamera);
+		vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
+	}
 	
 	if (currentlyPressedKeys[81] || currentlyPressedKeys[69]) {
 		//la letra Q o E
