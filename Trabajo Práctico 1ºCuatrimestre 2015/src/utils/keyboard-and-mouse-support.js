@@ -66,27 +66,38 @@ var clicking = 0;
 function onMouseUp(event){
 	clicking = 0;
 }
-
+var clickX;
+var clickY;
 function onMouseDown(event){
 	clicking = 1;
+	clickX = event.clientX;
+	clickY = event.clientY;
 }
 
 var normalizedCamera= vec3.create();
 function onMouseMove(event) {
-	if (clicking){
+	if (clicking){		
 		var x;
-		var y;		
-		
+		var y;
+		var testX;
+		var testY;
+		var testLimit = thetaAngle;
 		if(event.clientX) {
-			x = event.clientX+document.body.scrollLeft-event.target.offsetLeft;
-			y = event.clientY+document.body.scrollTop-event.target.offsetTop;
+			x = event.clientX;
+			y = event.clientY;
 		} else if(event.pageX) {
 			//x = event.pageX+window.pageXOffset-event.target.offsetLeft;
 			//y = event.pageY+window.pageYOffset-event.target.offsetTop;
 		}
-		phiAngle = degToRad((350*x)/widthOfCanvas);
-		thetaAngle = degToRad((160*y)/heightOfCanvas);
-		
+		testX = -(x - clickX)*128;
+		testY = (y - clickY)*64;
+		phiAngle += degToRad(testX)/widthOfCanvas;
+		testLimit += degToRad(-testY)/heightOfCanvas;
+		if (testLimit >= degToRad(1) && testLimit <= degToRad(150)){
+			thetaAngle = testLimit;
+		}
+		clickX = x;
+		clickY = y;
 		vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
 		vec3.normalize(normalizedCamera,normalizedCamera);
 		vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
