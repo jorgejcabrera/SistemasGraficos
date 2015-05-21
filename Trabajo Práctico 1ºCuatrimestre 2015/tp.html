@@ -214,7 +214,17 @@
 	}
 
     function webGLStart() {
-        var canvas = document.getElementById("lesson01-canvas");
+        var canvas = document.getElementById("TP1C2015");
+		//Sacado de http://www.sitepoint.com/html5-javascript-mouse-wheel/
+		if (canvas.addEventListener) {
+			// IE9, Chrome, Safari, Opera
+			canvas.addEventListener("mousewheel", MouseWheelHandler, false);
+			// Firefox
+			canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+		}
+		// IE 6/7/8
+		else canvas.attachEvent("onmousewheel", MouseWheelHandler);		
+		
         initGL(canvas);
         initShaders();
         initBuffers();
@@ -239,9 +249,8 @@
 
 
 <body onload="webGLStart();">
-    <canvas id="lesson01-canvas" style="border: none;" width="1400" height="640"></canvas>
+    <canvas id="TP1C2015" onmousemove="onMouseMove(event)" onclick="onClick(event)" style="border: none;" width="1400" height="640"></canvas>
 	<div style="color:#0000FF;text-align:center;font: Helvetica 12pt;border: 1px solid black;">
-		<div ><h3>Controles de cámara</h3></div>
 		<div>A/D mover cámara a izquierda o derecha.</div>
 		<div>W/S mover cámara hacia arriba o abajo.</div>
 		<div>Q/E alejar o acercar cámara.</div>

@@ -50,3 +50,14 @@ function handleKeyPresses(){
 		}	
 	}// else {posicionVisionZ = 0;}
 }
+
+//Testeo la ruedita del mouse
+//Ayuda de http://www.sitepoint.com/html5-javascript-mouse-wheel/
+function MouseWheelHandler(e) {
+	var e = window.event || e; // old IE support
+	e = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+	if ( e <= 0){
+		vec3.scale(cameraPosition,cameraPosition,1.1)
+	}
+	else{vec3.scale(cameraPosition,cameraPosition,0.9);}
+}
