@@ -61,3 +61,26 @@ function MouseWheelHandler(e) {
 	}
 	else{vec3.scale(cameraPosition,cameraPosition,0.9);}
 }
+
+function onMouseMove(event) {
+	var x;
+	var y;
+	var getDataOfCanvas = document.getElementById("TP1C2015");
+	var normalizedCamera= vec3.create();
+	
+	if(event.clientX) {
+		x = event.clientX+document.body.scrollLeft-event.target.offsetLeft;
+		y = event.clientY+document.body.scrollTop-event.target.offsetTop;
+	} else if(event.pageX) {
+		//x = event.pageX+window.pageXOffset-event.target.offsetLeft;
+		//y = event.pageY+window.pageYOffset-event.target.offsetTop;
+	}
+	phiAngle = degToRad((360*x)/getDataOfCanvas.width);
+	thetaAngle = degToRad((160*y)/getDataOfCanvas.height);
+	
+	vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
+	vec3.normalize(normalizedCamera,normalizedCamera);
+	vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
+		console.log("phiAngle: ",phiAngle);
+		console.log("thetaAngle: ",thetaAngle);
+}
