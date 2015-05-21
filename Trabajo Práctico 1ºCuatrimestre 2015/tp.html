@@ -213,8 +213,13 @@
         animate();
 	}
 
+	var widthOfCanvas = 0;
+	var heightOfCanvas = 0;
     function webGLStart() {
-        var canvas = document.getElementById("TP1C2015");		
+        var canvas = document.getElementById("TP1C2015");	
+		widthOfCanvas = document.getElementById("TP1C2015").width;
+		heightOfCanvas = document.getElementById("TP1C2015").height;
+		
 		//Sacado de http://www.sitepoint.com/html5-javascript-mouse-wheel/
 		if (canvas.addEventListener) {
 			// IE9, Chrome, Safari, Opera
@@ -249,7 +254,7 @@
 
 
 <body onload="webGLStart();">
-    <canvas id="TP1C2015" onmousemove="onMouseMove(event)" onclick="onClick(event)" style="border: none;" width="1400" height="640"></canvas>
+    <canvas id="TP1C2015" onmousemove="onMouseMove(event)" onmousedown="onMouseDown(event)" onmouseup="onMouseUp(event)" style="border: none;" width="1400" height="640"></canvas>
 	<div style="color:#0000FF;text-align:center;font: Helvetica 12pt;border: 1px solid black;">
 		<div>A/D mover cámara a izquierda o derecha.</div>
 		<div>W/S mover cámara hacia arriba o abajo.</div>
