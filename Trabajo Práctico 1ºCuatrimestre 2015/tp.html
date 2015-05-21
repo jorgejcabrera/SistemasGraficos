@@ -146,9 +146,14 @@
 	var cameraPosition = vec3.create();
 
 	function initVariables () {
-		cameraPosition = [5.0,5.0,0.0];
-		phiAngle = 0.0;	//para las rotaciones en el plano xy
-		thetaAngle = 0.0;	//para las rotaciones en zy e zx
+		//Esto que hago acá es para que pongas en coordenadas cartesianas X,Y,Z donde queres
+		//que empiece la camara al iniciarse, y despues las traduzco a cordenadas esfericas
+		var initPosToTranslate = vec3.create();
+		vec3.set(initPosToTranslate,2.0,2.0,3.0);	//Aca pongo a donde quiero que vaya
+		var radius = vec3.squaredLength(initPosToTranslate);
+		thetaAngle = Math.acos(initPosToTranslate[2]/radius);	//para las rotaciones en zy e zx
+		phiAngle = Math.atan(initPosToTranslate[1]/initPosToTranslate[0]);	//para las rotaciones en el plano xy
+		cameraPosition = [radius*Math.cos(phiAngle)*Math.sin(thetaAngle),radius*Math.sin(phiAngle)*Math.sin(thetaAngle),radius*Math.cos(thetaAngle)];
 		actualCubo = [0.0, 0.0, 0.0];
 		primerPiramide = [-1.5, 0.0, -7.0];
 		triangulo = [-4.5,0.0,-7.0];

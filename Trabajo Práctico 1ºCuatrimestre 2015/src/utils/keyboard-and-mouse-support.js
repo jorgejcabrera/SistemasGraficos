@@ -21,7 +21,7 @@ function handleKeyPresses(){
 		if (currentlyPressedKeys[68]) {
 			phiAngle -= degToRad(1);			
 		}	
-	vec3.set(normalizedCamera,Math.cos(phiAngle),Math.sin(phiAngle),cameraPosition[2]);	//TODO acá está mal el cero en z, en z debería ir la posición que tiene en Z actualmente
+	vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
 	vec3.normalize(normalizedCamera,normalizedCamera);
 	vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
 	} 
@@ -35,7 +35,7 @@ function handleKeyPresses(){
 		if (currentlyPressedKeys[87] && thetaAngle <= degToRad(150)) {
 			thetaAngle += degToRad(1);
 		}
-		vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));	//TODO acá está mal el cero en z, en z debería ir la posición que tiene en Z actualmente
+		vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
 		vec3.normalize(normalizedCamera,normalizedCamera);
 		vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
 	}
