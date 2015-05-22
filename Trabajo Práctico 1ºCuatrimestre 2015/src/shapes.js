@@ -135,7 +135,7 @@ function cylinder(){ //puntas, radio
      	var angle = i*angulo; 
     	verticesCylinder[j] = Math.cos(angle)*radio;
 		verticesCylinder[j+1] = Math.sin(angle)*radio;
-		verticesCylinder[j+2] = -2.0;
+		verticesCylinder[j+2] = 2.0;
     }
 	//Hago la tapa de abajo
 	for (i = 4; i < (puntas*2) ; i++){
@@ -143,21 +143,28 @@ function cylinder(){ //puntas, radio
      	var angle = i*angulo; 
     	verticesCylinder[j] = Math.cos(angle)*radio;
 		verticesCylinder[j+1] = Math.sin(angle)*radio;
-		verticesCylinder[j+2] = 2.0;
+		verticesCylinder[j+2] = -2.0;
     }
 
+	verticesCylinder[24] = 0.0;	//viene a ser el 8
+	verticesCylinder[25] = 0.0;	//viene a ser el 8
+	verticesCylinder[26] = 2.0;	//viene a ser el 8
+	verticesCylinder[27] = 0.0;	//viene a ser el 9
+	verticesCylinder[28] = 0.0;	//viene a ser el 9
+	verticesCylinder[29] = -2.0;	//viene a ser el 9
+	
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
 	cylinderVertexPositionBuffer.itemSize = 3;
-	cylinderVertexPositionBuffer.numItems = puntas*2;
+	cylinderVertexPositionBuffer.numItems = (puntas*2 + 2);
 	
 	//Y luego para usar el vertex index:
 	cylinderVertexIndexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderVertexIndexBuffer);
 	var cylinderVertexIndices = [
-		0, 1, 2,   1, 2, 3,    		// Front face
-		4, 5, 6,   5, 6, 7,    		// Back face
-		1, 3, 5,   3, 5, 7, 		// Right face
-		0, 2, 4,   2, 4, 6  		// Left face
+		8, 0, 1,   8, 1, 2,    		// Front face
+		8, 2, 3,   8, 3, 0,    		// Back face
+		9, 4, 5,   9, 5, 6, 		// Right face
+		9, 6, 7,   9, 7, 4  		// Left face
 	]
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
 	cylinderVertexIndexBuffer.itemSize = 1;
@@ -174,9 +181,11 @@ function cylinder(){ //puntas, radio
 	  1.0, 0.0,
 	  0.0, 0.0,
 	  1.0, 1.0,
-	  0.0, 1.0
+	  0.0, 1.0,
+	  0.0, 0.0,
+	  0.0, 0.0
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
     cylinderVertexTextureCoordBuffer.itemSize = 2;
-    cylinderVertexTextureCoordBuffer.numItems = puntas*2;	
+    cylinderVertexTextureCoordBuffer.numItems = puntas*2 +2;	
 }
