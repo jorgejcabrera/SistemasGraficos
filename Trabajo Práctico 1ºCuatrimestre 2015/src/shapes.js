@@ -125,24 +125,28 @@ function cylinder(){
 	// Definimos un array de Javascript con las posiciones de los vertices.
     var vertices = [];
     var radius = 1;
-
+    // Creamos un buffer de vertices para WebGL.
+    cubeVertexBuffer = gl.createBuffer();
+    // Le decimos a WebGL que las siguientes funciones se relacionan con ese buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexBuffer);
     //esto seria la tapa de arriba, ahora tendria que meterle el tubo
     for (i = 0; i <= 360 ; i++){
-	var j = i*3;    	
+		var j = i*3;    	
      	var angleConversion = i*(Math.PI)/180; 
-    	vertices[j] = Math.cos(angleConversion);
-	vertices[j+1] = Math.sin(angleConversion);
-	vertices[j+2] = -2;
+	    vertices[j] = Math.cos(angleConversion);
+		vertices[j+1] = Math.sin(angleConversion);
+		vertices[j+2] = -2;
     }
     //esto seria el tubo
     for (i = 361; i <= 721 ; i++){
-	var j = i*3;    	
+		var j = i*3;    	
      	var angleConversion = i*(Math.PI)/180; 
     	vertices[j] = Math.cos(angleConversion);
-	vertices[j+1] = Math.sin(angleConversion);
-	if (i%2 == 0){
-		vertices[j+2] = 2;
-	} else{ vertices[j+2] = -2;
+		vertices[j+1] = Math.sin(angleConversion);
+		if (i%2 == 0){
+			vertices[j+2] = 2;
+		} else{ 
+			vertices[j+2] = -2;
 		}
     }
     //el fan de la tapa de abajo
@@ -151,101 +155,12 @@ function cylinder(){
     vertices[2168] = 2;
     //esto seria la tapa de abajo, ahora tendria que meterle el tubo
     for (i = 723; i <= 1083 ; i++){
-	var j = i*3;    	
+		var j = i*3;    	
      	var angleConversion = i*(Math.PI)/180; 
     	vertices[j] = Math.cos(angleConversion);
-	vertices[j+1] = Math.sin(angleConversion);
-	vertices[j+2] = 2;
+		vertices[j+1] = Math.sin(angleConversion);
+		vertices[j+2] = 2;
     }
-    // Creamos un buffer de vertices para WebGL.
-    cubeVertexBuffer = gl.createBuffer();
-
-    // Le decimos a WebGL que las siguientes funciones se relacionan con ese buffer.
-    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexBuffer);
-
     // Cargamos datos de posiciones en el buffer.
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-    // Definimos los colores de cada cara en un nuevo array Javascript.
-    var colors = [
-      [1.0,  1.0,  1.0,  1.0],    // Cara frontal: blanco
-      [1.0,  0.0,  0.0,  1.0],    // Cara de atrás: rojo
-      [0.0,  1.0,  0.0,  1.0],    // Cara de arriba: verde
-      [0.0,  0.0,  1.0,  1.0],    // Cara de abajo: azul
-      [1.0,  1.0,  0.0,  1.0],    // Cara de la derecha: amarillo
-      [1.0,  0.0,  1.0,  1.0],    // Cara de la izquierda: violeta
-      [1.0,  1.0,  1.0,  1.0],    // Cara frontal: blanco
-      [1.0,  0.0,  0.0,  1.0],    // Cara de atrás: rojo
-      [0.0,  1.0,  0.0,  1.0],    // Cara de arriba: verde
-      [0.0,  0.0,  1.0,  1.0],    // Cara de abajo: azul
-      [1.0,  1.0,  0.0,  1.0],    // Cara de la derecha: amarillo
-      [1.0,  0.0,  1.0,  1.0],    // Cara de la izquierda: violeta
-      [1.0,  1.0,  1.0,  1.0],    // Cara frontal: blanco
-      [1.0,  0.0,  0.0,  1.0],    // Cara de atrás: rojo
-      [0.0,  1.0,  0.0,  1.0],    // Cara de arriba: verde
-      [0.0,  0.0,  1.0,  1.0],    // Cara de abajo: azul
-      [1.0,  1.0,  0.0,  1.0],    // Cara de la derecha: amarillo
-      [1.0,  0.0,  1.0,  1.0],    // Cara de la izquierda: violeta
-      [1.0,  1.0,  1.0,  1.0],    // Cara frontal: blanco
-      [1.0,  0.0,  0.0,  1.0],    // Cara de atrás: rojo
-      [0.0,  1.0,  0.0,  1.0],    // Cara de arriba: verde
-      [0.0,  0.0,  1.0,  1.0],    // Cara de abajo: azul
-      [1.0,  1.0,  0.0,  1.0],    // Cara de la derecha: amarillo
-      [1.0,  0.0,  1.0,  1.0],    // Cara de la izquierda: violeta
-      [1.0,  1.0,  1.0,  1.0],    // Cara frontal: blanco
-      [1.0,  0.0,  0.0,  1.0],    // Cara de atrás: rojo
-      [0.0,  1.0,  0.0,  1.0],    // Cara de arriba: verde
-      [0.0,  0.0,  1.0,  1.0],    // Cara de abajo: azul
-      [1.0,  1.0,  0.0,  1.0],    // Cara de la derecha: amarillo
-      [1.0,  0.0,  1.0,  1.0],    // Cara de la izquierda: violeta
-
-    ];
-  
-    // Replicamos los colores de cada cara cuatro veces.
-    var generatedColors = [];
-    for (var j=0; j<colors.length; j++) {
-      var c = colors[j];
-      for (var i=0; i<60; i++) {
-        generatedColors = generatedColors.concat(c);
-      }
-    }
-
-    // Cargamos los datos de los colores en un nuevo buffer igual que con las posiciones
-    cubeVertexColorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexColorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(generatedColors), gl.STATIC_DRAW);
-
-    // Definimos con que indices de los buffers definidos antes, se debe dibujar
-    // cada vertice de cada triangulo. 
-    // Cada cara del cubo se compone de dos triángulos.
-    var cubeVertexIndices = [];
-
-    // para la tapa de arriba
-    for (i = 0; i <= 360 ; i++){
-    	var j = i*3;
-    	cubeVertexIndices[j] = 0;
-	cubeVertexIndices[j+1] = i+1;
-	cubeVertexIndices[j+2] = i+2;
-    }
-    //para el tubo
-    for (i = 361; i <= 721 ; i++){
-    	var j = i*3;
-    	cubeVertexIndices[j] = i;
-	cubeVertexIndices[j+1] = i+1;
-	cubeVertexIndices[j+2] = i+2;
-    }
-    // para la tapa de abajo
-    for (i = 722; i <= 1083; i++){
-    	var j = i*3;
-    	cubeVertexIndices[j] = 722;
-	cubeVertexIndices[j+1] = i+1;
-	cubeVertexIndices[j+2] = i+2;
-    }
-    // Definimos y cargamos los datos en el buffer WebGL correspondiente.
-    // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-    // Notar también que se usa un array de enteros en lugar de floats.
-    cubeVertexIndexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), 
-                  gl.STATIC_DRAW);
 }
