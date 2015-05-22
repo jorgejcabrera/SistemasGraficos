@@ -12,7 +12,7 @@ function drawSquare (where,scalator,degreesToRotate) {
 
 function drawCube (where,scalator,degreesToRotate) {
 	//por ahora hardcodeada la textura
-	drawShaper3D(where,scalator,cubeVertexPositionBuffer,true,craneTexture,degreesToRotate);
+	drawShaper3D(where,scalator,cubeVertexPositionBuffer,false,craneTexture,degreesToRotate);
 	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
@@ -23,8 +23,9 @@ function drawPyramid(where,scalator,degreesToRotate){
 }
 
 function drawCylinder(where, scalator,degreesToRotate){
-	drawShaper3D(where,scalator,cubeVertexBuffer,false,nullTexture,degreesToRotate);
-	gl.drawElements(gl.TRIANGLES, 3248, gl.UNSIGNED_SHORT, 0);
+	cylinder();
+	drawShaper3D(where,scalator,cylinderVertexPositionBuffer,false,nullTexture,degreesToRotate);
+	gl.drawElements(gl.TRIANGLES, cylinderVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
@@ -36,7 +37,7 @@ function drawShaper3D(where,scalator,buffer,animation,texture,degreesToRotate){
 	mat4.translate(mMatrix,mMatrix, where);
 	mat4.rotate(mMatrix, mMatrix, degreesToRotate, [1, 0, 0]);
 
-	if (animation == false){
+	if (animation == true){
 		mat4.rotate(mMatrix, mMatrix, degToRad(ticker), [1, 1, 1]);
 	}
 	mat4.scale(mMatrix, mMatrix,scalator);

@@ -19,6 +19,7 @@ function drawWallCrane(posX,posY,posZ){
 }
 
 function drawCrame(posX,posY,posZ){
+	cube();
 	var distanceBeetwenWalls=4;
 	drawWallCrane(posX,posY,posZ)
     drawWallCrane(posX+distanceBeetwenWalls,posY,posZ)

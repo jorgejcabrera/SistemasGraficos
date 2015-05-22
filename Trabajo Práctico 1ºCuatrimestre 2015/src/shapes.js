@@ -50,7 +50,7 @@ function cube () {
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 	cubeVertexPositionBuffer.itemSize = 3;
-	cubeVertexPositionBuffer.numItems = 8;
+	cubeVertexPositionBuffer.numItems = 16;
 	
 	//Y luego para usar el vertex index:
 	cubeVertexIndexBuffer = gl.createBuffer();
@@ -92,7 +92,7 @@ function cube () {
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
     cubeVertexTextureCoordBuffer.itemSize = 2;
-    cubeVertexTextureCoordBuffer.numItems = 12;		
+    cubeVertexTextureCoordBuffer.numItems = 16;		
 }
 
 function pyramid(){
@@ -121,46 +121,70 @@ function pyramid(){
     pyramidVertexPositionBuffer.numItems = 12;
 }
 
-function cylinder(){
-	// Definimos un array de Javascript con las posiciones de los vertices.
-    var vertices = [];
-    var radius = 1;
-    // Creamos un buffer de vertices para WebGL.
-    cubeVertexBuffer = gl.createBuffer();
-    // Le decimos a WebGL que las siguientes funciones se relacionan con ese buffer.
-    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexBuffer);
-    //esto seria la tapa de arriba, ahora tendria que meterle el tubo
-    for (i = 0; i <= 360 ; i++){
+function cylinder(){ //puntas, radio
+	var puntas = 4;
+	var radio = 1;
+	var angulo = degToRad(puntas/360);
+	var verticesCylinder = [];
+	
+	cylinderVertexPositionBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexPositionBuffer);
+	
+	//Hago la tapa de arriba
+	for (i = 0; i < puntas ; i++){
 		var j = i*3;    	
-     	var angleConversion = i*(Math.PI)/180; 
-	    vertices[j] = Math.cos(angleConversion);
-		vertices[j+1] = Math.sin(angleConversion);
-		vertices[j+2] = -2;
+     	var angle = i*angulo; 
+    	verticesCylinder[j] = Math.cos(angle);
+		verticesCylinder[j+1] = Math.sin(angle);
+		verticesCylinder[j+2] = -2;
     }
-    //esto seria el tubo
-    for (i = 361; i <= 721 ; i++){
+	//Hago la tapa de abajo
+	for (i = 4; i < (puntas*2) ; i++){
 		var j = i*3;    	
-     	var angleConversion = i*(Math.PI)/180; 
-    	vertices[j] = Math.cos(angleConversion);
-		vertices[j+1] = Math.sin(angleConversion);
-		if (i%2 == 0){
-			vertices[j+2] = 2;
-		} else{ 
-			vertices[j+2] = -2;
-		}
+     	var angle = i*angulo; 
+    	verticesCylinder[j] = Math.cos(angle);
+		verticesCylinder[j+1] = Math.sin(angle);
+		verticesCylinder[j+2] = 2;
     }
-    //el fan de la tapa de abajo
-    vertices[2166] = 0;
-    vertices[2167] = 0;
-    vertices[2168] = 2;
-    //esto seria la tapa de abajo, ahora tendria que meterle el tubo
-    for (i = 723; i <= 1083 ; i++){
-		var j = i*3;    	
-     	var angleConversion = i*(Math.PI)/180; 
-    	vertices[j] = Math.cos(angleConversion);
-		vertices[j+1] = Math.sin(angleConversion);
-		vertices[j+2] = 2;
-    }
-    // Cargamos datos de posiciones en el buffer.
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
+	cylinderVertexPositionBuffer.itemSize = 3;
+	cylinderVertexPositionBuffer.numItems = puntas*2;
+	
+	//Y luego para usar el vertex index:
+	cylinderVertexIndexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderVertexIndexBuffer);
+	var cylinderVertexIndices = [
+		0, 1, 2,   1, 2, 3,    		// Front face
+		4, 5, 6,   5, 6, 7,    		// Back face
+	]
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
+	cylinderVertexIndexBuffer.itemSize = 1;
+	cylinderVertexIndexBuffer.numItems = 12;
+	
+	cylinderVertexTextureCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexTextureCoordBuffer);
+    var textureCoordsCylinder = [
+	//para cada uno de los ocho vértices que estoy utilizando 	
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+      1.0, 1.0,
+	  1.0, 0.0,
+	  0.0, 0.0,
+	  1.0, 1.0,
+	  0.0, 1.0,
+	  //la cara de arriba
+	  0.0, 0.0,
+	  1.0, 0.0,
+	  0.0, 1.0,
+	  1.0, 1.0,
+	  //la cara de abajo
+	  0.0, 0.0,
+	  1.0, 0.0,
+	  0.0, 1.0,
+	  1.0, 1.0,
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
+    cylinderVertexTextureCoordBuffer.itemSize = 2;
+    cylinderVertexTextureCoordBuffer.numItems = puntas*2;		
 }
