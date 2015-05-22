@@ -15,6 +15,7 @@ function drawWallCrane(posX,posY,posZ){
 	//barra lateral alta
 	drawCube([posX, posY + longitude * 10, height + posZ - width],[longitude,(height-longitude)/2,width],0);
 	//barra diagonal			esta todo muy hardcodeado hay que optimizar
+	drawCube([posX, posY+longitude*10, height-longitude*6],[longitude*0.5,longitudeHypotenuse,width],Math.PI/4);
 }
 
 function calculateHypotenuse(upperLeg,lowerLeg){
