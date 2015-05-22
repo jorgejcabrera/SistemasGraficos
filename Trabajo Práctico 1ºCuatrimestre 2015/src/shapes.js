@@ -10,6 +10,31 @@ function triangle () {
 	triangleVertexPositionBuffer.itemSize = 3;		/*puntos correspondientes a cada vertice*/
 	triangleVertexPositionBuffer.numItems = 3;		/*cantidad de vertices*/
 }
+function pyramid(){
+	pyramidVertexPositionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, pyramidVertexPositionBuffer);
+    var vertices = [
+		// Front face
+        0.0,  1.0,  0.0,
+        -1.0, -1.0,  1.0,
+        1.0, -1.0,  1.0,
+        // Right face
+        0.0,  1.0,  0.0,
+        1.0, -1.0,  1.0,
+        1.0, -1.0, -1.0,
+        // Back face
+        0.0,  1.0,  0.0,
+        1.0, -1.0, -1.0,
+        -1.0, -1.0, -1.0,
+        // Left face
+        0.0,  1.0,  0.0,
+        -1.0, -1.0, -1.0,
+        -1.0, -1.0,  1.0
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    pyramidVertexPositionBuffer.itemSize = 3;
+    pyramidVertexPositionBuffer.numItems = 12;
+}
 
 function square () {
 	squareVertexPositionBuffer = gl.createBuffer();
@@ -95,36 +120,10 @@ function cube () {
     cubeVertexTextureCoordBuffer.numItems = 16;		
 }
 
-function pyramid(){
-	pyramidVertexPositionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, pyramidVertexPositionBuffer);
-    var vertices = [
-		// Front face
-        0.0,  1.0,  0.0,
-        -1.0, -1.0,  1.0,
-        1.0, -1.0,  1.0,
-        // Right face
-        0.0,  1.0,  0.0,
-        1.0, -1.0,  1.0,
-        1.0, -1.0, -1.0,
-        // Back face
-        0.0,  1.0,  0.0,
-        1.0, -1.0, -1.0,
-        -1.0, -1.0, -1.0,
-        // Left face
-        0.0,  1.0,  0.0,
-        -1.0, -1.0, -1.0,
-        -1.0, -1.0,  1.0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    pyramidVertexPositionBuffer.itemSize = 3;
-    pyramidVertexPositionBuffer.numItems = 12;
-}
-
 function cylinder(){ //puntas, radio
 	var puntas = 4;
 	var radio = 1;
-	var angulo = degToRad(puntas/360);
+	var angulo = degToRad(360/puntas);
 	var verticesCylinder = [];
 	
 	cylinderVertexPositionBuffer = gl.createBuffer();
@@ -134,18 +133,19 @@ function cylinder(){ //puntas, radio
 	for (i = 0; i < puntas ; i++){
 		var j = i*3;    	
      	var angle = i*angulo; 
-    	verticesCylinder[j] = Math.cos(angle);
-		verticesCylinder[j+1] = Math.sin(angle);
-		verticesCylinder[j+2] = -2;
+    	verticesCylinder[j] = Math.cos(angle)*radio;
+		verticesCylinder[j+1] = Math.sin(angle)*radio;
+		verticesCylinder[j+2] = -2.0;
     }
 	//Hago la tapa de abajo
 	for (i = 4; i < (puntas*2) ; i++){
 		var j = i*3;    	
      	var angle = i*angulo; 
-    	verticesCylinder[j] = Math.cos(angle);
-		verticesCylinder[j+1] = Math.sin(angle);
-		verticesCylinder[j+2] = 2;
+    	verticesCylinder[j] = Math.cos(angle)*radio;
+		verticesCylinder[j+1] = Math.sin(angle)*radio;
+		verticesCylinder[j+2] = 2.0;
     }
+
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
 	cylinderVertexPositionBuffer.itemSize = 3;
 	cylinderVertexPositionBuffer.numItems = puntas*2;
@@ -156,10 +156,12 @@ function cylinder(){ //puntas, radio
 	var cylinderVertexIndices = [
 		0, 1, 2,   1, 2, 3,    		// Front face
 		4, 5, 6,   5, 6, 7,    		// Back face
+		1, 3, 5,   3, 5, 7, 		// Right face
+		0, 2, 4,   2, 4, 6  		// Left face
 	]
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
 	cylinderVertexIndexBuffer.itemSize = 1;
-	cylinderVertexIndexBuffer.numItems = 12;
+	cylinderVertexIndexBuffer.numItems = 24;
 	
 	cylinderVertexTextureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexTextureCoordBuffer);
@@ -172,19 +174,9 @@ function cylinder(){ //puntas, radio
 	  1.0, 0.0,
 	  0.0, 0.0,
 	  1.0, 1.0,
-	  0.0, 1.0,
-	  //la cara de arriba
-	  0.0, 0.0,
-	  1.0, 0.0,
-	  0.0, 1.0,
-	  1.0, 1.0,
-	  //la cara de abajo
-	  0.0, 0.0,
-	  1.0, 0.0,
-	  0.0, 1.0,
-	  1.0, 1.0,
+	  0.0, 1.0
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
     cylinderVertexTextureCoordBuffer.itemSize = 2;
-    cylinderVertexTextureCoordBuffer.numItems = puntas*2;		
+    cylinderVertexTextureCoordBuffer.numItems = puntas*2;	
 }
