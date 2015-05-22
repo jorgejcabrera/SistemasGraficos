@@ -1,12 +1,12 @@
 function drawTriangle (where,scalator) {
 	//por ahora hardcodeada la textura
-	drawShaper3D(where,scalator,triangleVertexPositionBuffer,false,nullTexture);
+	drawShaper3D(where,scalator,triangleVertexPositionBuffer,false,nullTexture,degreesToRotate);
 	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
 }
 
 function drawSquare (where,scalator) {
 	//por ahora hardcodeada la textura
-	drawShaper3D(where,scalator,squareVertexPositionBuffer,true,nullTexture);
+	drawShaper3D(where,scalator,squareVertexPositionBuffer,true,nullTexture,degreesToRotate);
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
 }
 
@@ -18,8 +18,13 @@ function drawCube (where,scalator,degreesToRotate) {
 
 function drawPyramid(where,scalator){
 	//por ahora hardcodeada la textura
-	drawShaper3D(where,scalator,pyramidVertexPositionBuffer,false,nullTexture);
+	drawShaper3D(where,scalator,pyramidVertexPositionBuffer,false,nullTexture,degreesToRotate);
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, pyramidVertexPositionBuffer.numItems);
+}
+
+function drawCylinder(where, scalator){
+	drawShaper3D(where,scalator,cubeVertexBuffer,false,nullTexture,degreesToRotate);
+	gl.drawElements(gl.TRIANGLES, 3248, gl.UNSIGNED_SHORT, 0);
 }
 
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
