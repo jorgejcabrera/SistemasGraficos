@@ -189,3 +189,16 @@ function cylinder(){ //puntas, radio
     cylinderVertexTextureCoordBuffer.itemSize = 2;
     cylinderVertexTextureCoordBuffer.numItems = puntas*2 +2;	
 }
+/*
+	for( w = 0; w < niveles -1; w++){
+		for(i = 0; i < puntas; i++){
+			cylinderVertexIndices.push(w*puntas+i);
+			cylinderVertexIndices.push(w*puntas +i+1);
+			cylinderVertexIndices.push((w+1)*puntas +i);
+			
+			cylinderVertexIndices.push((w+1)*puntas +i);
+			cylinderVertexIndices.push((w+1)*puntas +i+1);
+			cylinderVertexIndices.push(w*puntas +i+1);
+		}
+	}
+*/
