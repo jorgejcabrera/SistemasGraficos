@@ -18,6 +18,12 @@ function drawWallCrane(posX,posY,posZ){
 	drawCube([posX, posY+longitude*10, height-longitude*6],[longitude*0.5,longitudeHypotenuse,width],Math.PI/4);
 }
 
+function drawCrame(posX,posY,posZ){
+	var distanceBeetwenWalls=4;
+	drawWallCrane(posX,posY,posZ)
+    drawWallCrane(posX+distanceBeetwenWalls,posY,posZ)
+}
+
 function calculateHypotenuse(upperLeg,lowerLeg){
 	return Math.sqrt(upperLeg * upperLeg + lowerLeg * lowerLeg);
 }
