@@ -153,6 +153,7 @@ function cylinder(puntas,radio){ //puntas, radio
 	cylinderVertexPositionBuffer.itemSize = 3;
 	cylinderVertexPositionBuffer.numItems = ( verticesCylinder.length / 3);
 	console.log(cylinderVertexPositionBuffer.numItems)
+	
 	//Y luego para usar el vertex index:
 	cylinderVertexIndexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderVertexIndexBuffer);
@@ -181,10 +182,10 @@ function cylinder(puntas,radio){ //puntas, radio
 	cylinderVertexIndexBuffer.itemSize = 1;
 	cylinderVertexIndexBuffer.numItems = cylinderVertexIndices.length;
 	
-	cylinderVertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexTextureCoordBuffer);
 	
 	var textureCoordsCylinder = [];
+	cylinderVertexTextureCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexTextureCoordBuffer);
 	
 	//TEXTURAS TAPA SUPERIOR
 	for(i=0;i<puntas;i++){

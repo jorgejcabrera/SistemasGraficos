@@ -12,7 +12,7 @@ function drawSquare (where,scalator,degreesToRotate) {
 
 function drawCube (where,scalator,degreesToRotate) {
 	//por ahora hardcodeada la textura
-	drawShaper3D(where,scalator,cubeVertexPositionBuffer,false,craneTexture,degreesToRotate);
+	drawShaper3D(where,scalator,cubeVertexPositionBuffer,false,craneTexture,cubeVertexTextureCoordBuffer,degreesToRotate);
 	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
@@ -23,14 +23,14 @@ function drawPyramid(where,scalator,degreesToRotate){
 }
 
 function drawCylinder(where, scalator,degreesToRotate){
-	cylinder(7,1);
-	drawShaper3D(where,scalator,cylinderVertexPositionBuffer,true,nullTexture,degreesToRotate);
+	cylinder(7200,1);
+	drawShaper3D(where,scalator,cylinderVertexPositionBuffer,true,nullTexture,cylinderVertexTextureCoordBuffer,degreesToRotate);
 	gl.drawElements(gl.TRIANGLES, cylinderVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
 //TODO: CAMBIAR cubeVertexTextureCoordBuffer que no va en el shaper 3d, pasar el vertexTextureCoorBuffer por parametro
-function drawShaper3D(where,scalator,buffer,animation,texture,degreesToRotate){
+function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer,degreesToRotate){
 	//Math.cos(degToRad(ticker))*
 	mat4.lookAt(vMatrix,cameraPosition,[0.0,0.0,0.0],[0.0,0.0,1.0]);
 	
@@ -43,14 +43,13 @@ function drawShaper3D(where,scalator,buffer,animation,texture,degreesToRotate){
 	}
 	mat4.scale(mMatrix, mMatrix,scalator);
 	
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexTextureBuffer);
+	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, vertexTextureBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.uniform1i(shaderProgram.samplerUniform, 0);
+	gl.uniform1i(shaderProgram.samplerUniform, 0);	
 	
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, buffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	setMatrixUniforms();
 }
