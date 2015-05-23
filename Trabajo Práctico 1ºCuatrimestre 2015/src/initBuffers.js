@@ -1,7 +1,7 @@
 function initBuffers() {	
-	triangle();
-	square();
-	pyramid();	
+//	triangle();
+	//square();
+	//pyramid();	
 }
 
 var craneTexture;

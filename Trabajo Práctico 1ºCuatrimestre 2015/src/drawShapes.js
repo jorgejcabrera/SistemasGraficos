@@ -23,12 +23,13 @@ function drawPyramid(where,scalator,degreesToRotate){
 }
 
 function drawCylinder(where, scalator,degreesToRotate){
-	cylinder();
+	cylinder(7,1);
 	drawShaper3D(where,scalator,cylinderVertexPositionBuffer,true,nullTexture,degreesToRotate);
 	gl.drawElements(gl.TRIANGLES, cylinderVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
+//TODO: CAMBIAR cubeVertexTextureCoordBuffer que no va en el shaper 3d, pasar el vertexTextureCoorBuffer por parametro
 function drawShaper3D(where,scalator,buffer,animation,texture,degreesToRotate){
 	//Math.cos(degToRad(ticker))*
 	mat4.lookAt(vMatrix,cameraPosition,[0.0,0.0,0.0],[0.0,0.0,1.0]);

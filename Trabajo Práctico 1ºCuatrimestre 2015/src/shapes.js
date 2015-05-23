@@ -120,9 +120,7 @@ function cube () {
     cubeVertexTextureCoordBuffer.numItems = 16;		
 }
 
-function cylinder(){ //puntas, radio
-	var puntas = 4;
-	var radio = 1;
+function cylinder(puntas,radio){ //puntas, radio
 	var angulo = degToRad(360/puntas);
 	var verticesCylinder = [];
 	
@@ -131,63 +129,171 @@ function cylinder(){ //puntas, radio
 	
 	//Hago la tapa de arriba
 	for (i = 0; i < puntas ; i++){
-		var j = i*3;    	
      	var angle = i*angulo; 
-    	verticesCylinder[j] = Math.cos(angle)*radio;
-		verticesCylinder[j+1] = Math.sin(angle)*radio;
-		verticesCylinder[j+2] = 2.0;
+    	verticesCylinder.push(Math.cos(angle)*radio);
+		verticesCylinder.push(Math.sin(angle)*radio);
+		verticesCylinder.push(2.0);
     }
 	//Hago la tapa de abajo
-	for (i = 4; i < (puntas*2) ; i++){
-		var j = i*3;    	
+	for (i = puntas; i < (puntas*2) ; i++){
      	var angle = i*angulo; 
-    	verticesCylinder[j] = Math.cos(angle)*radio;
-		verticesCylinder[j+1] = Math.sin(angle)*radio;
-		verticesCylinder[j+2] = -2.0;
+    	verticesCylinder.push(Math.cos(angle)*radio);
+		verticesCylinder.push(Math.sin(angle)*radio);
+		verticesCylinder.push(-2.0);
     }
 
-	verticesCylinder[24] = 0.0;	//viene a ser el 8
-	verticesCylinder[25] = 0.0;	//viene a ser el 8
-	verticesCylinder[26] = 2.0;	//viene a ser el 8
-	verticesCylinder[27] = 0.0;	//viene a ser el 9
-	verticesCylinder[28] = 0.0;	//viene a ser el 9
-	verticesCylinder[29] = -2.0;	//viene a ser el 9
+	verticesCylinder.push(0.0);	//viene a ser el puntas * 2
+	verticesCylinder.push(0.0);	//viene a ser el puntas *2 
+	verticesCylinder.push(2.0);	//viene a ser el puntas*2
+	verticesCylinder.push(0.0);	//viene a ser el puntas*2+1
+	verticesCylinder.push(0.0);	//viene a ser el puntas*2+1
+	verticesCylinder.push(-2.0); //viene a ser el puntas*2+1
 	
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
 	cylinderVertexPositionBuffer.itemSize = 3;
-	cylinderVertexPositionBuffer.numItems = (puntas*2 + 2);
-	
+	cylinderVertexPositionBuffer.numItems = ( verticesCylinder.length / 3);
+	console.log(cylinderVertexPositionBuffer.numItems)
 	//Y luego para usar el vertex index:
 	cylinderVertexIndexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderVertexIndexBuffer);
-	var cylinderVertexIndices = [
-		8, 0, 1,   8, 1, 2,    		// Front face
-		8, 2, 3,   8, 3, 0,    		// Back face
-		9, 4, 5,   9, 5, 6, 		// Right face
-		9, 6, 7,   9, 7, 4  		// Left face
-	]
+	var cylinderVertexIndices=[];
+	//TAPA DE ARRIBA
+	for(i=0;i<puntas;i++){
+		cylinderVertexIndices.push(puntas*2);
+		cylinderVertexIndices.push(i);
+		if( i == puntas-1)
+			cylinderVertexIndices.push(0);
+		else
+			cylinderVertexIndices.push(i+1);
+
+	}
+	//TAPA DE ABAJO
+	for(i=puntas;i<puntas*2;i++){
+		cylinderVertexIndices.push(puntas*2+1);
+		cylinderVertexIndices.push(i);
+		if( i == puntas*2-1)
+			cylinderVertexIndices.push(puntas);
+		else
+			cylinderVertexIndices.push(i+1);
+	}
+
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
 	cylinderVertexIndexBuffer.itemSize = 1;
-	cylinderVertexIndexBuffer.numItems = 24;
+	cylinderVertexIndexBuffer.numItems = cylinderVertexIndices.length;
 	
 	cylinderVertexTextureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexTextureCoordBuffer);
-    var textureCoordsCylinder = [
-	//para cada uno de los ocho vértices que estoy utilizando 	
-      0.0, 0.0,
-      1.0, 0.0,
-      0.0, 1.0,
-      1.0, 1.0,
-	  1.0, 0.0,
-	  0.0, 0.0,
-	  1.0, 1.0,
-	  0.0, 1.0,
-	  0.0, 0.0,
-	  0.0, 0.0
-    ];
+	
+	var textureCoordsCylinder = [];
+	
+	//TEXTURAS TAPA SUPERIOR
+	for(i=0;i<puntas;i++){
+		//centro del fan
+		textureCoordsCylinder.push(0.5);
+		textureCoordsCylinder.push(0.5);
+
+		//coordenadas cilindricas con el valor del angulo que queda determinado por la cantidad de puntas
+		if (Math.cos(degToRad(angulo*i))+0.5>1)
+			textureCoordsCylinder.push(1);
+		else if(Math.cos(degToRad(angulo*i))+0.5<0)
+			textureCoordsCylinder.push(1);
+		else
+			textureCoordsCylinder.push(Math.cos(degToRad(angulo*i))+0.5);
+
+		if (Math.sin(degToRad(angulo*i))+0.5>1)
+			textureCoordsCylinder.push(1);
+		else if(Math.sin(degToRad(angulo*i))+0.5<0)
+			textureCoordsCylinder.push(1);
+		else
+			textureCoordsCylinder.push(Math.sin(degToRad(angulo*i))+0.5);
+
+		if( i == puntas-1){
+			if (Math.cos(degToRad(angulo*0))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.cos(degToRad(angulo*0))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+				textureCoordsCylinder.push(Math.cos(degToRad(angulo*0))+0.5);
+
+			if (Math.sin(degToRad(angulo*0))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.sin(degToRad(angulo*0))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+				textureCoordsCylinder.push(Math.sin(degToRad(angulo*0))+0.5);
+		}else{
+			if (Math.cos(degToRad(angulo*(i+1)))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.cos(degToRad(angulo*(i+1)))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+			textureCoordsCylinder.push(Math.cos(degToRad(angulo*(i+1)))+0.5);
+		
+			if (Math.sin(degToRad(angulo*(i+1)))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.sin(degToRad(angulo*(i+1)))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+				textureCoordsCylinder.push(Math.sin(degToRad(angulo*(i+1)))+0.5);
+		}
+	}
+
+	//TEXTURAS TAPA INFERIOR
+	for(i=puntas;i<puntas*2;i++){
+		//centro del fan
+		textureCoordsCylinder.push(0.5);
+		textureCoordsCylinder.push(0.5);
+
+		//coordenadas cilindricas con el valor del angulo que queda determinado por la cantidad de puntas
+		if (Math.cos(degToRad(angulo*i))+0.5>1)
+			textureCoordsCylinder.push(1);
+		else if(Math.cos(degToRad(angulo*i))+0.5<0)
+			textureCoordsCylinder.push(1);
+		else
+			textureCoordsCylinder.push(Math.cos(degToRad(angulo*i))+0.5);
+
+		if (Math.sin(degToRad(angulo*i))+0.5>1)
+			textureCoordsCylinder.push(1);
+		else if(Math.sin(degToRad(angulo*i))+0.5<0)
+			textureCoordsCylinder.push(1);
+		else
+			textureCoordsCylinder.push(Math.sin(degToRad(angulo*i))+0.5);
+
+		if( i == puntas*2-1){
+			if (Math.cos(degToRad(angulo*0))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.cos(degToRad(angulo*0))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+				textureCoordsCylinder.push(Math.cos(degToRad(angulo*0))+0.5);
+
+			if (Math.sin(degToRad(angulo*0))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.sin(degToRad(angulo*0))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+				textureCoordsCylinder.push(Math.sin(degToRad(angulo*0))+0.5);
+		}else{
+			if (Math.cos(degToRad(angulo*(i+1)))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.cos(degToRad(angulo*(i+1)))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+			textureCoordsCylinder.push(Math.cos(degToRad(angulo*(i+1)))+0.5);
+		
+			if (Math.sin(degToRad(angulo*(i+1)))+0.5>1)
+				textureCoordsCylinder.push(1);
+			else if(Math.sin(degToRad(angulo*(i+1)))+0.5<0)
+				textureCoordsCylinder.push(1);
+			else
+				textureCoordsCylinder.push(Math.sin(degToRad(angulo*(i+1)))+0.5);
+		}
+	}
+
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
     cylinderVertexTextureCoordBuffer.itemSize = 2;
-    cylinderVertexTextureCoordBuffer.numItems = puntas*2 +2;	
+    cylinderVertexTextureCoordBuffer.numItems = textureCoordsCylinder.length/2;	
+    //TODO verrificar si se debe dividir por dos
 }
 /*
 	for( w = 0; w < niveles -1; w++){
