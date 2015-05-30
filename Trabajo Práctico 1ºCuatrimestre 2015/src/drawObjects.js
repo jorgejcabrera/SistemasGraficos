@@ -35,7 +35,7 @@ function drawCrame(posX,posY,posZ){
 
     //SOPORTE
     drawCube([posX+distanceBeetwenWalls*0.5+(posX+distanceBeetwenWalls*0.5)/5 , posY - longitude * 6 , height + posZ - width],[longitude,distanceBeetwenWalls * 1.5,width*1.5],0);
-    drawCube([posX+distanceBeetwenWalls*0.5-(posX+distanceBeetwenWalls*0.5)/5 , posY - longitude * 6 , height + posZ - width],[longitude,distanceBeetwenWalls * 1.5,width*1.5],0);
+   	drawCube([posX+distanceBeetwenWalls*0.5-(posX+distanceBeetwenWalls*0.5)/5 , posY - longitude * 6 , height + posZ - width],[longitude,distanceBeetwenWalls * 1.5,width*1.5],0);
 
     //UNION ENTRE AMBOS SOPORTES
     drawCube([posX+distanceBeetwenWalls*0.5, posY-longitude*6-distanceBeetwenWalls*1.5- width, height + posZ - width ],[ (posX + distanceBeetwenWalls * 0.5) * 1/5 + width * 2,  width, width * 1.5],0);
@@ -45,6 +45,7 @@ function drawCrame(posX,posY,posZ){
 
     //CABINA
     drawCabin(posX, posY, height, posZ );
+
 
 }
 
@@ -60,14 +61,44 @@ function drawCabin(posX,posY,posZ,height){
 	drawCube([posXRearWall, posYRearWall, posZ],[longitudeRearWall,width, height-width],0);
 
 	//PISO
-	drawCube([posXRearWall, posYRearWall-(longitudeRearWall)*0.75-width, posZ-height+width*2],[longitudeRearWall,longitudeRearWall*0.75, width],0);
+	drawCube([posXRearWall, posYRearWall-longitudeRearWall*0.75-width, posZ-height+width*2],[longitudeRearWall,longitudeRearWall*0.75, width],0);
+	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],0);
+	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],0);
+	drawCube([posXRearWall,posYRearWall-longitudeRearWall*0.75*2,posZ-height+width*7],[longitudeRearWall-width*2,width, width*4],0);
 
 	//TECHO
-	drawCube([posXRearWall, posYRearWall-(longitudeRearWall)*0.75-width, posZ+height-width*2],[longitudeRearWall,longitudeRearWall*0.75, width],0);
-	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-(longitudeRearWall)*0.75-width, posZ+height-width*3-width*4*0.5-width*2],[width,longitudeRearWall*0.75, width*4],0);
-	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-(longitudeRearWall)*0.75-width, posZ+height-width*3-width*4*0.5-width*2],[width,longitudeRearWall*0.75, width*4],0);
-	drawCube([posXRearWall, posYRearWall-(longitudeRearWall)*0.75-width-longitudeRearWall*0.75+width, posZ+height-width*3-width*4*0.5-width*2],[longitudeRearWall-width*2,width, width*4],0);
+	drawCube([posXRearWall, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*2],[longitudeRearWall,longitudeRearWall*0.75, width],0);
+	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*7],[width,longitudeRearWall*0.75, width*4],0);
+	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*7],[width,longitudeRearWall*0.75, width*4],0);
+	drawCube([posXRearWall, posYRearWall-longitudeRearWall*0.75*2, posZ+height-width*7],[longitudeRearWall-width*2,width, width*4],0);
 
+	//LATERALES IZQUIERDOS
+	drawCube([posXRearWall-longitudeRearWall+width,posYRearWall-width*4, posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],0);
+	drawCube([posXRearWall-longitudeRearWall+width,posYRearWall-longitudeRearWall*0.75*2+longitudeRearWall*0.75*0.25-width,posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],0);
+
+	//LATERALES DERECHOS	
+	drawCube([posXRearWall+longitudeRearWall-width,posYRearWall-width*4,posZ],[width,longitudeRearWall*0.75*0.25, height-width-2*(width*5)],0);
+	drawCube([posXRearWall+longitudeRearWall-width,posYRearWall-longitudeRearWall*0.75*2+longitudeRearWall*0.75*0.25-width,posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],0);
+
+	//PARTE FRONTAL
+	drawCube([posXRearWall+longitudeRearWall-width*2-longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],0);
+	drawCube([posXRearWall-longitudeRearWall+width*2+longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],0);
+
+	//PINZAS IZQUIERDAS
+	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95],0);
+	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95],0);
+
+	//PINZAS DERECHAS
+	/*como la longitud de las pinzas es de la altura de la grua: posZ=4 es 4*0.95 que da 3.8,los container tendran que tener de altura 0.2. CUANDO LEVANTAMOS UN CONTAINER LO QUE
+	VAMOS A TENER QUE VARIAR ES EL PARAMETRO CONRRESPONDIENTE A LA ESCALA NO LA POSICION EN Z DE LAS PINZAS*/
+	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95],0);
+	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95],0);
+	
+	//AGARRE IZQUIERDO
+	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width*0.25,width*10,width*.25],0);
+	
+	//AGARRE DERECHO
+	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width*0.25,width*10,width*.25],0);
 
 }
 
