@@ -95,10 +95,10 @@ function drawCabin(posX,posY,posZ,height){
 	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95],0);
 	
 	//AGARRE IZQUIERDO
-	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width*0.25,width*10,width*.25],0);
+	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width,width*10,width*.25],0);
 	
 	//AGARRE DERECHO
-	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width*0.25,width*10,width*.25],0);
+	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width,width*10,width*.25],0);
 
 }
 
