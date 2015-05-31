@@ -152,7 +152,7 @@ function cylinder(puntas,radio){ //puntas, radio
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
 	cylinderVertexPositionBuffer.itemSize = 3;
 	cylinderVertexPositionBuffer.numItems = ( verticesCylinder.length / 3);
-	console.log(cylinderVertexPositionBuffer.numItems)
+	//console.log(cylinderVertexPositionBuffer.numItems)
 	
 	//Y luego para usar el vertex index:
 	cylinderVertexIndexBuffer = gl.createBuffer();
@@ -177,6 +177,8 @@ function cylinder(puntas,radio){ //puntas, radio
 		else
 			cylinderVertexIndices.push(i+1);
 	}
+	
+	//LATERAL DEL TUBO
 
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
 	cylinderVertexIndexBuffer.itemSize = 1;
@@ -193,49 +195,18 @@ function cylinder(puntas,radio){ //puntas, radio
 		textureCoordsCylinder.push(0.5);
 		textureCoordsCylinder.push(0.5);
 
-		//coordenadas cilindricas con el valor del angulo que queda determinado por la cantidad de puntas
-		if (Math.cos(degToRad(angulo*i))+0.5>1)
-			textureCoordsCylinder.push(1);
-		else if(Math.cos(degToRad(angulo*i))+0.5<0)
-			textureCoordsCylinder.push(1);
-		else
-			textureCoordsCylinder.push(Math.cos(degToRad(angulo*i))+0.5);
+		var firstCoordOfTextureCos = ((Math.cos(degToRad(angulo*i))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
+		var firstCoordOfTextureSin = ((Math.sin(degToRad(angulo*i))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
+		textureCoordsCylinder.push(firstCoordOfTextureCos);
+		textureCoordsCylinder.push(firstCoordOfTextureSin);
 
-		if (Math.sin(degToRad(angulo*i))+0.5>1)
-			textureCoordsCylinder.push(1);
-		else if(Math.sin(degToRad(angulo*i))+0.5<0)
-			textureCoordsCylinder.push(1);
-		else
-			textureCoordsCylinder.push(Math.sin(degToRad(angulo*i))+0.5);
-
-		if( i == puntas-1){
-			if (Math.cos(degToRad(angulo*0))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.cos(degToRad(angulo*0))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-				textureCoordsCylinder.push(Math.cos(degToRad(angulo*0))+0.5);
-
-			if (Math.sin(degToRad(angulo*0))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.sin(degToRad(angulo*0))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-				textureCoordsCylinder.push(Math.sin(degToRad(angulo*0))+0.5);
+		if ( i == puntas-1){
+			//Como llegue al ultimo es el siguiente:
+			textureCoordsCylinder.push(1.0);	//en X
+			textureCoordsCylinder.push(0.5);	//en Y			
 		}else{
-			if (Math.cos(degToRad(angulo*(i+1)))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.cos(degToRad(angulo*(i+1)))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-			textureCoordsCylinder.push(Math.cos(degToRad(angulo*(i+1)))+0.5);
-		
-			if (Math.sin(degToRad(angulo*(i+1)))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.sin(degToRad(angulo*(i+1)))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-				textureCoordsCylinder.push(Math.sin(degToRad(angulo*(i+1)))+0.5);
+			var secondCoordOfTextureCos = ((Math.cos(degToRad(angulo*(i+1)))) +1)/2;
+			var secondCoordOfTextureSin = ((Math.sin(degToRad(angulo*(i+1)))) +1)/2;			
 		}
 	}
 
@@ -244,50 +215,21 @@ function cylinder(puntas,radio){ //puntas, radio
 		//centro del fan
 		textureCoordsCylinder.push(0.5);
 		textureCoordsCylinder.push(0.5);
-
-		//coordenadas cilindricas con el valor del angulo que queda determinado por la cantidad de puntas
-		if (Math.cos(degToRad(angulo*i))+0.5>1)
-			textureCoordsCylinder.push(1);
-		else if(Math.cos(degToRad(angulo*i))+0.5<0)
-			textureCoordsCylinder.push(1);
-		else
-			textureCoordsCylinder.push(Math.cos(degToRad(angulo*i))+0.5);
-
-		if (Math.sin(degToRad(angulo*i))+0.5>1)
-			textureCoordsCylinder.push(1);
-		else if(Math.sin(degToRad(angulo*i))+0.5<0)
-			textureCoordsCylinder.push(1);
-		else
-			textureCoordsCylinder.push(Math.sin(degToRad(angulo*i))+0.5);
-
-		if( i == puntas*2-1){
-			if (Math.cos(degToRad(angulo*0))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.cos(degToRad(angulo*0))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-				textureCoordsCylinder.push(Math.cos(degToRad(angulo*0))+0.5);
-
-			if (Math.sin(degToRad(angulo*0))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.sin(degToRad(angulo*0))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-				textureCoordsCylinder.push(Math.sin(degToRad(angulo*0))+0.5);
-		}else{
-			if (Math.cos(degToRad(angulo*(i+1)))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.cos(degToRad(angulo*(i+1)))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-			textureCoordsCylinder.push(Math.cos(degToRad(angulo*(i+1)))+0.5);
 		
-			if (Math.sin(degToRad(angulo*(i+1)))+0.5>1)
-				textureCoordsCylinder.push(1);
-			else if(Math.sin(degToRad(angulo*(i+1)))+0.5<0)
-				textureCoordsCylinder.push(1);
-			else
-				textureCoordsCylinder.push(Math.sin(degToRad(angulo*(i+1)))+0.5);
+		var iCorrection = i - puntas;
+
+		var firstCoordOfTextureCos = ((Math.cos(degToRad(angulo*iCorrection))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
+		var firstCoordOfTextureSin = ((Math.sin(degToRad(angulo*iCorrection))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
+		textureCoordsCylinder.push(firstCoordOfTextureCos);
+		textureCoordsCylinder.push(firstCoordOfTextureSin);
+
+		if ( i == puntas*2 -1){
+			//Como llegue al ultimo es el siguiente:
+			textureCoordsCylinder.push(1.0);	//en X
+			textureCoordsCylinder.push(0.5);	//en Y			
+		}else{
+			var secondCoordOfTextureCos = ((Math.cos(degToRad(angulo*(iCorrection+1)))) +1)/2;
+			var secondCoordOfTextureSin = ((Math.sin(degToRad(angulo*(iCorrection+1)))) +1)/2;			
 		}
 	}
 
