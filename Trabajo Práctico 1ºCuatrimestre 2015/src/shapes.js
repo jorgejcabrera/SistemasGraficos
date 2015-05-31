@@ -142,12 +142,12 @@ function cylinder(puntas,radio){ //puntas, radio
 		verticesCylinder.push(-2.0);
     }
 
-	verticesCylinder.push(0.0);	//viene a ser el puntas * 2
-	verticesCylinder.push(0.0);	//viene a ser el puntas *2 
-	verticesCylinder.push(2.0);	//viene a ser el puntas*2
-	verticesCylinder.push(0.0);	//viene a ser el puntas*2+1
-	verticesCylinder.push(0.0);	//viene a ser el puntas*2+1
-	verticesCylinder.push(-2.0); //viene a ser el puntas*2+1
+	verticesCylinder.push(0.0);		//viene a ser el puntas * 2
+	verticesCylinder.push(0.0);		//viene a ser el puntas * 2 
+	verticesCylinder.push(2.0);		//viene a ser el puntas * 2
+	verticesCylinder.push(0.0);		//viene a ser el puntas * 2+1
+	verticesCylinder.push(0.0);		//viene a ser el puntas * 2+1
+	verticesCylinder.push(-2.0);	//viene a ser el puntas * 2+1
 	
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
 	cylinderVertexPositionBuffer.itemSize = 3;
@@ -155,10 +155,12 @@ function cylinder(puntas,radio){ //puntas, radio
 	//console.log(cylinderVertexPositionBuffer.numItems)
 	
 	//Y luego para usar el vertex index:
+	var cylinderVertexIndices=[];
 	cylinderVertexIndexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderVertexIndexBuffer);
-	var cylinderVertexIndices=[];
+	
 	//TAPA DE ARRIBA
+	
 	for(i=0;i<puntas;i++){
 		cylinderVertexIndices.push(puntas*2);
 		cylinderVertexIndices.push(i);
@@ -168,6 +170,7 @@ function cylinder(puntas,radio){ //puntas, radio
 			cylinderVertexIndices.push(i+1);
 
 	}
+	
 	//TAPA DE ABAJO
 	for(i=puntas;i<puntas*2;i++){
 		cylinderVertexIndices.push(puntas*2+1);
