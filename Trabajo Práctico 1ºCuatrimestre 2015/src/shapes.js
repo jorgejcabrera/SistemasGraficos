@@ -196,10 +196,10 @@ function cylinder(puntas,radio){ //puntas, radio
 	for(i=0;i<puntas;i++){
 		//centro del fan
 		textureCoordsCylinder.push(0.5);
-		textureCoordsCylinder.push(0.5);
+		textureCoordsCylinder.push(0.5);		
 
-		var firstCoordOfTextureCos = ((Math.cos(degToRad(angulo*i))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
-		var firstCoordOfTextureSin = ((Math.sin(degToRad(angulo*i))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
+		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*i/puntas))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
+		var firstCoordOfTextureSin = ((Math.sin(degToRad(360*i/puntas))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
 		textureCoordsCylinder.push(firstCoordOfTextureCos);
 		textureCoordsCylinder.push(firstCoordOfTextureSin);
 
@@ -208,8 +208,10 @@ function cylinder(puntas,radio){ //puntas, radio
 			textureCoordsCylinder.push(1.0);	//en X
 			textureCoordsCylinder.push(0.5);	//en Y			
 		}else{
-			var secondCoordOfTextureCos = ((Math.cos(degToRad(angulo*(i+1)))) +1)/2;
-			var secondCoordOfTextureSin = ((Math.sin(degToRad(angulo*(i+1)))) +1)/2;			
+			var secondCoordOfTextureCos = ((Math.cos(degToRad(360*(i+1)/puntas))) +1)/2;
+			var secondCoordOfTextureSin = ((Math.sin(degToRad(360*(i+1)/puntas))) +1)/2;
+			textureCoordsCylinder.push(secondCoordOfTextureCos);
+			textureCoordsCylinder.push(secondCoordOfTextureSin);
 		}
 	}
 
@@ -219,10 +221,10 @@ function cylinder(puntas,radio){ //puntas, radio
 		textureCoordsCylinder.push(0.5);
 		textureCoordsCylinder.push(0.5);
 		
-		var iCorrection = i - puntas;
+		var iCorrection = i - puntas;		
 
-		var firstCoordOfTextureCos = ((Math.cos(degToRad(angulo*iCorrection))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
-		var firstCoordOfTextureSin = ((Math.sin(degToRad(angulo*iCorrection))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
+		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*iCorrection/puntas))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
+		var firstCoordOfTextureSin = ((Math.sin(degToRad(360*iCorrection/puntas))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
 		textureCoordsCylinder.push(firstCoordOfTextureCos);
 		textureCoordsCylinder.push(firstCoordOfTextureSin);
 
@@ -231,8 +233,10 @@ function cylinder(puntas,radio){ //puntas, radio
 			textureCoordsCylinder.push(1.0);	//en X
 			textureCoordsCylinder.push(0.5);	//en Y			
 		}else{
-			var secondCoordOfTextureCos = ((Math.cos(degToRad(angulo*(iCorrection+1)))) +1)/2;
-			var secondCoordOfTextureSin = ((Math.sin(degToRad(angulo*(iCorrection+1)))) +1)/2;			
+			var secondCoordOfTextureCos = ((Math.cos(degToRad(360*(iCorrection+1)/puntas))) +1)/2;
+			var secondCoordOfTextureSin = ((Math.sin(degToRad(360*(iCorrection+1)/puntas))) +1)/2;
+			textureCoordsCylinder.push(secondCoordOfTextureCos);
+			textureCoordsCylinder.push(secondCoordOfTextureSin);			
 		}
 	}
 
