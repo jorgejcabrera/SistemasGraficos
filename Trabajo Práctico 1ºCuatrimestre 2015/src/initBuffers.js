@@ -27,6 +27,13 @@ function initTexture() {
 		handleLoadedTexture(skyTexture);
 	}
 	skyTexture.image.src = "src/textures/url.jpg";
+	
+	wheelTexture = gl.createTexture();
+	wheelTexture.image = new Image();
+	wheelTexture.image.onload = function() {		
+		handleLoadedTexture(wheelTexture);
+	}
+	wheelTexture.image.src = "src/textures/wheel.jpg";	
 }
   
 function handleLoadedTexture(texture) {
