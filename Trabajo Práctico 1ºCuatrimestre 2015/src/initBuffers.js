@@ -12,7 +12,6 @@ function initTexture() {
 	nullTexture.image.onload = function() {
 		handleLoadedTexture(nullTexture);
 	}
-
 	nullTexture.image.src = "src/textures/nullTexture.jpg";	
 	
 	craneTexture = gl.createTexture();
@@ -20,8 +19,14 @@ function initTexture() {
 	craneTexture.image.onload = function() {		
 		handleLoadedTexture(craneTexture);
 	}
-
 	craneTexture.image.src = "src/textures/craneTexture1.jpg";
+	
+	skyTexture = gl.createTexture();
+	skyTexture.image = new Image();
+	skyTexture.image.onload = function() {		
+		handleLoadedTexture(skyTexture);
+	}
+	skyTexture.image.src = "src/textures/url.jpg";
 }
   
 function handleLoadedTexture(texture) {

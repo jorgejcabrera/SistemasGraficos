@@ -164,41 +164,10 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         mat4.perspective(pMatrix,degToRad(70), gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);	
-		
-		//actualMovimiento = [posicionVisionX, posicionVisionY,posicionVisionZ];
-		
-		//actualCubo[0] = actualCubo[0] + actualMovimiento[0];
-		//actualCubo[1] = actualCubo[1] + actualMovimiento[1];
-		//actualCubo[2] = actualCubo[2] + actualMovimiento[2];
-		
-		//primerPiramide[0] = primerPiramide[0] + actualMovimiento[0];
-		//primerPiramide[1] = primerPiramide[1] + actualMovimiento[1];
-		//primerPiramide[2] = primerPiramide[2] + actualMovimiento[2];
-		
-		//triangulo[0] = triangulo[0] + actualMovimiento[0];
-		//triangulo[1] = triangulo[1] + actualMovimiento[1];
-		//triangulo[2] = triangulo[2] + actualMovimiento[2];
 
         drawCrame(1.0,2.0,1.0);
         drawCylinder([2,2,2],[2,2,2],0);
-
-		//drawTriangle(triangulo,[1.1,0.5,0.5])
-		//drawPyramid(primerPiramide,[0.5,0.5,0.5]);
-		//drawCube(actualCubo,[20.0, 20.0, 20.0]);
-		//drawCube([1.0, 1.0, 1.0],[1.0, 1.0, 1.0]);
-		//drawCube([1.0, 1.0, -1.0],[1.0, 1.0, 1.0]);
-		//drawCube([1.0, -1.0, 1.0],[1.0, 1.0, 1.0]);
-		//drawCube([1.0, -1.0, -1.0],[1.0, 1.0, 1.0]);
-		//drawCube([-1.0, 1.0, 1.0],[1.0, 1.0, 1.0]);
-		//drawCube([1.0, 1.0, -3.0],[0.2, 0.2, 0.2]);
-		//drawCube([-1.0, -1.0, 1.0],[20.0, 20.0, 20.0]);
-		//drawCube([-1.0, -1.0, -1.0],[20.0, 20.0, 20.0]);
-		//drawCube([2.0, 2.0, 2.0],[20.0, 20.0, 20.0]);
-		//drawCube([2.0, 2.0, -2.0],[20.0, 20.0, 20.0]);
-		//drawCube([2.0, -2.0, 2.0],[20.0, 20.0, 20.0]);
-		//drawCube([2.0, -2.0, -2.0],[20.0, 20.0, 20.0]);
-		//drawCube([-2.0, 2.0, 2.0],[20.0, 20.0, 20.0]);
-		//drawCube([-2.0, 2.0, -2.0],[20.0, 20.0, 20.0]);		
+		drawSky([0,0,0],[60,60,60],90);
     }
 	
 	var ticker = 0.0;

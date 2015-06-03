@@ -28,6 +28,13 @@ function drawCylinder(where, scalator,degreesToRotate){
 	gl.drawElements(gl.TRIANGLES, cylinderVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
+function drawSky(where, scalator,degreesToRotate){
+		sky = new TexturedSphere(32, 32);
+        sky.initBuffers();
+		drawShaper3D(where,scalator,sky.webgl_position_buffer,false,skyTexture,sky.webgl_texture_coord_buffer,degreesToRotate);
+		gl.drawElements(gl.TRIANGLES, sky.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
+
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
 //TODO: CAMBIAR cubeVertexTextureCoordBuffer que no va en el shaper 3d, pasar el vertexTextureCoorBuffer por parametro
 function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer,degreesToRotate){
@@ -36,10 +43,10 @@ function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextur
 	
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix,mMatrix, where);
-	mat4.rotate(mMatrix, mMatrix, degreesToRotate, [1, 0, 0]);
+	mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), [1, 0, 0]);
 
 	if (animation == true){
-		mat4.rotate(mMatrix, mMatrix, degToRad(ticker), [1, 1, 1]);
+		mat4.rotate(mMatrix, mMatrix, degToRad(ticker), [0, 0, 1]);
 	}
 	mat4.scale(mMatrix, mMatrix,scalator);
 	
