@@ -168,7 +168,6 @@ function cylinder(puntas,radio){ //puntas, radio
 			cylinderVertexIndices.push(0);
 		else
 			cylinderVertexIndices.push(i+1);
-
 	}
 	
 	//TAPA DE ABAJO
@@ -180,9 +179,43 @@ function cylinder(puntas,radio){ //puntas, radio
 		else
 			cylinderVertexIndices.push(i+1);
 	}
+	/*
+	for(wasd=0;wasd<puntas-1;wasd++){
+		cylinderVertexIndices.push(wasd);
+		cylinderVertexIndices.push(wasd+1);
+		cylinderVertexIndices.push(wasd+puntas);
+	}
+	for(wasd=puntas;wasd<puntas*2-1;wasd++){
+		cylinderVertexIndices.push(wasd);
+		cylinderVertexIndices.push(wasd+1);
+		cylinderVertexIndices.push(wasd-puntas);
+	}*/	
 	
 	//LATERAL DEL TUBO
-
+	//Notar como que son dos niveles ese for se ejecuta una sola vez
+	niveles = 2;
+	for(niv=0;niv<niveles-1;niv++){
+		for(io=0;io<puntas-1;io++){
+			cylinderVertexIndices.push(niv*puntas+io);
+			cylinderVertexIndices.push(niv*puntas +io+1);
+			cylinderVertexIndices.push((niv+1)*puntas +io);
+			
+			cylinderVertexIndices.push((niv+1)*puntas +io);
+			cylinderVertexIndices.push((niv+1)*puntas +io+1);
+			cylinderVertexIndices.push(niv*puntas +io+1);
+		}
+	//Esto es lo que va al final porque vuelve a cero, onda va de 0 1 2 3 4 Y vuelve a 0 en vez de ir al 5
+	cylinderVertexIndices.push(niv*puntas+(puntas-1));
+	cylinderVertexIndices.push(niv*puntas);
+	cylinderVertexIndices.push((niv+1)*puntas+(puntas-1));
+	
+	cylinderVertexIndices.push((niv+1)*puntas +io);
+	cylinderVertexIndices.push(puntas);
+	cylinderVertexIndices.push(0);
+				
+	}
+	
+	
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
 	cylinderVertexIndexBuffer.itemSize = 1;
 	cylinderVertexIndexBuffer.numItems = cylinderVertexIndices.length;
@@ -192,54 +225,28 @@ function cylinder(puntas,radio){ //puntas, radio
 	cylinderVertexTextureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexTextureCoordBuffer);
 	
-	//TEXTURAS TAPA SUPERIOR
+	//TEXTURAS TAPA SUPERIOR NOTAR QUE ES UNA POR CADA VERTICE
 	for(i=0;i<puntas;i++){
-		//centro del fan
-		textureCoordsCylinder.push(0.5);
-		textureCoordsCylinder.push(0.5);		
-
 		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*i/puntas))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
 		var firstCoordOfTextureSin = ((Math.sin(degToRad(360*i/puntas))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
 		textureCoordsCylinder.push(firstCoordOfTextureCos);
 		textureCoordsCylinder.push(firstCoordOfTextureSin);
-
-		if ( i == puntas-1){
-			//Como llegue al ultimo es el siguiente:
-			textureCoordsCylinder.push(1.0);	//en X
-			textureCoordsCylinder.push(0.5);	//en Y			
-		}else{
-			var secondCoordOfTextureCos = ((Math.cos(degToRad(360*(i+1)/puntas))) +1)/2;
-			var secondCoordOfTextureSin = ((Math.sin(degToRad(360*(i+1)/puntas))) +1)/2;
-			textureCoordsCylinder.push(secondCoordOfTextureCos);
-			textureCoordsCylinder.push(secondCoordOfTextureSin);
-		}
 	}
 
 	//TEXTURAS TAPA INFERIOR
 	for(i=puntas;i<puntas*2;i++){
-		//centro del fan
-		textureCoordsCylinder.push(0.5);
-		textureCoordsCylinder.push(0.5);
-		
-		var iCorrection = i - puntas;		
-
+		var iCorrection = i - puntas;
 		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*iCorrection/puntas))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
 		var firstCoordOfTextureSin = ((Math.sin(degToRad(360*iCorrection/puntas))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
 		textureCoordsCylinder.push(firstCoordOfTextureCos);
 		textureCoordsCylinder.push(firstCoordOfTextureSin);
-
-		if ( i == puntas*2 -1){
-			//Como llegue al ultimo es el siguiente:
-			textureCoordsCylinder.push(1.0);	//en X
-			textureCoordsCylinder.push(0.5);	//en Y			
-		}else{
-			var secondCoordOfTextureCos = ((Math.cos(degToRad(360*(iCorrection+1)/puntas))) +1)/2;
-			var secondCoordOfTextureSin = ((Math.sin(degToRad(360*(iCorrection+1)/puntas))) +1)/2;
-			textureCoordsCylinder.push(secondCoordOfTextureCos);
-			textureCoordsCylinder.push(secondCoordOfTextureSin);			
-		}
 	}
-
+	//Las texturas de los fanes (Notar que estan en la posicion de puntas * 2 para que quede en el mismo orden que los vertices)
+	textureCoordsCylinder.push(0.5);
+	textureCoordsCylinder.push(0.5);
+	textureCoordsCylinder.push(0.5);
+	textureCoordsCylinder.push(0.5);
+	
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
     cylinderVertexTextureCoordBuffer.itemSize = 2;
     cylinderVertexTextureCoordBuffer.numItems = textureCoordsCylinder.length/2;	
