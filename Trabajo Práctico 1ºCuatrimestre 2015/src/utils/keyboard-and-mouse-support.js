@@ -11,33 +11,35 @@ function handleKeyUp(event) {
   
 //Al estar adentro del tick, se llamaria siempre
 //Los codigos de las teclas fueron sacados de esta página http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
-function handleKeyPresses(){
-	var normalizedCamera= vec3.create();
-	if ( (currentlyPressedKeys[65] || currentlyPressedKeys[68]) //TODO METER ACA QUE ES LA CAMARA DOS Y SE MUEVE EL PJ) {
-	//Mover a izquierda o derecha
+function handleKeyPresses(){	
+	if ( (currentlyPressedKeys[65] || currentlyPressedKeys[68]) && cameraMode == 2){ //TODO METER ACA QUE ES LA CAMARA DOS Y SE MUEVE EL PJ) 
+		//Me voy a mover como con W/S pero roto como 90 grados, o sea como que cambio de Y a X y de X a Y
+		var normalizedCamera= vec3.create();
+		vec3.multiply(normalizedCamera, target, [1,1,0]);	//Obtengo la dirección X-Y
+		vec3.normalize(normalizedCamera,normalizedCamera);
+		vec3.cross(normalizedCamera, normalizedCamera, [0,0,1]);	//Le hago esa rotación mágica de la que hable arriba 
+		vec3.scale(normalizedCamera,normalizedCamera,0.3);	//Le modifico la velocidad
+		//Teclas A o D
 		if (currentlyPressedKeys[65]){
-			phiAngle += degToRad(1);			
+			vec3.sub(cameraPosition,cameraPosition, normalizedCamera);			
 		}
 		if (currentlyPressedKeys[68]) {
-			phiAngle -= degToRad(1);			
-		}	
-	vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
-	vec3.normalize(normalizedCamera,normalizedCamera);
-	vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
+			vec3.add(cameraPosition,cameraPosition, normalizedCamera);			
+		}
 	}
 	
-	if (currentlyPressedKeys[83] || currentlyPressedKeys[87]) {
+	if ( (currentlyPressedKeys[83] || currentlyPressedKeys[87]) && cameraMode == 2) {
 		var normalizedCamera= vec3.create();
-		//Mover hacia arriba o abajo
+		vec3.multiply(normalizedCamera, target, [1,1,0]);	//Obtengo la dirección X-Y
+		vec3.normalize(normalizedCamera,normalizedCamera);
+		vec3.scale(normalizedCamera,normalizedCamera,0.3);	//Le modifico la velocidad
+		//Teclas W o S
 		if (currentlyPressedKeys[83] && thetaAngle >= degToRad(1)){
-			thetaAngle -= degToRad(1);
+			vec3.sub(cameraPosition,cameraPosition, normalizedCamera);
 		}
 		if (currentlyPressedKeys[87] && thetaAngle <= degToRad(150)) {
-			thetaAngle += degToRad(1);
-		}
-		vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
-		vec3.normalize(normalizedCamera,normalizedCamera);
-		vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
+			vec3.add(cameraPosition,cameraPosition, normalizedCamera);
+		}		
 	}
 	
 	if (currentlyPressedKeys[81] || currentlyPressedKeys[69]) {
@@ -65,11 +67,11 @@ function handleKeyPresses(){
 	//si presiono el boton 2, me cambio a otra cámara
 	if (currentlyPressedKeys[50] && cameraMode != 2) {
 		cameraMode = 2;
-		cameraPosition = [5,3,0];
+		vec3.set(cameraPosition,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),-Math.cos(thetaAngle));
 		vec3.normalize(cameraPosition,cameraPosition);
-	//vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
-	//vec3.normalize(normalizedCamera,normalizedCamera);
-	//vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
+		vec3.scale(target,cameraPosition,100);
+		cameraPosition = [-20,-20,0];		
+		vec3.normalize(cameraPosition,cameraPosition);	
 	}
 }
 
@@ -90,8 +92,8 @@ var clicking = 0;
 function onMouseUp(event){
 	clicking = 0;
 }
-var clickX;
-var clickY;
+var clickX=0;
+var clickY=0;
 function onMouseDown(event){
 	clicking = 1;
 	clickX = event.clientX;
@@ -100,7 +102,7 @@ function onMouseDown(event){
 
 var normalizedCamera= vec3.create();
 function onMouseMove(event) {
-	if (clicking){		
+	if (clicking){
 		var x;
 		var y;
 		var testX;
@@ -122,14 +124,14 @@ function onMouseMove(event) {
 		}
 		clickX = x;
 		clickY = y;
-		
-		if (cameraMode == 1){
+		if(cameraMode == 1){
 			vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
 			vec3.normalize(normalizedCamera,normalizedCamera);
-			vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));
+			vec3.scale(cameraPosition,normalizedCamera,vec3.len(cameraPosition));			
 		}
-		if(cameraMode == 2){
-			vec3.set(normalizedCamera,-Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),Math.cos(thetaAngle));
+		
+		if (cameraMode == 2){
+			vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),-Math.cos(thetaAngle));
 			vec3.normalize(normalizedCamera,normalizedCamera);
 			vec3.scale(target,normalizedCamera,100);
 		}

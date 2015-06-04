@@ -39,7 +39,6 @@ function drawSky(where, scalator,degreesToRotate){
 //TODO: CAMBIAR cubeVertexTextureCoordBuffer que no va en el shaper 3d, pasar el vertexTextureCoorBuffer por parametro
 function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer,degreesToRotate){
 	mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
-	
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix,mMatrix, where);
 	mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), [1, 0, 0]);

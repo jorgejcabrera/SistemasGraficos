@@ -198,7 +198,7 @@
 		}
 		// IE 6/7/8
 		else canvas.attachEvent("onmousewheel", MouseWheelHandler);		
-		
+
         initGL(canvas);
         initShaders();
         initBuffers();
@@ -225,9 +225,8 @@
 <body onload="webGLStart();">
     <canvas id="TP1C2015" onmousemove="onMouseMove(event)" onmousedown="onMouseDown(event)" onmouseup="onMouseUp(event)" style="border: none;" width="1400" height="640"></canvas>
 	<div style="color:#0000FF;text-align:center;font: Helvetica 12pt;border: 1px solid black;">
-		<div>A/D mover cámara a izquierda o derecha.</div>
-		<div>W/S mover cámara hacia arriba o abajo.</div>
-		<div>Q/E alejar o acercar cámara.</div>
+		<div>Presione 1 para cámara orbital.</div>
+		<div>Presione 2 para cámara primera persona. WASD para moverse en este modo.</div>
 	</div>
 </body>
 
