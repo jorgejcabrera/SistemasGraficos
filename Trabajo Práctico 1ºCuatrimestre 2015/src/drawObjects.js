@@ -7,7 +7,7 @@ function drawWallCrane(posX,posY,posZ){
 	var longitudeHypotenuse = calculateHypotenuse(height - posZ + longitude * 1.50 - longitude * 7, (height-longitude)/2 + width);
 	var scale = [longitude,width,height];
 	//columna 1
-	drawCube([posX,posY,posZ],scale);
+	drawCube([posX,posY,posZ],scale);	
 	//columna 2
 	drawCube([posX, posY + height, posZ],scale);
 	//barra lateral baja
@@ -27,7 +27,7 @@ function drawCrame(posX,posY,posZ){
 	var distanceBeetwenWalls=4;
 	//PAREDES LATERALES
 	drawWallCrane(posX,posY,posZ);
-    drawWallCrane( posX+distanceBeetwenWalls,posY,posZ);
+    drawWallCrane(posX+distanceBeetwenWalls,posY,posZ);
 
     //BARRAS HORIZONTALES
     drawCube([ posX+distanceBeetwenWalls*0.5, posY+longitude*4, height+posZ-width ],[distanceBeetwenWalls-height/2-longitude , width*2,width]);
@@ -45,6 +45,22 @@ function drawCrame(posX,posY,posZ){
 
     //CABINA
     drawCabin(posX, posY, height, posZ );
+	
+	//LAS RUEDAS
+	drawWheels(posX,posY,posZ,distanceBeetwenWalls,height,width);
+}
+
+function drawWheels(posX,posY,posZ,distanceBeetwenWalls,distanciaRuedas,anchoGruaY){
+	var scaleDown = 1.75;
+	var radio = 1*scaleDown;
+	var scaleX = 1/scaleDown;
+	var scaleY = 1/scaleDown;
+	var scaleZ = 0.1;	//ver que sea el ancho de la grua
+	var wheelScale = [scaleX,scaleY,scaleZ];
+	drawCylinder([posX,posY+anchoGruaY+scaleZ*4/2,-posZ-radio],wheelScale,90, [1,0,0]);
+	drawCylinder([posX+distanceBeetwenWalls,posY+anchoGruaY+scaleZ*4/2,-posZ-radio],wheelScale,90, [1,0,0]);
+	drawCylinder([posX,posY-anchoGruaY-scaleZ*4/2+distanciaRuedas,-posZ-radio],wheelScale,90, [1,0,0]);
+	drawCylinder([posX+distanceBeetwenWalls,posY-anchoGruaY-scaleZ*4/2+distanciaRuedas,-posZ-radio],wheelScale,90, [1,0,0]);
 
 
 }

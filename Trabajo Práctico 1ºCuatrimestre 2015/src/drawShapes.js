@@ -29,7 +29,7 @@ function drawPyramid(where,scalator){
 }
 
 function drawCylinder(where, scalator,degreesToRotate,axisToRotate){
-	cylinder(360,1);
+	cylinder(36,1);
 	drawShaper3DOverload(where,scalator,cylinderVertexPositionBuffer,false,wheelTexture,cylinderVertexTextureCoordBuffer,degreesToRotate,axisToRotate);
 	gl.drawElements(gl.TRIANGLES, cylinderVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
