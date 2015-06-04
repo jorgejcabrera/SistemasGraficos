@@ -236,7 +236,7 @@ function cylinder(puntas,radio){ //puntas, radio
 	//TEXTURAS TAPA INFERIOR
 	for(i=puntas;i<puntas*2;i++){
 		var iCorrection = i - puntas;
-		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*iCorrection/puntas))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
+		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*iCorrection/puntas))) +1)/2 ;	//Le aplico una escala por eso el (cos+1)/2 
 		var firstCoordOfTextureSin = ((Math.sin(degToRad(360*iCorrection/puntas))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
 		textureCoordsCylinder.push(firstCoordOfTextureCos);
 		textureCoordsCylinder.push(firstCoordOfTextureSin);

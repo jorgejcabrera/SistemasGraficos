@@ -33,7 +33,7 @@ function initTexture() {
 	wheelTexture.image.onload = function() {		
 		handleLoadedTexture(wheelTexture);
 	}
-	wheelTexture.image.src = "src/textures/wheel.jpg";	
+	wheelTexture.image.src = "src/textures/wheel2.jpg";	
 }
   
 function handleLoadedTexture(texture) {
