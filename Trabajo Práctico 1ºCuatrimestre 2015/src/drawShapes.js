@@ -38,8 +38,7 @@ function drawSky(where, scalator,degreesToRotate){
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
 //TODO: CAMBIAR cubeVertexTextureCoordBuffer que no va en el shaper 3d, pasar el vertexTextureCoorBuffer por parametro
 function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer,degreesToRotate){
-	//Math.cos(degToRad(ticker))*
-	mat4.lookAt(vMatrix,cameraPosition,[0.0,0.0,0.0],[0.0,0.0,1.0]);
+	mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
 	
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix,mMatrix, where);

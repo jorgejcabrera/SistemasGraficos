@@ -144,6 +144,8 @@
     }
 	
 	var cameraPosition = vec3.create();
+	var target = vec3.create();
+	var cameraMode = 1; //uno es default orbital
 
 	function initVariables () {
 		//Esto que hago acá es para que pongas en coordenadas cartesianas X,Y,Z donde queres
@@ -153,10 +155,8 @@
 		var radius = vec3.squaredLength(initPosToTranslate);
 		thetaAngle = Math.acos(initPosToTranslate[2]/radius);	//para las rotaciones en zy e zx
 		phiAngle = Math.atan(initPosToTranslate[1]/initPosToTranslate[0]);	//para las rotaciones en el plano xy
+		target = [0,0,0];
 		cameraPosition = [radius*Math.cos(phiAngle)*Math.sin(thetaAngle),radius*Math.sin(phiAngle)*Math.sin(thetaAngle),radius*Math.cos(thetaAngle)];
-		actualCubo = [0.0, 0.0, 0.0];
-		primerPiramide = [-1.5, 0.0, -7.0];
-		triangulo = [-4.5,0.0,-7.0];
 	}
 	
     function drawScene() {
