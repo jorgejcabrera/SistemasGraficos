@@ -146,8 +146,7 @@
 	var cameraPosition = vec3.create();
 	var target = vec3.create();
 	var cameraMode = 1; //uno es default orbital
-	var moveXCrane = 0;
-	var moveYCrane = 0;
+	var moveXCrane = 0;	
 
 	function initVariables () {
 		//Esto que hago acá es para que pongas en coordenadas cartesianas X,Y,Z donde queres
@@ -167,7 +166,7 @@
 
         mat4.perspective(pMatrix,degToRad(70), gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
 		
-        drawCrame(1.0 + moveXCrane,2.0,1.0);        
+        drawCrame(moveXCrane,2.0,1.0);        
 		drawSky([0,0,0],[60,60,60],90,[1,0,0]);
     }
 	
