@@ -44,11 +44,11 @@ function handleKeyPresses(){
 	
 	if (currentlyPressedKeys[81] || currentlyPressedKeys[69]) {
 		//la letra Q o E
-		if (currentlyPressedKeys[81] && vec3.length(cameraPosition) > 1) {	//limito el máximo acercamiento
-			vec3.scale(cameraPosition,cameraPosition,0.98);
+		if (currentlyPressedKeys[81]) {	//limito el máximo acercamiento
+			moveXCrane += 0.2;
 		}
-		if (currentlyPressedKeys[69] && vec3.length(cameraPosition) < 10) {	//limito el máximo alejamiento
-			vec3.scale(cameraPosition,cameraPosition,1.02);
+		if (currentlyPressedKeys[69]) {	//limito el máximo alejamiento
+			moveXCrane -= 0.2;
 		}	
 	}
 	
