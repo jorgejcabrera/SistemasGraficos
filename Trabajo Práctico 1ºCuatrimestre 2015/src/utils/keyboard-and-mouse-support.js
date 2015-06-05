@@ -7,6 +7,9 @@ function handleKeyDown(event) {
 
 function handleKeyUp(event) {
     currentlyPressedKeys[event.keyCode] = false;
+	if (!currentlyPressedKeys[81] || !currentlyPressedKeys[69]){
+		spinning = false;
+	}
 }
   
 //Al estar adentro del tick, se llamaria siempre
@@ -45,10 +48,12 @@ function handleKeyPresses(){
 	if (currentlyPressedKeys[81] || currentlyPressedKeys[69]) {
 		//la letra Q o E
 		if (currentlyPressedKeys[81]) {	//limito el máximo acercamiento
-			moveXCrane += 0.2;
+			moveXCrane += 0.08;
+			spinning = true;
 		}
 		if (currentlyPressedKeys[69]) {	//limito el máximo alejamiento
-			moveXCrane -= 0.2;
+			moveXCrane -= 0.08;
+			spinning = true;
 		}	
 	}
 	
@@ -119,7 +124,7 @@ function onMouseMove(event) {
 		testY = (y - clickY)*64;
 		phiAngle += degToRad(testX)/widthOfCanvas;
 		testLimit += degToRad(-testY)/heightOfCanvas;
-		if (testLimit >= degToRad(1) && testLimit <= degToRad(150)){
+		if (testLimit >= degToRad(25) && testLimit <= degToRad(150)){
 			thetaAngle = testLimit;
 		}
 		clickX = x;

@@ -34,6 +34,20 @@ function initTexture() {
 		handleLoadedTexture(wheelTexture);
 	}
 	wheelTexture.image.src = "src/textures/wheel2.jpg";	
+	
+	floorTexture = gl.createTexture();
+	floorTexture.image = new Image();
+	floorTexture.image.onload = function() {		
+		handleLoadedTexture(floorTexture);
+	}
+	floorTexture.image.src = "src/textures/floor2.jpg";
+	
+	waterTexture = gl.createTexture();
+	waterTexture.image = new Image();
+	waterTexture.image.onload = function() {		
+		handleLoadedTexture(waterTexture);
+	}
+	waterTexture.image.src = "src/textures/water.png";
 }
   
 function handleLoadedTexture(texture) {
