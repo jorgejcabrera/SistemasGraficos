@@ -37,17 +37,46 @@ function pyramid(){
 }
 
 function square () {
-	squareVertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
+	this.webgl_position_buffer = null;
+	this.webgl_normal_buffer = null;
+	this.webgl_texture_coord_buffer = null;
+	this.webgl_index_buffer = null;
+	
+	this.webgl_position_buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 	var vertices = [
-		-1.0,	1.0,	0.0,
-		1.0,	1.0,	0.0,
-		-1.0,	-1.0,	0.0,
-		1.0,	-1.0,	0.0
+		-1.0,	1.0,	0.0,	//0
+		1.0,	1.0,	0.0,	//1
+		-1.0,	-1.0,	0.0,	//2
+		1.0,	-1.0,	0.0		//3
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	squareVertexPositionBuffer.itemSize = 3;
-	squareVertexPositionBuffer.numItems = 4;
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = 4;
+	
+	//Ahora le digo como usar esos vértices
+	this.webgl_index_buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+	var cubeVertexIndices = [
+		0, 1, 2,   1, 2, 3
+	]
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = 6;
+	
+	//Y aca le pongo la textura al cuadrado
+	this.webgl_texture_coord_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+    var textureCoords = [
+	//para cada uno de los ocho vértices que estoy utilizando 	
+      0.0, 1.0,
+      1.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+    this.webgl_texture_coord_buffer.itemSize = 2;
+    this.webgl_texture_coord_buffer.numItems = 4;	
 }
 
 function cube () {

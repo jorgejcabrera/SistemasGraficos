@@ -30,7 +30,7 @@ function drawPyramid(where,scalator){
 
 function drawCylinder(where, scalator,degreesToRotate,axisToRotate){
 	cylinder(36,1);
-	drawShaper3DOverload(where,scalator,cylinderVertexPositionBuffer,false,wheelTexture,cylinderVertexTextureCoordBuffer,degreesToRotate,axisToRotate);
+	drawShaper3DOverload(where,scalator,cylinderVertexPositionBuffer,spinning,wheelTexture,cylinderVertexTextureCoordBuffer,degreesToRotate,axisToRotate);
 	gl.drawElements(gl.TRIANGLES, cylinderVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
@@ -39,6 +39,12 @@ function drawSky(where, scalator,degreesToRotate,axisToRotate){
 	sky.initBuffers();
 	drawShaper3DOverload(where,scalator,sky.webgl_position_buffer,false,skyTexture,sky.webgl_texture_coord_buffer,degreesToRotate,axisToRotate);
 	gl.drawElements(gl.TRIANGLES, sky.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
+
+function drawQUAD(where,scalator,degreesToRotate,axisToRotate,texture){
+	quad = new square();
+	drawShaper3DOverload(where,scalator,quad.webgl_position_buffer,false,texture,quad.webgl_texture_coord_buffer,degreesToRotate,axisToRotate);
+	gl.drawElements(gl.TRIANGLES, quad.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
@@ -70,7 +76,7 @@ function drawShaper3DOverload(where,scalator,vertexBuffer,animation,texture,vert
 	mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);	//axisToRotate = 1 0 0 90 grados
 
 	if (animation == true){
-		mat4.rotate(mMatrix, mMatrix, degToRad(ticker), [1, 1, 1]);
+		mat4.rotate(mMatrix, mMatrix, degToRad(ticker), [0, 0, 1]);
 	}
 	mat4.scale(mMatrix, mMatrix,scalator);
 	

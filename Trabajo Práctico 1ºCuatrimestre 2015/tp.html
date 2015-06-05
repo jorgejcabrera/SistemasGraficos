@@ -146,7 +146,10 @@
 	var cameraPosition = vec3.create();
 	var target = vec3.create();
 	var cameraMode = 1; //uno es default orbital
-	var moveXCrane = 0;	
+	var moveXCrane = 0;
+	var gruaAbajo = -3;
+	var ruedasAncho = -0.5*0.97;	//sale de la escala que le puse a la rueda
+	var spinning = false;
 
 	function initVariables () {
 		//Esto que hago acá es para que pongas en coordenadas cartesianas X,Y,Z donde queres
@@ -168,6 +171,8 @@
 		
         drawCrame(moveXCrane,2.0,1.0);        
 		drawSky([0,0,0],[60,60,60],90,[1,0,0]);
+		drawQUAD([0,4,gruaAbajo+ruedasAncho],[8,4,1],0,[1,0,0],floorTexture);		//Acá que vaya la plataforma
+		//drawQUAD([0,0,-5],[5,5,5],0,[1,0,0],craneTexture);							//Acá que vaya el mar
     }
 	
 	var ticker = 0.0;
