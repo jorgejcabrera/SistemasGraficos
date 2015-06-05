@@ -41,10 +41,10 @@ function drawCrame(posX,posY,posZ){
     drawCube([posX+distanceBeetwenWalls*0.5, posY-longitude*6-distanceBeetwenWalls*1.5- width, height + posZ - width ],[ (distanceBeetwenWalls * 0.5) * 1/5 + width * 2,  width, width * 1.5]);
 
     //CONTRAPESO
-    //drawCube([posX+distanceBeetwenWalls*0.5, posY-longitude*6+distanceBeetwenWalls*1.5, height + posZ - width ],[ (posX + distanceBeetwenWalls * 0.5) * 1/5 + width * 3, distanceBeetwenWalls * 0.15, distanceBeetwenWalls * 0.15]);
+    drawCube([posX+distanceBeetwenWalls*0.5, posY-longitude*6+distanceBeetwenWalls*1.5, height + posZ - width ],[ (distanceBeetwenWalls * 0.5) * 1/5 + width * 3, distanceBeetwenWalls * 0.15, distanceBeetwenWalls * 0.15]);
 
     //CABINA
-    //drawCabin(posX, posY, height, posZ );
+    drawCabin(posX, posY, height, posZ );
 	
 	//LAS RUEDAS
 	drawWheels(posX,posY,posZ,distanceBeetwenWalls,height,width);
@@ -75,7 +75,7 @@ function drawCabin(posX,posY,posZ,height){
 	var longitude = 0.20;
 	var width = 0.05;
 	var posXRearWall = posX+distanceBeetwenWalls*0.5;
-	var longitudeRearWall = (posX+distanceBeetwenWalls*0.5)*1/5+width*3;
+	var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
 	var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
 
 	//PARED TRASERA
