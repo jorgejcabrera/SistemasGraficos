@@ -51,18 +51,23 @@ function drawCrame(posX,posY,posZ){
 }
 
 function drawWheels(posX,posY,posZ,distanceBeetwenWalls,distanciaRuedas,anchoGruaY){
-	var scaleDown = 1.75;
+	var scaleDown = 1.97;
 	var radio = 1*scaleDown;
 	var scaleX = 1/scaleDown;
 	var scaleY = 1/scaleDown;
-	var scaleZ = 0.1;	//ver que sea el ancho de la grua
+	var scaleZ = 0.07;	//ver que sea el ancho de la grua
 	var wheelScale = [scaleX,scaleY,scaleZ];
 	drawCylinder([posX,posY+anchoGruaY+scaleZ*4/2,-posZ-radio],wheelScale,90, [1,0,0]);
+	drawCylinder([posX,posY-anchoGruaY-scaleZ*4/2,-posZ-radio],wheelScale,90, [1,0,0]);
+	
 	drawCylinder([posX+distanceBeetwenWalls,posY+anchoGruaY+scaleZ*4/2,-posZ-radio],wheelScale,90, [1,0,0]);
+	drawCylinder([posX+distanceBeetwenWalls,posY-anchoGruaY-scaleZ*4/2,-posZ-radio],wheelScale,90, [1,0,0]);
+
 	drawCylinder([posX,posY-anchoGruaY-scaleZ*4/2+distanciaRuedas,-posZ-radio],wheelScale,90, [1,0,0]);
+	drawCylinder([posX,posY+anchoGruaY+scaleZ*4/2+distanciaRuedas,-posZ-radio],wheelScale,90, [1,0,0]);
+	
 	drawCylinder([posX+distanceBeetwenWalls,posY-anchoGruaY-scaleZ*4/2+distanciaRuedas,-posZ-radio],wheelScale,90, [1,0,0]);
-
-
+	drawCylinder([posX+distanceBeetwenWalls,posY+anchoGruaY+scaleZ*4/2+distanciaRuedas,-posZ-radio],wheelScale,90, [1,0,0]);
 }
 
 function drawCabin(posX,posY,posZ,height){
