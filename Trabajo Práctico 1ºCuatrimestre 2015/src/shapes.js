@@ -457,7 +457,10 @@ function grid (curveDetail,precision, numberTall) {
 			var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva],puntosZ[curva],puntosZ[curva]]);
 			vertices.push(valueX);
 			vertices.push(valueY);
-			vertices.push(valueZ);			
+			vertices.push(valueZ);
+			vertices.push(valueX*0.8);
+			vertices.push(valueY*0.8);
+			vertices.push(valueZ*0.8);			
 		}
 		for (var fromTo = 0; fromTo < precision; fromTo++){
 			var u = step * fromTo;	//El valor de u que va de 0 a 1
@@ -471,10 +474,13 @@ function grid (curveDetail,precision, numberTall) {
 			vertices.push(valueX);
 			vertices.push(valueY);
 			vertices.push(valueZ);
+			vertices.push(valueX*0.8);
+			vertices.push(valueY*0.8);
+			vertices.push(valueZ*0.8);
 		}
 	}
 
-	//Luego otro de estos para hacerle una escala y asi tener un strip?
+/*	//Luego otro de estos para hacerle una escala y asi tener un strip?
 	for (var i = 0; i<numberWide; i++){
 		var u = step * i;	//El valor de u que va de 0 a 1
 		var currentUs = vec4.create();
@@ -488,41 +494,43 @@ function grid (curveDetail,precision, numberTall) {
 		vertices.push(valueY)*0.8;
 		vertices.push(valueZ)*0.8;
 	}
-	
+*/	
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 	this.webgl_position_buffer.itemSize = 3;
-	this.webgl_position_buffer.numItems = numberWide*numberTall;
+	this.webgl_position_buffer.numItems = vertices.length/3;
 	
 	//Ahora le digo como usar esos vértices
 	this.webgl_index_buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-	var cubeVertexIndices = [
-		0, 1, 5,   0, 1, 6,
-		1, 2, 6,   1, 2, 7,
-		2, 3, 7,   2, 3, 8,
-		3, 4, 8,   3, 4, 9		
-	]
+	var cubeVertexIndices = [];
+	
+	for (var indice = 0; indice < (vertices.length/3)-2; indice++){
+		cubeVertexIndices.push(indice);
+		cubeVertexIndices.push(indice+1);
+		cubeVertexIndices.push(indice+2);
+	}
+	//Y aca para cerrar los ultimos dos
+	cubeVertexIndices.push(vertices.length/3 -1);
+	cubeVertexIndices.push(vertices.length/3 -2);
+	cubeVertexIndices.push(0);
+	cubeVertexIndices.push(vertices.length/3-1);
+	cubeVertexIndices.push(1);
+	cubeVertexIndices.push(0);
+	
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 	this.webgl_index_buffer.itemSize = 1;
-	this.webgl_index_buffer.numItems = 24;
+	this.webgl_index_buffer.numItems = cubeVertexIndices.length;
 	
 	//Y aca le pongo la textura al cuadrado
 	this.webgl_texture_coord_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-    var textureCoords = [
-	//para cada uno de los ocho vértices que estoy utilizando 	
-      0.0, 1.0,
-      1.0, 1.0,
-      0.0, 0.0,
-      1.0, 0.0,
-	  0.0, 0.0,
-      1.0, 0.0,
-	  0.0, 0.0,
-      1.0, 0.0,
-	  0.0, 0.0,
-      1.0, 0.0
-    ];
+    var textureCoords = [];
+	for (var indice = 0; indice < (vertices.length/3); indice++){
+		textureCoords.push(0.0);
+		textureCoords.push(3);
+	}
+	
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
     this.webgl_texture_coord_buffer.itemSize = 2;
-    this.webgl_texture_coord_buffer.numItems = 4;	
+    this.webgl_texture_coord_buffer.numItems = textureCoords.length/2;	
 }

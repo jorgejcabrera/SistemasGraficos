@@ -47,6 +47,12 @@ function drawQUAD(where,scalator,degreesToRotate,axisToRotate,texture){
 	gl.drawElements(gl.TRIANGLES, quad.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
+function drawMountain(where,scalator){
+	mountain = new grid(3,3, 1);
+	drawShaper3D(where,scalator,mountain.webgl_position_buffer,false,nullTexture,mountain.webgl_texture_coord_buffer);
+	gl.drawElements(gl.TRIANGLES, mountain.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
+
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
 function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer){
 	mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
