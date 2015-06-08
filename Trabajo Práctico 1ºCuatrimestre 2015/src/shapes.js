@@ -408,3 +408,107 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	}
 	
 }
+
+function grid (numberOfPointsOfInterest,precision, numberTall) {
+	this.webgl_position_buffer = null;
+	this.webgl_normal_buffer = null;
+	this.webgl_texture_coord_buffer = null;
+	this.webgl_index_buffer = null;
+	
+	var puntosX = [];
+	var puntosY = [];
+	var puntosZ = [];
+	
+	//La cantidad de puntos que va a tener mi grid de ancho, así va a haber "precision" puntos por cada curvita
+	var numberWide = numberOfPointsOfInterest*precision; 
+	
+	//Con esto voy a formar mi círculo erratico saliendo del medio, o sea del punto 0,0
+	var angle = degToRad(360/numberOfPointsOfInterest);
+	for (var i = 0; i<numberOfPointsOfInterest; i++){
+		var alpha = angle * i;
+		puntosX.push(Math.cos(alpha) + Math.sin(1.6*alpha)/4);
+		puntosY.push(Math.sin(alpha) + Math.sin(1.6*alpha)/4);
+		puntosZ.push(0);
+	}
+	
+	var cubicSpline = [
+		-1/6,  3/6,  -3/6,  1/6,
+		3/6,  -6/6,  3/6,  0,
+		-3/6,  0,  3/6,  0,
+		1/6,  4/6,  1/6,  0
+	]
+	
+	var step = 1/(numberWide -1);	//Va a ser el pasito de u de 0 a 1, cuenta con uno menos que el number wide por el 0 indexed
+	this.webgl_position_buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+	var vertices = [];
+	
+	//Si yo uso B-Spline cúbica, tendré esta fórmula
+	for (var curva = 0; curva<numberOfPointsOfInterest-3; curva++){
+		for (var fromTo = 0; fromTo < precision; fromTo++){
+			var u = step * fromTo;	//El valor de u que va de 0 a 1
+			var currentUs = vec4.create();
+			vec4.set(currentUs,Math.pow(u,3),Math.pow(u,2),u,1);
+			vec4.transformMat4(currentUs, currentUs, cubicSpline);		
+			
+			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva+1],puntosX[curva+2],puntosX[curva+3]]);	
+			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva+1],puntosY[curva+2],puntosY[curva+3]]);
+			var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva+1],puntosZ[curva+2],puntosZ[curva+3]]);
+			vertices.push(valueX);
+			vertices.push(valueY);
+			vertices.push(valueZ);
+		}
+	}
+	console.log(vertices);
+	//Luego otro de estos para hacerle una escala y asi tener un strip?
+	for (var i = 0; i<numberWide; i++){
+		var u = step * i;	//El valor de u que va de 0 a 1
+		var currentUs = vec4.create();
+		vec4.set(currentUs,Math.pow(u,3),Math.pow(u,2),u,1);
+		vec4.transformMat4(currentUs, currentUs, cubicSpline);		
+		
+		var valueX = vec4.dot(currentUs,[puntosX[0],puntosX[1],puntosX[2],puntosX[3]]);	
+		var valueY = vec4.dot(currentUs,[puntosY[0],puntosY[1],puntosY[2],puntosY[3]]);
+		var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[1],puntosZ[2],puntosZ[3]]);
+		vertices.push(valueX)*0.8;
+		vertices.push(valueY)*0.8;
+		vertices.push(valueZ)*0.8;
+	}
+	
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = numberWide*numberTall;
+	
+	//Ahora le digo como usar esos vértices
+	this.webgl_index_buffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+	var cubeVertexIndices = [
+		0, 1, 5,   0, 1, 6,
+		1, 2, 6,   1, 2, 7,
+		2, 3, 7,   2, 3, 8,
+		3, 4, 8,   3, 4, 9		
+	]
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = 24;
+	
+	//Y aca le pongo la textura al cuadrado
+	this.webgl_texture_coord_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+    var textureCoords = [
+	//para cada uno de los ocho vértices que estoy utilizando 	
+      0.0, 1.0,
+      1.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0,
+	  0.0, 0.0,
+      1.0, 0.0,
+	  0.0, 0.0,
+      1.0, 0.0,
+	  0.0, 0.0,
+      1.0, 0.0
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+    this.webgl_texture_coord_buffer.itemSize = 2;
+    this.webgl_texture_coord_buffer.numItems = 4;	
+}
