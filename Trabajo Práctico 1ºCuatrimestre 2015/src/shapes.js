@@ -458,9 +458,9 @@ function grid (curveDetail,precision, numberTall) {
 			vertices.push(valueX);
 			vertices.push(valueY);
 			vertices.push(valueZ);
-			vertices.push(valueX*0.8);
-			vertices.push(valueY*0.8);
-			vertices.push(valueZ*0.8);			
+			vertices.push(valueX*0.7);
+			vertices.push(valueY*0.7);
+			vertices.push(0.3);			
 		}
 		for (var fromTo = 0; fromTo < precision; fromTo++){
 			var u = step * fromTo;	//El valor de u que va de 0 a 1
@@ -474,9 +474,9 @@ function grid (curveDetail,precision, numberTall) {
 			vertices.push(valueX);
 			vertices.push(valueY);
 			vertices.push(valueZ);
-			vertices.push(valueX*0.8);
-			vertices.push(valueY*0.8);
-			vertices.push(valueZ*0.8);
+			vertices.push(valueX*0.7);
+			vertices.push(valueY*0.7);
+			vertices.push(0.3);
 		}
 	}
 
