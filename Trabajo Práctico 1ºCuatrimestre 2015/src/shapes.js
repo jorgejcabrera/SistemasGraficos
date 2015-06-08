@@ -409,7 +409,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	
 }
 
-function grid (numberOfPointsOfInterest,precision, numberTall) {
+function grid (curveDetail,precision, numberTall) {
 	this.webgl_position_buffer = null;
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
@@ -419,6 +419,8 @@ function grid (numberOfPointsOfInterest,precision, numberTall) {
 	var puntosY = [];
 	var puntosZ = [];
 	
+	
+	var numberOfPointsOfInterest = curveDetail*10;
 	//La cantidad de puntos que va a tener mi grid de ancho, así va a haber "precision" puntos por cada curvita
 	var numberWide = numberOfPointsOfInterest*precision; 
 	
@@ -445,11 +447,23 @@ function grid (numberOfPointsOfInterest,precision, numberTall) {
 	
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
 	for (var curva = 0; curva<numberOfPointsOfInterest-3; curva++){
+		if (numberOfPointsOfInterest % 10 == 0){
+			var currentUs = vec4.create();
+			vec4.set(currentUs,0,0,0,1);
+			vec4.transformMat4(currentUs, currentUs, cubicSpline);	
+			
+			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva],puntosX[curva],puntosX[curva]]);	
+			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva],puntosY[curva],puntosY[curva]]);
+			var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva],puntosZ[curva],puntosZ[curva]]);
+			vertices.push(valueX);
+			vertices.push(valueY);
+			vertices.push(valueZ);			
+		}
 		for (var fromTo = 0; fromTo < precision; fromTo++){
 			var u = step * fromTo;	//El valor de u que va de 0 a 1
 			var currentUs = vec4.create();
 			vec4.set(currentUs,Math.pow(u,3),Math.pow(u,2),u,1);
-			vec4.transformMat4(currentUs, currentUs, cubicSpline);		
+			vec4.transformMat4(currentUs, currentUs, cubicSpline);	
 			
 			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva+1],puntosX[curva+2],puntosX[curva+3]]);	
 			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva+1],puntosY[curva+2],puntosY[curva+3]]);
@@ -459,7 +473,7 @@ function grid (numberOfPointsOfInterest,precision, numberTall) {
 			vertices.push(valueZ);
 		}
 	}
-	console.log(vertices);
+
 	//Luego otro de estos para hacerle una escala y asi tener un strip?
 	for (var i = 0; i<numberWide; i++){
 		var u = step * i;	//El valor de u que va de 0 a 1
