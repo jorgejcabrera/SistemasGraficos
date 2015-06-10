@@ -414,7 +414,6 @@ function grid (curveDetail,precision, numberTall,radius) {
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
 	this.webgl_index_buffer = null;
-	
 	var puntosX = [];
 	var puntosY = [];
 	var puntosZ = [];
@@ -445,6 +444,7 @@ function grid (curveDetail,precision, numberTall,radius) {
 	gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 	var vertices = [];
 	
+	var entered = 0;
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
 	for (var curva = 0; curva<numberOfPointsOfInterest-3; curva++){
 		if (numberOfPointsOfInterest % 10 == 0){
@@ -455,7 +455,8 @@ function grid (curveDetail,precision, numberTall,radius) {
 			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva],puntosX[curva],puntosX[curva]]);	
 			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva],puntosY[curva],puntosY[curva]]);
 			//var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva],puntosZ[curva],puntosZ[curva]]); va a dar cero
-			pushVertix(valueX,valueY)		
+			pushVertix(valueX,valueY);
+			entered++;
 		}
 		for (var fromTo = 0; fromTo < precision; fromTo++){
 			var u = step * fromTo;	//El valor de u que va de 0 a 1
@@ -481,14 +482,11 @@ function grid (curveDetail,precision, numberTall,radius) {
 		vertices.push(0);
 		for (var i = 1; i <numberTall; i++){			
 			var scaler = 1/Math.pow(256,i);
+			scaler=0.8
 			vertices.push(valueX*scaler);
 			vertices.push(valueY*scaler);
-			if(i<(numberTall-6)){
-				vertices.push(6);	
-			}else{
-				vertices.push(0);	
-			}
-			
+			vertices.push(i*2);	
+		
 		}
 	}
 	
@@ -499,23 +497,32 @@ function grid (curveDetail,precision, numberTall,radius) {
 	//Ahora le digo como usar esos vértices
 	this.webgl_index_buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-	var cubeVertexIndices = [];
+	var vertexIndices = [];
 	
-	for (var indice = 0; numberTall*indice/2 +numberTall < (vertices.length/3); indice++){
-		if (indice % 2 == 0){
-			cubeVertexIndices.push(numberTall*indice/2);
-			cubeVertexIndices.push(numberTall*indice/2 + 1);
-			cubeVertexIndices.push(numberTall*indice/2 +numberTall);					
-		}else{			
-			cubeVertexIndices.push(numberTall*((indice-1)/2) +1);
-			cubeVertexIndices.push(numberTall*((indice-1)/2) +numberTall);
-			cubeVertexIndices.push(numberTall*((indice-1)/2) +numberTall +1);
+	for(var wasd = 0; wasd < numberTall-1; wasd++){
+		for (var indice = 0; numberTall*indice/2 +numberTall < (vertices.length/3); indice++){
+			if (indice % 2 == 0){
+				vertexIndices.push(numberTall*indice/2 + wasd);
+				vertexIndices.push(numberTall*indice/2 + 1 + wasd);
+				vertexIndices.push(numberTall*indice/2 + numberTall + wasd);					
+			}else{			
+				vertexIndices.push(numberTall*((indice-1)/2) + 1 + wasd);
+				vertexIndices.push(numberTall*((indice-1)/2) + numberTall + wasd);
+				vertexIndices.push(numberTall*((indice-1)/2) + numberTall +1 + wasd);
+			}
 		}
+	}	
+
+	for(var wasd = 1; wasd < numberWide+entered-(precision*3); wasd++){
+		//Cierro la tapa
+		vertexIndices.push(numberTall-1);
+		vertexIndices.push(numberTall*(wasd+1)-1);
+		vertexIndices.push(numberTall*(wasd+2)-1);
 	}
 	
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndices), gl.STATIC_DRAW);
 	this.webgl_index_buffer.itemSize = 1;
-	this.webgl_index_buffer.numItems = cubeVertexIndices.length;
+	this.webgl_index_buffer.numItems = vertexIndices.length;
 	
 	//Y aca le pongo la textura al grid
 	this.webgl_texture_coord_buffer = gl.createBuffer();
