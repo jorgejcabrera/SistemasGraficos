@@ -48,6 +48,13 @@ function initTexture() {
 		handleLoadedTexture(waterTexture);
 	}
 	waterTexture.image.src = "src/textures/water.png";
+	
+	mountainTexture = gl.createTexture();
+	mountainTexture.image = new Image();
+	mountainTexture.image.onload = function() {		
+		handleLoadedTexture(mountainTexture);
+	}
+	mountainTexture.image.src = "src/textures/rock1.jpg";
 }
   
 function handleLoadedTexture(texture) {

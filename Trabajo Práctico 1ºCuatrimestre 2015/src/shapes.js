@@ -454,13 +454,8 @@ function grid (curveDetail,precision, numberTall) {
 			
 			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva],puntosX[curva],puntosX[curva]]);	
 			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva],puntosY[curva],puntosY[curva]]);
-			var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva],puntosZ[curva],puntosZ[curva]]);
-			vertices.push(valueX);
-			vertices.push(valueY);
-			vertices.push(valueZ);
-			vertices.push(valueX*0.7);
-			vertices.push(valueY*0.7);
-			vertices.push(0.3);			
+			//var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva],puntosZ[curva],puntosZ[curva]]); va a dar cero
+			pushVertix(valueX,valueY)		
 		}
 		for (var fromTo = 0; fromTo < precision; fromTo++){
 			var u = step * fromTo;	//El valor de u que va de 0 a 1
@@ -470,25 +465,27 @@ function grid (curveDetail,precision, numberTall) {
 			
 			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva+1],puntosX[curva+2],puntosX[curva+3]]);	
 			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva+1],puntosY[curva+2],puntosY[curva+3]]);
-			var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva+1],puntosZ[curva+2],puntosZ[curva+3]]);
-			vertices.push(valueX);
-			vertices.push(valueY);
-			vertices.push(valueZ);
-			vertices.push(valueX*0.7);
-			vertices.push(valueY*0.7);
-			vertices.push(0.3);
+			//var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva+1],puntosZ[curva+2],puntosZ[curva+3]]); va a dar cero
+			pushVertix(valueX,valueY)
 		}
 	}
 	//Esto para el ultimo paso porque este no llega: ""if (numberOfPointsOfInterest % 10 == 0)"" al ultimo paso, porque va de 0 a numberOfPointsOfInterest-3
 	var valueX = vec4.dot(currentUs,[puntosX[0],puntosX[0],puntosX[0],puntosX[0]]);	
 	var valueY = vec4.dot(currentUs,[puntosY[0],puntosY[0],puntosY[0],puntosY[0]]);
-	var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[0],puntosZ[0],puntosZ[0]]);
-	vertices.push(valueX);
-	vertices.push(valueY);
-	vertices.push(valueZ);
-	vertices.push(valueX*0.7);
-	vertices.push(valueY*0.7);
-	vertices.push(0.3);
+	//var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[0],puntosZ[0],puntosZ[0]]);
+	pushVertix(valueX,valueY);
+	
+	function pushVertix(valueX,valueY){
+		vertices.push(valueX);
+		vertices.push(valueY);
+		vertices.push(0);
+		for (var i = 1; i <numberTall; i++){
+			var scaler = (1 - i*0.1/(numberTall-1));	
+			vertices.push(valueX*scaler);
+			vertices.push(valueY*scaler);
+			vertices.push(0.3);	
+		}
+	}
 	
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 	this.webgl_position_buffer.itemSize = 3;

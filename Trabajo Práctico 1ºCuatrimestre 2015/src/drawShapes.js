@@ -48,8 +48,8 @@ function drawQUAD(where,scalator,degreesToRotate,axisToRotate,texture){
 }
 
 function drawMountain(where,scalator){
-	mountain = new grid(3,3, 1);
-	drawShaper3D(where,scalator,mountain.webgl_position_buffer,false,nullTexture,mountain.webgl_texture_coord_buffer);
+	mountain = new grid(3,3, 2);
+	drawShaper3D(where,scalator,mountain.webgl_position_buffer,false,mountainTexture,mountain.webgl_texture_coord_buffer);
 	gl.drawElements(gl.TRIANGLES, mountain.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
