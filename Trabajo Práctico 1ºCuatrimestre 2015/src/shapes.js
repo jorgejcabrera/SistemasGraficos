@@ -481,8 +481,7 @@ function grid (curveDetail,precision, numberTall,radius) {
 		vertices.push(valueY);
 		vertices.push(0);
 		for (var i = 1; i <numberTall; i++){			
-			var scaler = 1/Math.pow(256,i);
-			scaler=0.8
+			var scaler = 1/Math.pow(2,i);
 			vertices.push(valueX*scaler);
 			vertices.push(valueY*scaler);
 			vertices.push(i*2);	
@@ -536,7 +535,7 @@ function grid (curveDetail,precision, numberTall,radius) {
 		}else{
 			textureCoords.push(1.0);
 		}
-		textureCoords.push(textCoordFirstOpinion*(  (numberTall-1)/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
+		textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}
 	
 	
