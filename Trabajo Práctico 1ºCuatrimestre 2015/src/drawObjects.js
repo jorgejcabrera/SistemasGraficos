@@ -18,12 +18,6 @@ function drawWallCrane(posX,posY,posZ){
 	drawCubeOverload([posX, posY+longitude*10, height-longitude*6],[longitude*0.5,longitudeHypotenuse,width],45,[1,0,0]);
 }
 
-function drawFloor(posX,posY,posZ){
-	cube();
-	//drawQUAD([pos],[8,4,1],0,[1,0,0],floorTexture);		//Acá que vaya la plataforma
-	drawCube([posX,posY,posZ-1],[8,4,1]);
-}
-
 //PRE: POSX TIENE QUE SER DISTINTO DE CERO
 function drawCrame(posX,posY,posZ){
 	var height = 4.0;

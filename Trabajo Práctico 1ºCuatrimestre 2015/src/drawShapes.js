@@ -47,6 +47,18 @@ function drawQUAD(where,scalator,degreesToRotate,axisToRotate,texture){
 	gl.drawElements(gl.TRIANGLES, quad.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
+function drawFloor(where,scalator){
+	cube();	
+	drawShaper3D(where,scalator,cubeVertexPositionBuffer,false,floorTexture,cubeVertexTextureCoordBuffer);
+	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
+
+function drawPinza(where,scalator){
+	pinza = new pinza();	
+	drawShaper3D(where,scalator,pinza.webgl_position_buffer,false,pinzaTexture,pinza.webgl_texture_coord_buffer);
+	gl.drawElements(gl.TRIANGLES, pinza.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
+
 function drawMountain(where,scalator){
 	mountain = new grid(4,4,5,17);
 	drawShaper3D(where,scalator,mountain.webgl_position_buffer,false,mountainTexture,mountain.webgl_texture_coord_buffer);

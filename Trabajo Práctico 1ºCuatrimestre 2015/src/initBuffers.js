@@ -55,6 +55,13 @@ function initTexture() {
 		handleLoadedTexture(mountainTexture);
 	}
 	mountainTexture.image.src = "src/textures/rock3.jpg";
+	
+	pinzaTexture = gl.createTexture();
+	pinzaTexture.image = new Image();
+	pinzaTexture.image.onload = function() {		
+		handleLoadedTexture(pinzaTexture);
+	}
+	pinzaTexture.image.src = "src/textures/cord.jpg";
 }
   
 function handleLoadedTexture(texture) {
