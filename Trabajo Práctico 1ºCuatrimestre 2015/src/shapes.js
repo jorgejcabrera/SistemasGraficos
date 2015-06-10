@@ -427,8 +427,8 @@ function grid (curveDetail,precision, numberTall,radius) {
 	var angle = degToRad(360/numberOfPointsOfInterest);
 	for (var i = 0; i<numberOfPointsOfInterest; i++){
 		var alpha = angle * i;
-		puntosX.push(radius*Math.cos(alpha) + radius*Math.sin(1.6*alpha)/3);
-		puntosY.push(radius*Math.sin(alpha) + radius*Math.sin(1.6*alpha)/3);
+		puntosX.push(radius*Math.cos(alpha) + Math.sin(1.6*alpha)/3);
+		puntosY.push(radius*Math.sin(alpha) + Math.sin(1.6*alpha)/3);
 		puntosZ.push(0);
 	}
 	
@@ -480,12 +480,17 @@ function grid (curveDetail,precision, numberTall,radius) {
 		vertices.push(valueX);
 		vertices.push(valueY);
 		vertices.push(0);
-		for (var i = 1; i <numberTall; i++){			
+		for (var i = 1; i <numberTall-1; i++){			
 			var scaler = 1/Math.pow(2,i);
 			vertices.push(valueX*scaler);
 			vertices.push(valueY*scaler);
-			vertices.push(i*2);	
-		
+			vertices.push(i*2);
+		}
+		for (var i = numberTall-1; i <numberTall; i++){
+			var scaler = 1/Math.pow(2,i);
+			vertices.push(valueX*scaler);
+			vertices.push(valueY*scaler);
+			vertices.push((numberTall-2)*2+i/10);
 		}
 	}
 	
