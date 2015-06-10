@@ -472,7 +472,7 @@ function grid (curveDetail,precision, numberTall) {
 	//Esto para el ultimo paso porque este no llega: ""if (numberOfPointsOfInterest % 10 == 0)"" al ultimo paso, porque va de 0 a numberOfPointsOfInterest-3
 	var valueX = vec4.dot(currentUs,[puntosX[0],puntosX[0],puntosX[0],puntosX[0]]);	
 	var valueY = vec4.dot(currentUs,[puntosY[0],puntosY[0],puntosY[0],puntosY[0]]);
-	//var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[0],puntosZ[0],puntosZ[0]]);
+	//var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[0],puntosZ[0],puntosZ[0]]);	va a dar cero
 	pushVertix(valueX,valueY);
 	
 	function pushVertix(valueX,valueY){
@@ -497,9 +497,15 @@ function grid (curveDetail,precision, numberTall) {
 	var cubeVertexIndices = [];
 	
 	for (var indice = 0; indice < (vertices.length/3)-2; indice++){
-		cubeVertexIndices.push(indice);
-		cubeVertexIndices.push(indice+1);
-		cubeVertexIndices.push(indice+2);
+		if (indice % 2 == 0){
+			cubeVertexIndices.push(numberTall*indice/2);
+			cubeVertexIndices.push(numberTall*indice/2 + 1);
+			cubeVertexIndices.push(numberTall*indice/2 +numberTall);					
+		}else{			
+			cubeVertexIndices.push(numberTall*((indice-1)/2) +1);
+			cubeVertexIndices.push(numberTall*((indice-1)/2) +numberTall);
+			cubeVertexIndices.push(numberTall*((indice-1)/2) +numberTall +1);
+		}
 	}
 	
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
