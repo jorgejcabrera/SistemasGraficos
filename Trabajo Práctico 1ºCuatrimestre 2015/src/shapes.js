@@ -479,22 +479,17 @@ function grid (curveDetail,precision, numberTall) {
 			vertices.push(0.3);
 		}
 	}
-
-/*	//Luego otro de estos para hacerle una escala y asi tener un strip?
-	for (var i = 0; i<numberWide; i++){
-		var u = step * i;	//El valor de u que va de 0 a 1
-		var currentUs = vec4.create();
-		vec4.set(currentUs,Math.pow(u,3),Math.pow(u,2),u,1);
-		vec4.transformMat4(currentUs, currentUs, cubicSpline);		
-		
-		var valueX = vec4.dot(currentUs,[puntosX[0],puntosX[1],puntosX[2],puntosX[3]]);	
-		var valueY = vec4.dot(currentUs,[puntosY[0],puntosY[1],puntosY[2],puntosY[3]]);
-		var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[1],puntosZ[2],puntosZ[3]]);
-		vertices.push(valueX)*0.8;
-		vertices.push(valueY)*0.8;
-		vertices.push(valueZ)*0.8;
-	}
-*/	
+	//Esto para el ultimo paso porque este no llega: ""if (numberOfPointsOfInterest % 10 == 0)"" al ultimo paso, porque va de 0 a numberOfPointsOfInterest-3
+	var valueX = vec4.dot(currentUs,[puntosX[0],puntosX[0],puntosX[0],puntosX[0]]);	
+	var valueY = vec4.dot(currentUs,[puntosY[0],puntosY[0],puntosY[0],puntosY[0]]);
+	var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[0],puntosZ[0],puntosZ[0]]);
+	vertices.push(valueX);
+	vertices.push(valueY);
+	vertices.push(valueZ);
+	vertices.push(valueX*0.7);
+	vertices.push(valueY*0.7);
+	vertices.push(0.3);
+	
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 	this.webgl_position_buffer.itemSize = 3;
 	this.webgl_position_buffer.numItems = vertices.length/3;
@@ -509,13 +504,6 @@ function grid (curveDetail,precision, numberTall) {
 		cubeVertexIndices.push(indice+1);
 		cubeVertexIndices.push(indice+2);
 	}
-	//Y aca para cerrar los ultimos dos
-	cubeVertexIndices.push(vertices.length/3 -1);
-	cubeVertexIndices.push(vertices.length/3 -2);
-	cubeVertexIndices.push(0);
-	cubeVertexIndices.push(vertices.length/3-1);
-	cubeVertexIndices.push(1);
-	cubeVertexIndices.push(0);
 	
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 	this.webgl_index_buffer.itemSize = 1;
@@ -526,8 +514,29 @@ function grid (curveDetail,precision, numberTall) {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
     var textureCoords = [];
 	for (var indice = 0; indice < (vertices.length/3); indice++){
-		textureCoords.push(0.0);
-		textureCoords.push(3);
+		if(indice % 2 == 0){
+			//pares
+			if(indice % 4 == 2){
+				//La parte derecha
+				textureCoords.push(1.0);
+				textureCoords.push(0.0);		
+			}else{
+				//La parte izquierda
+				textureCoords.push(0.0);
+				textureCoords.push(0.0);
+			}
+		}else{
+			//Impares
+			if(indice % 4 == 1){
+				//Los de la izquierda
+				textureCoords.push(0.0);
+				textureCoords.push(1.0)				
+			}else{
+				//Los de la derecha
+				textureCoords.push(1.0);
+				textureCoords.push(1.0)
+			}
+		}
 	}
 	
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
