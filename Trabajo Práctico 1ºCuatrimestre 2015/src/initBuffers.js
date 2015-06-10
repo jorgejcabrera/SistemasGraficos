@@ -54,7 +54,7 @@ function initTexture() {
 	mountainTexture.image.onload = function() {		
 		handleLoadedTexture(mountainTexture);
 	}
-	mountainTexture.image.src = "src/textures/rock1.jpg";
+	mountainTexture.image.src = "src/textures/rock3.jpg";
 }
   
 function handleLoadedTexture(texture) {

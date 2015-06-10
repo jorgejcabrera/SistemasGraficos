@@ -409,7 +409,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	
 }
 
-function grid (curveDetail,precision, numberTall) {
+function grid (curveDetail,precision, numberTall,radius) {
 	this.webgl_position_buffer = null;
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
@@ -428,8 +428,8 @@ function grid (curveDetail,precision, numberTall) {
 	var angle = degToRad(360/numberOfPointsOfInterest);
 	for (var i = 0; i<numberOfPointsOfInterest; i++){
 		var alpha = angle * i;
-		puntosX.push(Math.cos(alpha) + Math.sin(1.6*alpha)/4);
-		puntosY.push(Math.sin(alpha) + Math.sin(1.6*alpha)/4);
+		puntosX.push(radius*Math.cos(alpha) + radius*Math.sin(1.6*alpha)/3);
+		puntosY.push(radius*Math.sin(alpha) + radius*Math.sin(1.6*alpha)/3);
 		puntosZ.push(0);
 	}
 	
@@ -480,11 +480,15 @@ function grid (curveDetail,precision, numberTall) {
 		vertices.push(valueY);
 		vertices.push(0);
 		for (var i = 1; i <numberTall; i++){			
-			var scaler = 0.001;
-			var tall = i*1.7/(numberTall-1);
+			var scaler = 1/Math.pow(256,i);
 			vertices.push(valueX*scaler);
 			vertices.push(valueY*scaler);
-			vertices.push(tall);	
+			if(i<(numberTall-6)){
+				vertices.push(6);	
+			}else{
+				vertices.push(0);	
+			}
+			
 		}
 	}
 	
@@ -525,7 +529,7 @@ function grid (curveDetail,precision, numberTall) {
 		}else{
 			textureCoords.push(1.0);
 		}
-		textureCoords.push( textCoordFirstOpinion*(  1/( numberTall-1 )  ) );
+		textureCoords.push(textCoordFirstOpinion*(  (numberTall-1)/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}
 	
 	
