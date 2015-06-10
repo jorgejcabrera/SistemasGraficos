@@ -479,11 +479,12 @@ function grid (curveDetail,precision, numberTall) {
 		vertices.push(valueX);
 		vertices.push(valueY);
 		vertices.push(0);
-		for (var i = 1; i <numberTall; i++){
-			var scaler = (1 - i*0.1/(numberTall-1));	
+		for (var i = 1; i <numberTall; i++){			
+			var scaler = 0.001;
+			var tall = i*1.7/(numberTall-1);
 			vertices.push(valueX*scaler);
 			vertices.push(valueY*scaler);
-			vertices.push(0.3);	
+			vertices.push(tall);	
 		}
 	}
 	
@@ -496,7 +497,7 @@ function grid (curveDetail,precision, numberTall) {
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 	var cubeVertexIndices = [];
 	
-	for (var indice = 0; indice < (vertices.length/3)-2; indice++){
+	for (var indice = 0; numberTall*indice/2 +numberTall < (vertices.length/3); indice++){
 		if (indice % 2 == 0){
 			cubeVertexIndices.push(numberTall*indice/2);
 			cubeVertexIndices.push(numberTall*indice/2 + 1);
@@ -512,35 +513,21 @@ function grid (curveDetail,precision, numberTall) {
 	this.webgl_index_buffer.itemSize = 1;
 	this.webgl_index_buffer.numItems = cubeVertexIndices.length;
 	
-	//Y aca le pongo la textura al cuadrado
+	//Y aca le pongo la textura al grid
 	this.webgl_texture_coord_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
     var textureCoords = [];
 	for (var indice = 0; indice < (vertices.length/3); indice++){
-		if(indice % 2 == 0){
-			//pares
-			if(indice % 4 == 2){
-				//La parte derecha
-				textureCoords.push(1.0);
-				textureCoords.push(0.0);		
-			}else{
-				//La parte izquierda
-				textureCoords.push(0.0);
-				textureCoords.push(0.0);
-			}
+		var textCoordFirstOpinion= indice % numberTall;		
+		var textCoordSecondOpinion = indice % (numberTall*2);
+		if(textCoordSecondOpinion < numberTall){
+			textureCoords.push(0.0);
 		}else{
-			//Impares
-			if(indice % 4 == 1){
-				//Los de la izquierda
-				textureCoords.push(0.0);
-				textureCoords.push(1.0)				
-			}else{
-				//Los de la derecha
-				textureCoords.push(1.0);
-				textureCoords.push(1.0)
-			}
+			textureCoords.push(1.0);
 		}
+		textureCoords.push( textCoordFirstOpinion*(  1/( numberTall-1 )  ) );
 	}
+	
 	
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
     this.webgl_texture_coord_buffer.itemSize = 2;
