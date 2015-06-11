@@ -44,7 +44,7 @@ function drawCrame(posX,posY,posZ){
     drawCube([posX+distanceBeetwenWalls*0.5, posY-longitude*6+distanceBeetwenWalls*1.5, height + posZ - width ],[ (distanceBeetwenWalls * 0.5) * 1/5 + width * 3, distanceBeetwenWalls * 0.15, distanceBeetwenWalls * 0.15]);
 
     //CABINA
-    drawCabin(posX, posY, height, posZ );
+    drawCabin(posX, posY+moverCabina, height, posZ );
 	
 	//LAS RUEDAS
 	drawWheels(posX,posY,posZ,distanceBeetwenWalls,height,width);

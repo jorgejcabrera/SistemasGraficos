@@ -19,7 +19,7 @@ function initTexture() {
 	craneTexture.image.onload = function() {		
 		handleLoadedTexture(craneTexture);
 	}
-	craneTexture.image.src = "src/textures/craneTexture1.jpg";
+	craneTexture.image.src = "src/textures/craneTexture4.jpg";
 	
 	skyTexture = gl.createTexture();
 	skyTexture.image = new Image();
