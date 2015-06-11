@@ -336,28 +336,28 @@ function cylinder(puntas,radio){ //puntas, radio
 		return textureCoordsCylinder;
 	}
 	
-	this.initBuffers = function(verticesCylinder,cylinderVertexIndices,textureCoordsCylinder){
+	this.initBuffers = function(){
 		//Vertices del cilindro	
 		this.webgl_position_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertex()), gl.STATIC_DRAW);
 		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = (verticesCylinder.length / 3);
+		this.webgl_position_buffer.numItems = (this.getVertex().length / 3);
 		//Index vertex del cilindro
 		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndex()), gl.STATIC_DRAW);
 		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = cylinderVertexIndices.length;	
+		this.webgl_index_buffer.numItems = this.getVertexIndex().length;	
 		//Texturas del cilindro
 		this.webgl_texture_coord_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
 		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = textureCoordsCylinder.length/2;
+		this.webgl_texture_coord_buffer.numItems = this.getTextureCoords().length/2;
 	}
 }
 
@@ -626,27 +626,27 @@ function grid (curveDetail,precision, numberTall,radius) {
 		return textureCoords;
 	}
 	
-	this.initBuffers = function(vertices,vertexIndices,textureCoords){
+	this.initBuffers = function(){
 		//DEL VERTEX POSITION
 		this.webgl_position_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertices()), gl.STATIC_DRAW);
 		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = vertices.length/3;
+		this.webgl_position_buffer.numItems = this.getVertices().length/3;
 		//DEL INDEX VERTEX
 		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndices), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndices()), gl.STATIC_DRAW);
 		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = vertexIndices.length;
+		this.webgl_index_buffer.numItems = this.getVertexIndices().length;
 		//DE LA TEXTURA
 		this.webgl_texture_coord_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
 		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = textureCoords.length/2;	
+		this.webgl_texture_coord_buffer.numItems = this.getTextureCoords().length/2;	
 	}
 }

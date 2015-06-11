@@ -170,6 +170,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         mat4.perspective(pMatrix,degToRad(70), gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
+		mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
 		
         drawCrame(moveXCrane,2.0,1.0);        
 		drawSky([0,0,0],[60,60,60],90,[1,0,0]);

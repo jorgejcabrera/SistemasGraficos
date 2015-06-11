@@ -29,7 +29,7 @@ function drawPyramid(where,scalator){
 }
 
 function drawCylinder(where, scalator,degreesToRotate,axisToRotate){
-	cilindro.initBuffers(cilindro.getVertex(),cilindro.getVertexIndex(),cilindro.getTextureCoords());
+	cilindro.initBuffers();
 	drawShaper3DOverload(where,scalator,cilindro.webgl_position_buffer,spinning,wheelTexture,cilindro.webgl_texture_coord_buffer,degreesToRotate,axisToRotate);
 	gl.drawElements(gl.TRIANGLES, cilindro.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
@@ -59,14 +59,13 @@ function drawPinza(where,scalator){
 }
 
 function drawMountain(where,scalator){
-	mountain.initBuffers(mountain.getVertices(),mountain.getVertexIndices(),mountain.getTextureCoords());
+	mountain.initBuffers();
 	drawShaper3D(where,scalator,mountain.webgl_position_buffer,false,mountainTexture,mountain.webgl_texture_coord_buffer);
 	gl.drawElements(gl.TRIANGLES, mountain.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
-function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer){
-	mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
+function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer){	
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix,mMatrix, where);
 
@@ -87,7 +86,6 @@ function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextur
 }
 //Overload que pide rotación y eje de rotación
 function drawShaper3DOverload(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer,degreesToRotate,axisToRotate){
-	mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
 	mat4.identity(mMatrix);
 	mat4.translate(mMatrix,mMatrix, where);
 	mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);	//axisToRotate = 1 0 0 90 grados
