@@ -225,11 +225,13 @@ function cube () {
 }
 
 function cylinder(puntas,radio){ //puntas, radio
+	this.webgl_position_buffer = null;
+	this.webgl_normal_buffer = null;
+	this.webgl_texture_coord_buffer = null;
+	this.webgl_index_buffer = null;
+
 	var angulo = degToRad(360/puntas);
 	var verticesCylinder = [];
-	
-	cylinderVertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexPositionBuffer);
 	
 	//Hago la tapa de arriba
 	for (i = 0; i < puntas ; i++){
@@ -251,20 +253,12 @@ function cylinder(puntas,radio){ //puntas, radio
 	verticesCylinder.push(1.6);		//viene a ser el puntas * 2
 	verticesCylinder.push(0.0);		//viene a ser el puntas * 2+1
 	verticesCylinder.push(0.0);		//viene a ser el puntas * 2+1
-	verticesCylinder.push(-1.6);	//viene a ser el puntas * 2+1
-	
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
-	cylinderVertexPositionBuffer.itemSize = 3;
-	cylinderVertexPositionBuffer.numItems = ( verticesCylinder.length / 3);
-	//console.log(cylinderVertexPositionBuffer.numItems)
-	
+	verticesCylinder.push(-1.6);	//viene a ser el puntas * 2+1	
+
 	//Y luego para usar el vertex index:
 	var cylinderVertexIndices=[];
-	cylinderVertexIndexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cylinderVertexIndexBuffer);
 	
-	//TAPA DE ARRIBA
-	
+	//TAPA DE ARRIBA	
 	for(i=0;i<puntas;i++){
 		cylinderVertexIndices.push(puntas*2);
 		cylinderVertexIndices.push(i);
@@ -283,17 +277,6 @@ function cylinder(puntas,radio){ //puntas, radio
 		else
 			cylinderVertexIndices.push(i+1);
 	}
-	/*
-	for(wasd=0;wasd<puntas-1;wasd++){
-		cylinderVertexIndices.push(wasd);
-		cylinderVertexIndices.push(wasd+1);
-		cylinderVertexIndices.push(wasd+puntas);
-	}
-	for(wasd=puntas;wasd<puntas*2-1;wasd++){
-		cylinderVertexIndices.push(wasd);
-		cylinderVertexIndices.push(wasd+1);
-		cylinderVertexIndices.push(wasd-puntas);
-	}*/	
 	
 	//LATERAL DEL TUBO
 	//Notar como que son dos niveles ese for se ejecuta una sola vez
@@ -319,15 +302,7 @@ function cylinder(puntas,radio){ //puntas, radio
 				
 	}
 	
-	
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
-	cylinderVertexIndexBuffer.itemSize = 1;
-	cylinderVertexIndexBuffer.numItems = cylinderVertexIndices.length;
-	
-	
 	var textureCoordsCylinder = [];
-	cylinderVertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cylinderVertexTextureCoordBuffer);
 	
 	//TEXTURAS TAPA SUPERIOR NOTAR QUE ES UNA POR CADA VERTICE
 	for(i=0;i<puntas;i++){
@@ -351,9 +326,39 @@ function cylinder(puntas,radio){ //puntas, radio
 	textureCoordsCylinder.push(0.5);
 	textureCoordsCylinder.push(0.5);
 	
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
-    cylinderVertexTextureCoordBuffer.itemSize = 2;
-    cylinderVertexTextureCoordBuffer.numItems = textureCoordsCylinder.length/2;	
+	this.getVertex = function(){
+		return verticesCylinder;
+	}
+	this.getVertexIndex = function(){
+		return cylinderVertexIndices;
+	}
+	this.getTextureCoords = function(){
+		return textureCoordsCylinder;
+	}
+	
+	this.initBuffers = function(verticesCylinder,cylinderVertexIndices,textureCoordsCylinder){
+		//Vertices del cilindro	
+		this.webgl_position_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCylinder), gl.STATIC_DRAW);
+		this.webgl_position_buffer.itemSize = 3;
+		this.webgl_position_buffer.numItems = (verticesCylinder.length / 3);
+		//Index vertex del cilindro
+		this.webgl_index_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cylinderVertexIndices), gl.STATIC_DRAW);
+		this.webgl_index_buffer.itemSize = 1;
+		this.webgl_index_buffer.numItems = cylinderVertexIndices.length;	
+		//Texturas del cilindro
+		this.webgl_texture_coord_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordsCylinder), gl.STATIC_DRAW);
+		this.webgl_texture_coord_buffer.itemSize = 2;
+		this.webgl_texture_coord_buffer.numItems = textureCoordsCylinder.length/2;
+	}
 }
 
 

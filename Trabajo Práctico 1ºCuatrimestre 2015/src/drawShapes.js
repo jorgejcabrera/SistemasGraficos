@@ -29,9 +29,9 @@ function drawPyramid(where,scalator){
 }
 
 function drawCylinder(where, scalator,degreesToRotate,axisToRotate){
-	cylinder(36,1);
-	drawShaper3DOverload(where,scalator,cylinderVertexPositionBuffer,spinning,wheelTexture,cylinderVertexTextureCoordBuffer,degreesToRotate,axisToRotate);
-	gl.drawElements(gl.TRIANGLES, cylinderVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	cilindro.initBuffers(cilindro.getVertex(),cilindro.getVertexIndex(),cilindro.getTextureCoords());
+	drawShaper3DOverload(where,scalator,cilindro.webgl_position_buffer,spinning,wheelTexture,cilindro.webgl_texture_coord_buffer,degreesToRotate,axisToRotate);
+	gl.drawElements(gl.TRIANGLES, cilindro.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 function drawSky(where, scalator,degreesToRotate,axisToRotate){

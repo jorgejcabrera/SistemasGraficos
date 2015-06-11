@@ -1,6 +1,7 @@
 function initObjects() {
 	mountain = new grid(4,3,4,17);
 	sky = new TexturedSphere(24, 24);
+	cilindro = new cylinder(36,1);
 }
 
 var craneTexture;
