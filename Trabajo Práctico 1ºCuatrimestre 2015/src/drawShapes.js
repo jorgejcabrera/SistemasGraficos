@@ -64,6 +64,11 @@ function drawMountain(where,scalator){
 	gl.drawElements(gl.TRIANGLES, mountain.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
+function drawShip(where,scalator){
+	ship.initBuffers();
+	drawShaper3D(where,scalator,ship.webgl_position_buffer,false,pinzaTexture,ship.webgl_texture_coord_buffer);
+	gl.drawElements(gl.TRIANGLES, ship.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
 /*La funcion se encarga de dibujar el objeto segun el buffer que se le pase, la posicion y la escala*/
 function drawShaper3D(where,scalator,vertexBuffer,animation,texture,vertexTextureBuffer){	
 	mat4.identity(mMatrix);
