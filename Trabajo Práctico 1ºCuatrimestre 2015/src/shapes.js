@@ -490,165 +490,45 @@ function TexturedSphere(latitude_bands, longitude_bands){
 }
 
 function Barco (curveDetail,precision, numberTall,radius) {
-	this.webgl_position_buffer = null;
-	this.webgl_normal_buffer = null;
-	this.webgl_texture_coord_buffer = null;
-	this.webgl_index_buffer = null;
-	var puntosX = [];
-	var puntosY = [];
-	var puntosZ = [];
-	
-	
-	var numberOfPointsOfInterest = curveDetail*10;
-	//La cantidad de puntos que va a tener mi grid de ancho, así va a haber "precision" puntos por cada curvita
-	var numberWide = numberOfPointsOfInterest*precision; 
-	
-	//Con esto voy a formar mi círculo erratico saliendo del medio, o sea del punto 0,0
-	var angle = degToRad(360/numberOfPointsOfInterest);
-	for (var i = 0; i<numberOfPointsOfInterest; i++){
-		var alpha = angle * i;
-		puntosX.push(radius*Math.cos(alpha) + Math.sin(1.6*alpha)/3);
-		puntosY.push(radius*Math.sin(alpha) + Math.sin(1.6*alpha)/3);
-		puntosZ.push(0);
-	}
-	
-	var cubicBezier = [
-		1,  0,  0,  0,
-		-3,  3,  0,  0,
-		3,  -6,  3,  0,
-		-1,  3,  -3,  1
-	]
-	
-	var step = 1/(numberWide -1);	//Va a ser el pasito de u de 0 a 1, cuenta con uno menos que el number wide por el 0 indexed
-	var vertices = [];
-	this.wasd = [
-	0,0,0,
-	1,1,1,
-	2,2,2,
-	3,3,3,
-	4,4,4
-	]
-	
-	var entered = 0;
-	//Si yo uso B-Spline cúbica, tendré esta fórmula
-	for (var curva = 0; curva<numberOfPointsOfInterest-3; curva++){
-		if (numberOfPointsOfInterest % 10 == 0){
-			var currentUs = vec4.create();
-			vec4.set(currentUs,0,0,0,1);
-			vec4.transformMat4(currentUs, currentUs, cubicBezier);	
-			
-			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva],puntosX[curva],puntosX[curva]]);	
-			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva],puntosY[curva],puntosY[curva]]);
-			//var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva],puntosZ[curva],puntosZ[curva]]); va a dar cero
-			pushVertix(valueX,valueY);
-			entered++;
-		}
-		for (var fromTo = 0; fromTo < precision; fromTo++){
-			var u = step * fromTo;	//El valor de u que va de 0 a 1
-			var currentUs = vec4.create();
-			vec4.set(currentUs,Math.pow(u,3),Math.pow(u,2),u,1);
-			vec4.transformMat4(currentUs, currentUs, cubicBezier);	
-			
-			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva+1],puntosX[curva+2],puntosX[curva+3]]);	
-			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva+1],puntosY[curva+2],puntosY[curva+3]]);
-			//var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva+1],puntosZ[curva+2],puntosZ[curva+3]]); va a dar cero
-			pushVertix(valueX,valueY)
-		}
-	}
-	//Esto para el ultimo paso porque este no llega: ""if (numberOfPointsOfInterest % 10 == 0)"" al ultimo paso, porque va de 0 a numberOfPointsOfInterest-3
-	var valueX = vec4.dot(currentUs,[puntosX[0],puntosX[0],puntosX[0],puntosX[0]]);	
-	var valueY = vec4.dot(currentUs,[puntosY[0],puntosY[0],puntosY[0],puntosY[0]]);
-	//var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[0],puntosZ[0],puntosZ[0]]);	va a dar cero
-	pushVertix(valueX,valueY);
-	
-	function pushVertix(valueX,valueY){
-		vertices.push(valueX);
-		vertices.push(valueY);
-		vertices.push(0);
-		for (var i = 1; i <numberTall-1; i++){			
-			var scaler = 1/Math.pow(2,i);
-			vertices.push(valueX*scaler);
-			vertices.push(valueY*scaler);
-			vertices.push(i*2);
-		}
-		for (var i = numberTall-1; i <numberTall; i++){
-			var scaler = 1/Math.pow(2,i);
-			vertices.push(valueX*scaler);
-			vertices.push(valueY*scaler);
-			vertices.push((numberTall-2)*2+i/10);
-		}
-	}
-	
-	//Ahora le digo como usar esos vértices
-	var vertexIndices = [];
-	
-	for(var wasd = 0; wasd < numberTall-1; wasd++){
-		for (var indice = 0; numberTall*indice/2 +numberTall < (vertices.length/3); indice++){
-			if (indice % 2 == 0){
-				vertexIndices.push(numberTall*indice/2 + wasd);
-				vertexIndices.push(numberTall*indice/2 + 1 + wasd);
-				vertexIndices.push(numberTall*indice/2 + numberTall + wasd);					
-			}else{			
-				vertexIndices.push(numberTall*((indice-1)/2) + 1 + wasd);
-				vertexIndices.push(numberTall*((indice-1)/2) + numberTall + wasd);
-				vertexIndices.push(numberTall*((indice-1)/2) + numberTall +1 + wasd);
-			}
-		}
-	}	
+  bezier = function(u, p0, p1, p2, p3){
+      var cX = 3 * (p1.x - p0.x),
+          bX = 3 * (p2.x - p1.x) - cX,
+          aX = p3.x - p0.x - cX - bX;
+            
+      var cY = 3 * (p1.y - p0.y),
+          bY = 3 * (p2.y - p1.y) - cY,
+          aY = p3.y - p0.y - cY - bY;
+            
+      var x = (aX * Math.pow(u, 3)) + (bX * Math.pow(u, 2)) + (cX * u) + p0.x;
+      var y = (aY * Math.pow(u, 3)) + (bY * Math.pow(u, 2)) + (cY * u) + p0.y;
+            
+      return {x: x, y: y};
+    },
 
-	for(var wasd = 1; wasd < numberWide+entered-(precision*3); wasd++){
-		//Cierro la tapa
-		vertexIndices.push(numberTall-1);
-		vertexIndices.push(numberTall*(wasd+1)-1);
-		vertexIndices.push(numberTall*(wasd+2)-1);
-	}
-	
-	//Y aca le pongo la textura al grid	
-    var textureCoords = [];
-	for (var indice = 0; indice < (vertices.length/3); indice++){
-		var textCoordFirstOpinion= indice % numberTall;		
-		var textCoordSecondOpinion = indice % (numberTall*2);
-		if(textCoordSecondOpinion < numberTall){
-			textureCoords.push(0.0);
-		}else{
-			textureCoords.push(1.0);
-		}
-		textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
-	}
-	
-	this.getVertices = function(){
-		return vertices;
-	}
-	this.getVertexIndices = function(){
-		return vertexIndices;
-	}
-	this.getTextureCoords = function(){
-		return textureCoords;
-	}
-	
-	this.initBuffers = function(){
-		//DEL VERTEX POSITION
-		this.webgl_position_buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertices()), gl.STATIC_DRAW);
-		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = this.getVertices().length/3;
-		//DEL INDEX VERTEX
-		this.webgl_index_buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-		
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndices()), gl.STATIC_DRAW);
-		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = this.getVertexIndices().length;
-		//DE LA TEXTURA
-		this.webgl_texture_coord_buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
-		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = this.getTextureCoords().length/2;	
-	}
+    (function(){
+      var accuracy = 0.01, //this'll give the bezier 100 segments
+          p0 = {x: 0, y: 100}, //use whatever points you want obviously
+          p1 = {x: 33, y: 0},
+          p2 = {x: 66, y: 0},
+          p3 = {x: 100, y: 100},
+          p4 = {x: 5, y: 1650},
+          p5 = {x: 95, y: 1650},
+          ctx = document.createElement('canvas').getContext('2d');
+
+      ctx.width = 500;
+      ctx.height = 500;
+      document.body.appendChild(ctx.canvas);
+      
+      ctx.moveTo(p0.x, p0.y);
+      for (var i=0; i<=1; i+=accuracy){
+         var p = bezier(i, p0, p1, p2, p3);
+         var q = bezier(i, p0, p4, p5,p3);
+         ctx.lineTo(p.x, p.y);
+         ctx.lineTo(q.x, q.y);
+      }
+  
+      ctx.stroke()
+    })()
 }
 
 function grid (curveDetail,precision, numberTall,radius) {
