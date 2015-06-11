@@ -515,9 +515,14 @@ function grid (curveDetail,precision, numberTall,radius) {
 	]
 	
 	var step = 1/(numberWide -1);	//Va a ser el pasito de u de 0 a 1, cuenta con uno menos que el number wide por el 0 indexed
-	this.webgl_position_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 	var vertices = [];
+	this.wasd = [
+	0,0,0,
+	1,1,1,
+	2,2,2,
+	3,3,3,
+	4,4,4
+	]
 	
 	var entered = 0;
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
@@ -569,13 +574,7 @@ function grid (curveDetail,precision, numberTall,radius) {
 		}
 	}
 	
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	this.webgl_position_buffer.itemSize = 3;
-	this.webgl_position_buffer.numItems = vertices.length/3;
-	
 	//Ahora le digo como usar esos vértices
-	this.webgl_index_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 	var vertexIndices = [];
 	
 	for(var wasd = 0; wasd < numberTall-1; wasd++){
@@ -599,13 +598,7 @@ function grid (curveDetail,precision, numberTall,radius) {
 		vertexIndices.push(numberTall*(wasd+2)-1);
 	}
 	
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndices), gl.STATIC_DRAW);
-	this.webgl_index_buffer.itemSize = 1;
-	this.webgl_index_buffer.numItems = vertexIndices.length;
-	
-	//Y aca le pongo la textura al grid
-	this.webgl_texture_coord_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+	//Y aca le pongo la textura al grid	
     var textureCoords = [];
 	for (var indice = 0; indice < (vertices.length/3); indice++){
 		var textCoordFirstOpinion= indice % numberTall;		
@@ -618,8 +611,37 @@ function grid (curveDetail,precision, numberTall,radius) {
 		textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}
 	
+	this.getVertices = function(){
+		return vertices;
+	}
+	this.getVertexIndices = function(){
+		return vertexIndices;
+	}
+	this.getTextureCoords = function(){
+		return textureCoords;
+	}
 	
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-    this.webgl_texture_coord_buffer.itemSize = 2;
-    this.webgl_texture_coord_buffer.numItems = textureCoords.length/2;	
+	this.initBuffers = function(vertices,vertexIndices,textureCoords){
+		//DEL VERTEX POSITION
+		this.webgl_position_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+		this.webgl_position_buffer.itemSize = 3;
+		this.webgl_position_buffer.numItems = vertices.length/3;
+		//DEL INDEX VERTEX
+		this.webgl_index_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(vertexIndices), gl.STATIC_DRAW);
+		this.webgl_index_buffer.itemSize = 1;
+		this.webgl_index_buffer.numItems = vertexIndices.length;
+		//DE LA TEXTURA
+		this.webgl_texture_coord_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+		this.webgl_texture_coord_buffer.itemSize = 2;
+		this.webgl_texture_coord_buffer.numItems = textureCoords.length/2;	
+	}
 }

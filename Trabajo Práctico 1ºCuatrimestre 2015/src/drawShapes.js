@@ -35,7 +35,6 @@ function drawCylinder(where, scalator,degreesToRotate,axisToRotate){
 }
 
 function drawSky(where, scalator,degreesToRotate,axisToRotate){
-	sky = new TexturedSphere(24, 24);
 	sky.initBuffers();
 	drawShaper3DOverload(where,scalator,sky.webgl_position_buffer,false,skyTexture,sky.webgl_texture_coord_buffer,degreesToRotate,axisToRotate);
 	gl.drawElements(gl.TRIANGLES, sky.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
@@ -60,7 +59,7 @@ function drawPinza(where,scalator){
 }
 
 function drawMountain(where,scalator){
-	mountain = new grid(4,3,4,17);
+	mountain.initBuffers(mountain.getVertices(),mountain.getVertexIndices(),mountain.getTextureCoords());
 	drawShaper3D(where,scalator,mountain.webgl_position_buffer,false,mountainTexture,mountain.webgl_texture_coord_buffer);
 	gl.drawElements(gl.TRIANGLES, mountain.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }

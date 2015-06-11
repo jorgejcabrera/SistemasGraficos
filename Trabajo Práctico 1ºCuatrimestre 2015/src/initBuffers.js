@@ -1,7 +1,6 @@
-function initBuffers() {	
-//	triangle();
-	//square();
-	//pyramid();
+function initObjects() {
+	mountain = new grid(4,3,4,17);
+	sky = new TexturedSphere(24, 24);
 }
 
 var craneTexture;

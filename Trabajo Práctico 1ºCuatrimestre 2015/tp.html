@@ -209,7 +209,7 @@
 
         initGL(canvas);
         initShaders();
-        initBuffers();
+        initObjects();	//Acá es donde iniciamos todas las cosas pesadas, como cilindro, montaña, esfera para que sea mas performante y lo sacamos de DrawShape
 		initVariables();
 		initTexture();
 
@@ -219,7 +219,7 @@
 		//Agregando soporte para el movimiento con teclado(¿Y mouse también?):
 		document.onkeydown = handleKeyDown;
         document.onkeyup = handleKeyUp;
-
+		
 		tick();
     }
 
