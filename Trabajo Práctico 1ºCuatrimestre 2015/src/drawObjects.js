@@ -106,20 +106,20 @@ function drawCabin(posX,posY,posZ,height){
 	drawCube([posXRearWall-longitudeRearWall+width*2+longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)]);
 
 	//PINZAS IZQUIERDAS
-	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95]);
-	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95]);
+	drawPinza([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ*0.5-(height-width)+2],[width*0.25,width*0.25,posZ*scaleDeLasPinzas]);	//El +2 es porque antes media desde otro lado a otro lado
+	drawPinza([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ*0.5-(height-width)+2],[width*0.25,width*0.25,posZ*scaleDeLasPinzas]);	//El +2 es porque antes media desde otro lado a otro lado
 
 	//PINZAS DERECHAS
 	/*como la longitud de las pinzas es de la altura de la grua: posZ=4 es 4*0.95 que da 3.8,los container tendran que tener de altura 0.2. CUANDO LEVANTAMOS UN CONTAINER LO QUE
 	VAMOS A TENER QUE VARIAR ES EL PARAMETRO CONRRESPONDIENTE A LA ESCALA NO LA POSICION EN Z DE LAS PINZAS*/
-	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95]);
-	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ*0.5-(height-width)],[width*0.25,width*0.25,posZ*0.95]);
+	drawPinza([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ*0.5-(height-width)+2],[width*0.25,width*0.25,posZ*scaleDeLasPinzas]);	//El +2 es porque antes media desde otro lado a otro lado
+	drawPinza([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ*0.5-(height-width)+2],[width*0.25,width*0.25,posZ*scaleDeLasPinzas]);	//El +2 es porque antes media desde otro lado a otro lado
 	
 	//AGARRE IZQUIERDO
-	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width,width*10,width*.25]);
+	drawCube([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2],[width,width*10,width*.25]);	//El +2 es porque antes media desde otro lado a otro lado
 	
 	//AGARRE DERECHO
-	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*0.95],[width,width*10,width*.25]);
+	drawCube([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)],[width,width*10,width*.25]);	//El +2 es porque antes media desde otro lado a otro lado
 
 }
 

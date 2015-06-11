@@ -78,6 +78,25 @@ function handleKeyPresses(){
 		cameraPosition = [-20,-20,0];		
 		vec3.normalize(cameraPosition,cameraPosition);	
 	}
+	//Si presiono Z=90 o X=88, para mover las pinzas de la grua
+	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
+		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
+			scaleDeLasPinzas -= 0.01;
+		}
+		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.2){
+			scaleDeLasPinzas += 0.01;
+		}
+	}
+	
+	//Si presiono C=67 o V=86, para mover la cabina
+	if (currentlyPressedKeys[67] || currentlyPressedKeys[86]) {
+		if(currentlyPressedKeys[67] && moverCabina > -2){
+			moverCabina -= 0.01;
+		}
+		if(currentlyPressedKeys[86] && moverCabina < 2){
+			moverCabina += 0.01;
+		}
+	}
 }
 
 //Testeo la ruedita del mouse

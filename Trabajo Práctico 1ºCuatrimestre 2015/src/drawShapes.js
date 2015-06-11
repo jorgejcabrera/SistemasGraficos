@@ -54,9 +54,9 @@ function drawFloor(where,scalator){
 }
 
 function drawPinza(where,scalator){
-	pinza = new pinza();	
-	drawShaper3D(where,scalator,pinza.webgl_position_buffer,false,pinzaTexture,pinza.webgl_texture_coord_buffer);
-	gl.drawElements(gl.TRIANGLES, pinza.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	garras = new pinza();	
+	drawShaper3D(where,scalator,garras.webgl_position_buffer,false,pinzaTexture,garras.webgl_texture_coord_buffer);
+	gl.drawElements(gl.TRIANGLES, garras.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 function drawMountain(where,scalator){
