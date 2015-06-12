@@ -53,7 +53,7 @@ function drawFloor(where,scalator){
 }
 
 function drawPinza(where,scalator){
-	garras = new pinza();	
+	garras.initBuffers();
 	drawShaper3D(where,scalator,garras.webgl_position_buffer,false,pinzaTexture,garras.webgl_texture_coord_buffer);
 	gl.drawElements(gl.TRIANGLES, garras.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }

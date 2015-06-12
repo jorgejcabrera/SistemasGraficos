@@ -83,11 +83,9 @@ function pinza () {
 	this.webgl_position_buffer = null;
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
-	this.webgl_index_buffer = null;
-	
-	this.webgl_position_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-	var vertices = [
+	this.webgl_index_buffer = null;	
+
+	this.vertices = [
 		0.0,	0.0,	0.0,	//0
 		1.0,	0.0,	0.0,	//1
 		0.0,	-1.0,	0.0,	//2
@@ -107,14 +105,9 @@ function pinza () {
 		0.0,	-1.0,	-1.0,	//14
 		1.0,	-1.0,	-1.0,	//15
 	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	this.webgl_position_buffer.itemSize = 3;
-	this.webgl_position_buffer.numItems = 16;
 	
 	//Y luego para usar el vertex index:
-	this.webgl_index_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-	var cubeVertexIndices = [
+	this.cubeVertexIndices = [
 		0, 1, 2,   1, 2, 3,    		// Front face
 		4, 5, 6,   5, 6, 7,    		// Back face
 		8, 9, 10,   9, 10, 11,  	// Top face
@@ -122,13 +115,8 @@ function pinza () {
 		1, 3, 5,   3, 5, 7, 		// Right face
 		0, 2, 4,   2, 4, 6  		// Left face
 	]
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-	this.webgl_index_buffer.itemSize = 1;
-	this.webgl_index_buffer.numItems = 36;
-	
-	this.webgl_texture_coord_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-    var textureCoords = [
+
+    this.textureCoords = [
 	//para cada uno de los ocho vértices que estoy utilizando 	
       0.0, 0.0,
       1.0, 0.0,
@@ -149,9 +137,41 @@ function pinza () {
 	  0.0, 1.0,
 	  1.0, 1.0,
     ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-    this.webgl_texture_coord_buffer.itemSize = 2;
-    this.webgl_texture_coord_buffer.numItems = 16;		
+	
+	this.getVertices = function(){
+		return this.vertices;
+	}
+	this.getVertexIndices = function(){
+		return this.cubeVertexIndices;
+	}
+	this.getTextureCoords = function(){
+		return this.textureCoords;
+	}
+	
+	this.initBuffers = function(){
+		//Vertices de las pinzas
+		this.webgl_position_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);	
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertices()), gl.STATIC_DRAW);
+		this.webgl_position_buffer.itemSize = 3;
+		this.webgl_position_buffer.numItems = 16;
+		//Index Vertex de las pinzas
+		this.webgl_index_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndices()), gl.STATIC_DRAW);
+		this.webgl_index_buffer.itemSize = 1;
+		this.webgl_index_buffer.numItems = 36;
+		//Coordenadas de textura
+		this.webgl_texture_coord_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
+		this.webgl_texture_coord_buffer.itemSize = 2;
+		this.webgl_texture_coord_buffer.numItems = 16;	
+	}
+	
 }
 
 function cube () {
@@ -560,7 +580,7 @@ function grid (curveDetail,pasito, numberTall,radius) {
 		1/6,  4/6,  1/6,  0
 	]
 	
-	var vertices = [];	
+	this.vertices = [];	
 
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
 	for (var curva = 0; curva<=puntosX.length -4; curva++){		
@@ -571,11 +591,11 @@ function grid (curveDetail,pasito, numberTall,radius) {
 			
 			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva+1],puntosX[curva+2],puntosX[curva+3]]);	
 			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva+1],puntosY[curva+2],puntosY[curva+3]]);
-			pushVertix(valueX,valueY)
+			pushVertix(valueX,valueY,this.vertices)
 		}
 	}
 	
-	function pushVertix(valueX,valueY){
+	function pushVertix(valueX,valueY,vertices){
 		vertices.push(valueX);
 		vertices.push(valueY);
 		vertices.push(0);
@@ -594,42 +614,42 @@ function grid (curveDetail,pasito, numberTall,radius) {
 	}
 	
 	//Ahora le digo como usar esos vértices
-	var vertexIndices = [];
+	this.vertexIndices = [];
 	
 	for(var wasd = 0; wasd < numberTall-1; wasd++){
-		for (var indice = 0; numberTall*indice/2 +numberTall < (vertices.length/3); indice++){
+		for (var indice = 0; numberTall*indice/2 +numberTall < (this.vertices.length/3); indice++){
 			if (indice % 2 == 0){
-				vertexIndices.push(numberTall*indice/2 + wasd);
-				vertexIndices.push(numberTall*indice/2 + 1 + wasd);
-				vertexIndices.push(numberTall*indice/2 + numberTall + wasd);					
+				this.vertexIndices.push(numberTall*indice/2 + wasd);
+				this.vertexIndices.push(numberTall*indice/2 + 1 + wasd);
+				this.vertexIndices.push(numberTall*indice/2 + numberTall + wasd);					
 			}else{			
-				vertexIndices.push(numberTall*((indice-1)/2) + 1 + wasd);
-				vertexIndices.push(numberTall*((indice-1)/2) + numberTall + wasd);
-				vertexIndices.push(numberTall*((indice-1)/2) + numberTall +1 + wasd);
+				this.vertexIndices.push(numberTall*((indice-1)/2) + 1 + wasd);
+				this.vertexIndices.push(numberTall*((indice-1)/2) + numberTall + wasd);
+				this.vertexIndices.push(numberTall*((indice-1)/2) + numberTall +1 + wasd);
 			}
 		}
 	}
 	//Y aca le pongo la textura al grid	
-    var textureCoords = [];
-	for (var indice = 0; indice < (vertices.length/3); indice++){
+    this.textureCoords = [];
+	for (var indice = 0; indice < (this.vertices.length/3); indice++){
 		var textCoordFirstOpinion= indice % numberTall;		
 		var textCoordSecondOpinion = indice % (numberTall*2);
 		if(textCoordSecondOpinion < numberTall){
-			textureCoords.push(0.0);
+			this.textureCoords.push(0.0);
 		}else{
-			textureCoords.push(1.0);
+			this.textureCoords.push(1.0);
 		}
-		textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
+		this.textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}
 	
 	this.getVertices = function(){
-		return vertices;
+		return this.vertices;
 	}
 	this.getVertexIndices = function(){
-		return vertexIndices;
+		return this.vertexIndices;
 	}
 	this.getTextureCoords = function(){
-		return textureCoords;
+		return this.textureCoords;
 	}
 	
 	this.initBuffers = function(){
