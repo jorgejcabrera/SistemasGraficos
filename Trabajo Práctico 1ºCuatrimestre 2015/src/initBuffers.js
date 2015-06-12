@@ -55,7 +55,7 @@ function initTexture() {
 	mountainTexture.image.onload = function() {		
 		handleLoadedTexture(mountainTexture);
 	}
-	mountainTexture.image.src = "src/textures/rock3.jpg";
+	mountainTexture.image.src = "src/textures/rock4.jpg";
 	
 	pinzaTexture = gl.createTexture();
 	pinzaTexture.image = new Image();
