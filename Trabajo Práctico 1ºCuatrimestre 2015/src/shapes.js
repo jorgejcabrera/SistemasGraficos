@@ -490,6 +490,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
 }
 
 function Barco (curveDetail,precision, numberTall,radius) {
+  /*
   bezier = function(u, p0, p1, p2, p3){
       var cX = 3 * (p1.x - p0.x),
           bX = 3 * (p2.x - p1.x) - cX,
@@ -529,22 +530,20 @@ function Barco (curveDetail,precision, numberTall,radius) {
   
       ctx.stroke()
     })()
+	*/
 }
 
-function grid (curveDetail,precision, numberTall,radius) {
+function grid (curveDetail,pasito, numberTall,radius) {
 	this.webgl_position_buffer = null;
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
 	this.webgl_index_buffer = null;
 	var puntosX = [];
 	var puntosY = [];
-	var puntosZ = [];
+	var puntosZ = [];	
 	
-	
-	var numberOfPointsOfInterest = curveDetail*10;
-	//La cantidad de puntos que va a tener mi grid de ancho, así va a haber "precision" puntos por cada curvita
-	var numberWide = numberOfPointsOfInterest*precision; 
-	
+	var numberOfPointsOfInterest = curveDetail;
+
 	//Con esto voy a formar mi círculo erratico saliendo del medio, o sea del punto 0,0
 	var angle = degToRad(360/numberOfPointsOfInterest);
 	for (var i = 0; i<numberOfPointsOfInterest; i++){
@@ -561,47 +560,20 @@ function grid (curveDetail,precision, numberTall,radius) {
 		1/6,  4/6,  1/6,  0
 	]
 	
-	var step = 1/(numberWide -1);	//Va a ser el pasito de u de 0 a 1, cuenta con uno menos que el number wide por el 0 indexed
-	var vertices = [];
-	this.wasd = [
-	0,0,0,
-	1,1,1,
-	2,2,2,
-	3,3,3,
-	4,4,4
-	]
-	
-	var entered = 0;
+	var vertices = [];	
+
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
-	for (var curva = 0; curva<numberOfPointsOfInterest-3; curva++){
-		if (numberOfPointsOfInterest % 10 == 0){
-			var currentUs = vec4.create();
-			vec4.set(currentUs,0,0,0,1);
-			vec4.transformMat4(currentUs, currentUs, cubicSpline);	
-			
-			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva],puntosX[curva],puntosX[curva]]);	
-			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva],puntosY[curva],puntosY[curva]]);
-			//var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva],puntosZ[curva],puntosZ[curva]]); va a dar cero
-			pushVertix(valueX,valueY);
-			entered++;
-		}
-		for (var fromTo = 0; fromTo < precision; fromTo++){
-			var u = step * fromTo;	//El valor de u que va de 0 a 1
+	for (var curva = 0; curva<=puntosX.length -4; curva++){		
+		for (var u = 0; u <= 1; u+= pasito){
 			var currentUs = vec4.create();
 			vec4.set(currentUs,Math.pow(u,3),Math.pow(u,2),u,1);
-			vec4.transformMat4(currentUs, currentUs, cubicSpline);	
+			vec4.transformMat4(currentUs, currentUs, cubicSpline);
 			
 			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva+1],puntosX[curva+2],puntosX[curva+3]]);	
 			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva+1],puntosY[curva+2],puntosY[curva+3]]);
-			//var valueZ = vec4.dot(currentUs,[puntosZ[curva],puntosZ[curva+1],puntosZ[curva+2],puntosZ[curva+3]]); va a dar cero
 			pushVertix(valueX,valueY)
 		}
 	}
-	//Esto para el ultimo paso porque este no llega: ""if (numberOfPointsOfInterest % 10 == 0)"" al ultimo paso, porque va de 0 a numberOfPointsOfInterest-3
-	var valueX = vec4.dot(currentUs,[puntosX[0],puntosX[0],puntosX[0],puntosX[0]]);	
-	var valueY = vec4.dot(currentUs,[puntosY[0],puntosY[0],puntosY[0],puntosY[0]]);
-	//var valueZ = vec4.dot(currentUs,[puntosZ[0],puntosZ[0],puntosZ[0],puntosZ[0]]);	va a dar cero
-	pushVertix(valueX,valueY);
 	
 	function pushVertix(valueX,valueY){
 		vertices.push(valueX);
@@ -636,15 +608,7 @@ function grid (curveDetail,precision, numberTall,radius) {
 				vertexIndices.push(numberTall*((indice-1)/2) + numberTall +1 + wasd);
 			}
 		}
-	}	
-
-	for(var wasd = 1; wasd < numberWide+entered-(precision*3); wasd++){
-		//Cierro la tapa
-		vertexIndices.push(numberTall-1);
-		vertexIndices.push(numberTall*(wasd+1)-1);
-		vertexIndices.push(numberTall*(wasd+2)-1);
 	}
-	
 	//Y aca le pongo la textura al grid	
     var textureCoords = [];
 	for (var indice = 0; indice < (vertices.length/3); indice++){

@@ -1,5 +1,5 @@
 function initObjects() {
-	mountain = new grid(4,3,5,17);
+	mountain = new grid(12,0.5,5,15);
 	sky = new TexturedSphere(24, 24);
 	cilindro = new cylinder(36,1);
 	ship = new Barco(4,3,5,320);

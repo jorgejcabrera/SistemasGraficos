@@ -58,9 +58,9 @@ function drawPinza(where,scalator){
 	gl.drawElements(gl.TRIANGLES, garras.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
-function drawMountain(where,scalator){
+function drawMountain(where,scalator,degreesToRotate,axisToRotate){
 	mountain.initBuffers();
-	drawShaper3D(where,scalator,mountain.webgl_position_buffer,false,mountainTexture,mountain.webgl_texture_coord_buffer);
+	drawShaper3DOverload(where,scalator,mountain.webgl_position_buffer,false,mountainTexture,mountain.webgl_texture_coord_buffer,degreesToRotate,axisToRotate);
 	gl.drawElements(gl.TRIANGLES, mountain.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
