@@ -64,6 +64,13 @@ function drawMountain(where,scalator,degreesToRotate,axisToRotate){
 	gl.drawElements(gl.TRIANGLES, mountain.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
+function drawContainer(where,scalator){
+	container.setPosition(where);
+	container.initBuffers();
+	drawShaper3D(where,scalator,container.webgl_position_buffer,false,pinzaTexture,container.webgl_texture_coord_buffer);
+	gl.drawElements(gl.TRIANGLES, container.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+}
+
 function drawShip(where,scalator){
 	ship.initBuffers();
 	drawShaper3D(where,scalator,ship.webgl_position_buffer,false,pinzaTexture,ship.webgl_texture_coord_buffer);

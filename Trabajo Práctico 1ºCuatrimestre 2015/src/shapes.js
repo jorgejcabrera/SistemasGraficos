@@ -509,7 +509,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	
 }
 
-function Barco (curveDetail,precision, numberTall,radius) {
+function Ship (curveDetail,precision, numberTall,radius) {
   /*
   bezier = function(u, p0, p1, p2, p3){
       var cX = 3 * (p1.x - p0.x),
@@ -551,6 +551,105 @@ function Barco (curveDetail,precision, numberTall,radius) {
       ctx.stroke()
     })()
 	*/
+}
+
+function Container(){
+	this.positionX=null;
+	this.positionY=null;
+	this.positionZ=null;
+	this.webgl_position_buffer = null;
+	this.webgl_normal_buffer = null;
+	this.webgl_texture_coord_buffer = null;
+	this.webgl_index_buffer = null;
+
+	this.vertices = [
+		-1.0,	1.0,	1.0,	//0
+		1.0,	1.0,	1.0,	//1
+		-1.0,	-1.0,	1.0,	//2
+		1.0,	-1.0,	1.0,	//3
+		-1.0,	1.0,	-1.0,	//4
+		1.0,	1.0,	-1.0,	//5
+		-1.0,	-1.0,	-1.0,	//6
+		1.0,	-1.0,	-1.0,	//7
+		//para el top face
+		-1.0,	1.0,	1.0,	//8
+		1.0,	1.0,	1.0,	//9
+		-1.0,	1.0,	-1.0,	//10
+		1.0,	1.0,	-1.0,	//11
+		//para el bottom face
+		-1.0,	-1.0,	1.0,	//12
+		1.0,	-1.0,	1.0,	//13
+		-1.0,	-1.0,	-1.0,	//14
+		1.0,	-1.0,	-1.0,	//15
+	];
+
+	this.cubeVertexIndices = [
+		0, 1, 2,   1, 2, 3,    		// Front face
+		4, 5, 6,   5, 6, 7,    		// Back face
+		8, 9, 10,   9, 10, 11,  	// Top face
+		12, 13, 14,   13, 14, 15, 	// Bottom face
+		1, 3, 5,   3, 5, 7, 		// Right face
+		0, 2, 4,   2, 4, 6  		// Left face
+	];
+
+    this.textureCoords = [
+	//para cada uno de los ocho vértices que estoy utilizando 	
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+      1.0, 1.0,
+	  1.0, 0.0,
+	  0.0, 0.0,
+	  1.0, 1.0,
+	  0.0, 1.0,
+	  //la cara de arriba
+	  0.0, 0.0,
+	  1.0, 0.0,
+	  0.0, 1.0,
+	  1.0, 1.0,
+	  //la cara de abajo
+	  0.0, 0.0,
+	  1.0, 0.0,
+	  0.0, 1.0,
+	  1.0, 1.0,
+    ];
+
+    this.setPosition=function(where){
+		this.positionX=where[1];
+		this.positionY=where[1];
+		this.positionZ=where[2];
+	}
+
+	this.getPositionX = function(){
+		return this.positionX
+	}
+
+	this.getPositionY = function(){
+		return this.positionY
+	}
+
+    this.initBuffers = function(){
+    	//Buffer de vertices
+    	this.webgl_position_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+    	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+		this.webgl_position_buffer.itemSize = 3;
+		this.webgl_position_buffer.numItems = 16;
+
+		//Buffer de indices
+		this.webgl_index_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.cubeVertexIndices), gl.STATIC_DRAW);
+		this.webgl_index_buffer.itemSize = 1;
+		this.webgl_index_buffer.numItems = 36;
+
+		//Buffer de texturas
+		this.webgl_texture_coord_buffer = gl.createBuffer();
+	    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+    	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
+    	this.webgl_texture_coord_buffer.itemSize = 2;
+  	 	this.webgl_texture_coord_buffer.numItems = 16;
+    }
 }
 
 function grid (curveDetail,pasito, numberTall,radius) {
@@ -659,20 +758,20 @@ function grid (curveDetail,pasito, numberTall,radius) {
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertices()), gl.STATIC_DRAW);
 		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = this.getVertices().length/3;
+		this.webgl_position_buffer.numItems = this.vertices.length/3;
 		//DEL INDEX VERTEX
 		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndices()), gl.STATIC_DRAW);
 		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = this.getVertexIndices().length;
+		this.webgl_index_buffer.numItems = this.vertexIndices.length;
 		//DE LA TEXTURA
 		this.webgl_texture_coord_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
 		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = this.getTextureCoords().length/2;	
+		this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;	
 	}
 }
