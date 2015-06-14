@@ -1,10 +1,12 @@
 function initObjects() {
-	mountain = new grid(12,0.5,5,15);
-	sky = new TexturedSphere(24, 24);
-	cilindro = new cylinder(36,1);
-	ship = new Ship(4,3,5,320);
-	garras = new pinza();
-	container = new Container();
+	mountain = new mountain(12,0.5,5,15);
+	sky = new TexturedSphere(24, 24);	
+	cilindro = new cylinder(36,1);	
+	ship = new Ship(4,3,5,320);	
+	garras = new pinza();	
+	container = new Container();	
+	cubo = new cube();
+	quad = new square();
 }
 
 var craneTexture;

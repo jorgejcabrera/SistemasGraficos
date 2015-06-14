@@ -1,82 +1,68 @@
-function triangle () {
-	triangleVertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
-	var vertices = [
-		 0.0,  1.0,  0.0,
-		-1.0, -1.0,  0.0,
-		 1.0, -1.0,  0.0
-	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	triangleVertexPositionBuffer.itemSize = 3;		/*puntos correspondientes a cada vertice*/
-	triangleVertexPositionBuffer.numItems = 3;		/*cantidad de vertices*/
-}
-function pyramid(){
-	pyramidVertexPositionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, pyramidVertexPositionBuffer);
-    var vertices = [
-		// Front face
-        0.0,  1.0,  0.0,
-        -1.0, -1.0,  1.0,
-        1.0, -1.0,  1.0,
-        // Right face
-        0.0,  1.0,  0.0,
-        1.0, -1.0,  1.0,
-        1.0, -1.0, -1.0,
-        // Back face
-        0.0,  1.0,  0.0,
-        1.0, -1.0, -1.0,
-        -1.0, -1.0, -1.0,
-        // Left face
-        0.0,  1.0,  0.0,
-        -1.0, -1.0, -1.0,
-        -1.0, -1.0,  1.0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    pyramidVertexPositionBuffer.itemSize = 3;
-    pyramidVertexPositionBuffer.numItems = 12;
-}
-
 function square () {
 	this.webgl_position_buffer = null;
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
 	this.webgl_index_buffer = null;
-	
-	this.webgl_position_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-	var vertices = [
+
+	this.vertices = [
 		-1.0,	1.0,	0.0,	//0
 		1.0,	1.0,	0.0,	//1
 		-1.0,	-1.0,	0.0,	//2
 		1.0,	-1.0,	0.0		//3
 	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	this.webgl_position_buffer.itemSize = 3;
-	this.webgl_position_buffer.numItems = 4;
 	
-	//Ahora le digo como usar esos vértices
-	this.webgl_index_buffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-	var cubeVertexIndices = [
+	this.vertexIndex = [
 		0, 1, 2,   1, 2, 3
 	]
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-	this.webgl_index_buffer.itemSize = 1;
-	this.webgl_index_buffer.numItems = 6;
 	
-	//Y aca le pongo la textura al cuadrado
-	this.webgl_texture_coord_buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-    var textureCoords = [
+    this.textureCoords = [
 	//para cada uno de los ocho vértices que estoy utilizando 	
       0.0, 1.0,
       1.0, 1.0,
       0.0, 0.0,
       1.0, 0.0
     ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-    this.webgl_texture_coord_buffer.itemSize = 2;
-    this.webgl_texture_coord_buffer.numItems = 4;	
+	
+	this.initBuffers = function(){
+		//Vertex
+		this.webgl_position_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);	
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+		this.webgl_position_buffer.itemSize = 3;
+		this.webgl_position_buffer.numItems = 4;	
+		//Index vertex
+		this.webgl_index_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);		
+		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndex), gl.STATIC_DRAW);
+		this.webgl_index_buffer.itemSize = 1;
+		this.webgl_index_buffer.numItems = 6;
+		//Coord textures
+		this.webgl_texture_coord_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+			
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
+		this.webgl_texture_coord_buffer.itemSize = 2;
+		this.webgl_texture_coord_buffer.numItems = 4;
+	}
+	
+	this.draw = function(where,scalator,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	
 }
 
 function pinza () {
@@ -107,7 +93,7 @@ function pinza () {
 	];
 	
 	//Y luego para usar el vertex index:
-	this.cubeVertexIndices = [
+	this.VertexIndices = [
 		0, 1, 2,   1, 2, 3,    		// Front face
 		4, 5, 6,   5, 6, 7,    		// Back face
 		8, 9, 10,   9, 10, 11,  	// Top face
@@ -137,47 +123,56 @@ function pinza () {
 	  0.0, 1.0,
 	  1.0, 1.0,
     ];
-	
-	this.getVertices = function(){
-		return this.vertices;
-	}
-	this.getVertexIndices = function(){
-		return this.cubeVertexIndices;
-	}
-	this.getTextureCoords = function(){
-		return this.textureCoords;
-	}
-	
+
 	this.initBuffers = function(){
 		//Vertices de las pinzas
 		this.webgl_position_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);	
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertices()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
 		this.webgl_position_buffer.itemSize = 3;
 		this.webgl_position_buffer.numItems = 16;
 		//Index Vertex de las pinzas
 		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndices()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.VertexIndices), gl.STATIC_DRAW);
 		this.webgl_index_buffer.itemSize = 1;
 		this.webgl_index_buffer.numItems = 36;
 		//Coordenadas de textura
 		this.webgl_texture_coord_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
 		this.webgl_texture_coord_buffer.itemSize = 2;
 		this.webgl_texture_coord_buffer.numItems = 16;	
 	}
 	
+	this.draw = function(where,scalator,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}
 }
 
 function cube () {
-	cubeVertexPositionBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-	var vertices = [
+	this.webgl_position_buffer = null;
+	this.webgl_normal_buffer = null;
+	this.webgl_texture_coord_buffer = null;
+	this.webgl_index_buffer = null;	
+	
+	this.vertices = [
 		-1.0,	1.0,	1.0,	//0
 		1.0,	1.0,	1.0,	//1
 		-1.0,	-1.0,	1.0,	//2
@@ -197,14 +192,8 @@ function cube () {
 		-1.0,	-1.0,	-1.0,	//14
 		1.0,	-1.0,	-1.0,	//15
 	];
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	cubeVertexPositionBuffer.itemSize = 3;
-	cubeVertexPositionBuffer.numItems = 16;
 	
-	//Y luego para usar el vertex index:
-	cubeVertexIndexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-	var cubeVertexIndices = [
+	this.VertexIndices = [
 		0, 1, 2,   1, 2, 3,    		// Front face
 		4, 5, 6,   5, 6, 7,    		// Back face
 		8, 9, 10,   9, 10, 11,  	// Top face
@@ -212,13 +201,8 @@ function cube () {
 		1, 3, 5,   3, 5, 7, 		// Right face
 		0, 2, 4,   2, 4, 6  		// Left face
 	]
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-	cubeVertexIndexBuffer.itemSize = 1;
-	cubeVertexIndexBuffer.numItems = 36;
 	
-	cubeVertexTextureCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-    var textureCoords = [
+    this.textureCoords = [
 	//para cada uno de los ocho vértices que estoy utilizando 	
       0.0, 0.0,
       1.0, 0.0,
@@ -239,9 +223,65 @@ function cube () {
 	  0.0, 1.0,
 	  1.0, 1.0,
     ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-    cubeVertexTextureCoordBuffer.itemSize = 2;
-    cubeVertexTextureCoordBuffer.numItems = 16;		
+
+	this.initBuffers = function(){
+		//Vertices del cubo
+		this.webgl_position_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);	
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+		this.webgl_position_buffer.itemSize = 3;
+		this.webgl_position_buffer.numItems = 16;
+		//Index Vertex del cubo
+		this.webgl_index_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.VertexIndices), gl.STATIC_DRAW);
+		this.webgl_index_buffer.itemSize = 1;
+		this.webgl_index_buffer.numItems = 36;
+		//Coordenadas de textura del cubo
+		this.webgl_texture_coord_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
+		this.webgl_texture_coord_buffer.itemSize = 2;
+		this.webgl_texture_coord_buffer.numItems = 16;	
+	}
+	
+	this.draw = function(where,scalator,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}
+	
+	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);		
+		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	
 }
 
 function cylinder(puntas,radio){ //puntas, radio
@@ -251,51 +291,51 @@ function cylinder(puntas,radio){ //puntas, radio
 	this.webgl_index_buffer = null;
 
 	var angulo = degToRad(360/puntas);
-	var verticesCylinder = [];
+	this.vertices = [];
 	
 	//Hago la tapa de arriba
 	for (i = 0; i < puntas ; i++){
      	var angle = i*angulo; 
-    	verticesCylinder.push(Math.cos(angle)*radio);
-		verticesCylinder.push(Math.sin(angle)*radio);
-		verticesCylinder.push(2.0);
+    	this.vertices.push(Math.cos(angle)*radio);
+		this.vertices.push(Math.sin(angle)*radio);
+		this.vertices.push(2.0);
     }
 	//Hago la tapa de abajo
 	for (i = puntas; i < (puntas*2) ; i++){
      	var angle = i*angulo; 
-    	verticesCylinder.push(Math.cos(angle)*radio);
-		verticesCylinder.push(Math.sin(angle)*radio);
-		verticesCylinder.push(-2.0);
+    	this.vertices.push(Math.cos(angle)*radio);
+		this.vertices.push(Math.sin(angle)*radio);
+		this.vertices.push(-2.0);
     }
 
-	verticesCylinder.push(0.0);		//viene a ser el puntas * 2
-	verticesCylinder.push(0.0);		//viene a ser el puntas * 2 
-	verticesCylinder.push(1.6);		//viene a ser el puntas * 2
-	verticesCylinder.push(0.0);		//viene a ser el puntas * 2+1
-	verticesCylinder.push(0.0);		//viene a ser el puntas * 2+1
-	verticesCylinder.push(-1.6);	//viene a ser el puntas * 2+1	
+	this.vertices.push(0.0);		//viene a ser el puntas * 2
+	this.vertices.push(0.0);		//viene a ser el puntas * 2 
+	this.vertices.push(1.6);		//viene a ser el puntas * 2
+	this.vertices.push(0.0);		//viene a ser el puntas * 2+1
+	this.vertices.push(0.0);		//viene a ser el puntas * 2+1
+	this.vertices.push(-1.6);	//viene a ser el puntas * 2+1	
 
 	//Y luego para usar el vertex index:
-	var cylinderVertexIndices=[];
+	this.vertexIndex=[];
 	
 	//TAPA DE ARRIBA	
 	for(i=0;i<puntas;i++){
-		cylinderVertexIndices.push(puntas*2);
-		cylinderVertexIndices.push(i);
+		this.vertexIndex.push(puntas*2);
+		this.vertexIndex.push(i);
 		if( i == puntas-1)
-			cylinderVertexIndices.push(0);
+			this.vertexIndex.push(0);
 		else
-			cylinderVertexIndices.push(i+1);
+			this.vertexIndex.push(i+1);
 	}
 	
 	//TAPA DE ABAJO
 	for(i=puntas;i<puntas*2;i++){
-		cylinderVertexIndices.push(puntas*2+1);
-		cylinderVertexIndices.push(i);
+		this.vertexIndex.push(puntas*2+1);
+		this.vertexIndex.push(i);
 		if( i == puntas*2-1)
-			cylinderVertexIndices.push(puntas);
+			this.vertexIndex.push(puntas);
 		else
-			cylinderVertexIndices.push(i+1);
+			this.vertexIndex.push(i+1);
 	}
 	
 	//LATERAL DEL TUBO
@@ -303,33 +343,33 @@ function cylinder(puntas,radio){ //puntas, radio
 	niveles = 2;
 	for(niv=0;niv<niveles-1;niv++){
 		for(io=0;io<puntas-1;io++){
-			cylinderVertexIndices.push(niv*puntas+io);
-			cylinderVertexIndices.push(niv*puntas +io+1);
-			cylinderVertexIndices.push((niv+1)*puntas +io);
+			this.vertexIndex.push(niv*puntas+io);
+			this.vertexIndex.push(niv*puntas +io+1);
+			this.vertexIndex.push((niv+1)*puntas +io);
 			
-			cylinderVertexIndices.push((niv+1)*puntas +io);
-			cylinderVertexIndices.push((niv+1)*puntas +io+1);
-			cylinderVertexIndices.push(niv*puntas +io+1);
+			this.vertexIndex.push((niv+1)*puntas +io);
+			this.vertexIndex.push((niv+1)*puntas +io+1);
+			this.vertexIndex.push(niv*puntas +io+1);
 		}
 	//Esto es lo que va al final porque vuelve a cero, onda va de 0 1 2 3 4 Y vuelve a 0 en vez de ir al 5
-	cylinderVertexIndices.push(niv*puntas+(puntas-1));
-	cylinderVertexIndices.push(niv*puntas);
-	cylinderVertexIndices.push((niv+1)*puntas+(puntas-1));
+	this.vertexIndex.push(niv*puntas+(puntas-1));
+	this.vertexIndex.push(niv*puntas);
+	this.vertexIndex.push((niv+1)*puntas+(puntas-1));
 	
-	cylinderVertexIndices.push((niv+1)*puntas +io);
-	cylinderVertexIndices.push(puntas);
-	cylinderVertexIndices.push(0);
+	this.vertexIndex.push((niv+1)*puntas +io);
+	this.vertexIndex.push(puntas);
+	this.vertexIndex.push(0);
 				
 	}
 	
-	var textureCoordsCylinder = [];
+	this.textureCoords = [];
 	
 	//TEXTURAS TAPA SUPERIOR NOTAR QUE ES UNA POR CADA VERTICE
 	for(i=0;i<puntas;i++){
 		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*i/puntas))) +1)/2;	//Le aplico una escala por eso el (cos+1)/2 
 		var firstCoordOfTextureSin = ((Math.sin(degToRad(360*i/puntas))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
-		textureCoordsCylinder.push(firstCoordOfTextureCos);
-		textureCoordsCylinder.push(firstCoordOfTextureSin);
+		this.textureCoords.push(firstCoordOfTextureCos);
+		this.textureCoords.push(firstCoordOfTextureSin);
 	}
 
 	//TEXTURAS TAPA INFERIOR
@@ -337,47 +377,55 @@ function cylinder(puntas,radio){ //puntas, radio
 		var iCorrection = i - puntas;
 		var firstCoordOfTextureCos = ((Math.cos(degToRad(360*iCorrection/puntas))) +1)/2 ;	//Le aplico una escala por eso el (cos+1)/2 
 		var firstCoordOfTextureSin = ((Math.sin(degToRad(360*iCorrection/puntas))) +1)/2;	//Ya que paso de la escala -1 a +1, a la escala 0 a +1
-		textureCoordsCylinder.push(firstCoordOfTextureCos);
-		textureCoordsCylinder.push(firstCoordOfTextureSin);
+		this.textureCoords.push(firstCoordOfTextureCos);
+		this.textureCoords.push(firstCoordOfTextureSin);
 	}
 	//Las texturas de los fanes (Notar que estan en la posicion de puntas * 2 para que quede en el mismo orden que los vertices)
-	textureCoordsCylinder.push(0.5);
-	textureCoordsCylinder.push(0.5);
-	textureCoordsCylinder.push(0.5);
-	textureCoordsCylinder.push(0.5);
-	
-	this.getVertex = function(){
-		return verticesCylinder;
-	}
-	this.getVertexIndex = function(){
-		return cylinderVertexIndices;
-	}
-	this.getTextureCoords = function(){
-		return textureCoordsCylinder;
-	}
+	this.textureCoords.push(0.5);
+	this.textureCoords.push(0.5);
+	this.textureCoords.push(0.5);
+	this.textureCoords.push(0.5);
 	
 	this.initBuffers = function(){
 		//Vertices del cilindro	
 		this.webgl_position_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertex()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
 		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = (this.getVertex().length / 3);
+		this.webgl_position_buffer.numItems = (this.vertices.length / 3);
 		//Index vertex del cilindro
 		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndex()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndex), gl.STATIC_DRAW);
 		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = this.getVertexIndex().length;	
+		this.webgl_index_buffer.numItems = this.vertexIndex.length;	
 		//Texturas del cilindro
 		this.webgl_texture_coord_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
 		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = this.getTextureCoords().length/2;
+		this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;
+	}
+	
+	this.draw = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);
+		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 	}
 }
 
@@ -486,7 +534,6 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	}
 
 	this.draw = function(){
-
 		// Se configuran los buffers que alimentarán el pipeline
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -506,7 +553,24 @@ function TexturedSphere(latitude_bands, longitude_bands){
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 		/////////////////////////////////
 	}
-	
+
+	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);		
+		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	
 }
 
 function Ship (curveDetail,precision, numberTall,radius) {
@@ -650,9 +714,26 @@ function Container(){
     	this.webgl_texture_coord_buffer.itemSize = 2;
   	 	this.webgl_texture_coord_buffer.numItems = 16;
     }
+	
+	this.draw = function(where,scalator,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	
 }
 
-function grid (curveDetail,pasito, numberTall,radius) {
+function mountain (curveDetail,pasito, numberTall,radius) {
 	this.webgl_position_buffer = null;
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
@@ -741,37 +822,45 @@ function grid (curveDetail,pasito, numberTall,radius) {
 		this.textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}
 	
-	this.getVertices = function(){
-		return this.vertices;
-	}
-	this.getVertexIndices = function(){
-		return this.vertexIndices;
-	}
-	this.getTextureCoords = function(){
-		return this.textureCoords;
-	}
-	
 	this.initBuffers = function(){
 		//DEL VERTEX POSITION
 		this.webgl_position_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getVertices()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
 		this.webgl_position_buffer.itemSize = 3;
 		this.webgl_position_buffer.numItems = this.vertices.length/3;
 		//DEL INDEX VERTEX
 		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.getVertexIndices()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndices), gl.STATIC_DRAW);
 		this.webgl_index_buffer.itemSize = 1;
 		this.webgl_index_buffer.numItems = this.vertexIndices.length;
 		//DE LA TEXTURA
 		this.webgl_texture_coord_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.getTextureCoords()), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
 		this.webgl_texture_coord_buffer.itemSize = 2;
 		this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;	
 	}
+	
+	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);		
+		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	
 }
