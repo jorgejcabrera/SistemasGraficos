@@ -42,19 +42,21 @@ function handleKeyPresses(){
 		}
 		if (currentlyPressedKeys[87] && thetaAngle <= degToRad(150)) {
 			vec3.add(cameraPosition,cameraPosition, normalizedCamera);
-		}		
+		}	
+		return;
 	}
 	
 	if (currentlyPressedKeys[81] || currentlyPressedKeys[69]) {
 		//la letra Q o E
-		if (currentlyPressedKeys[81]) {	//limito el máximo acercamiento
+		if (currentlyPressedKeys[81]) {
 			moveXCrane += 0.08;
 			spinning = true;
 		}
-		if (currentlyPressedKeys[69]) {	//limito el máximo alejamiento
+		if (currentlyPressedKeys[69]) {	
 			moveXCrane -= 0.08;
 			spinning = true;
-		}	
+		}
+		return;
 	}
 	
 	//Si presiono el boton 1, vuelvo a la camara orbital
@@ -67,6 +69,7 @@ function handleKeyPresses(){
 		thetaAngle = Math.acos(initPosToTranslate[2]/radius);	//para las rotaciones en zy e zx
 		phiAngle = Math.atan(initPosToTranslate[1]/initPosToTranslate[0]);	//para las rotaciones en el plano xy
 		cameraPosition = [radius*Math.cos(phiAngle)*Math.sin(thetaAngle),radius*Math.sin(phiAngle)*Math.sin(thetaAngle),radius*Math.cos(thetaAngle)];
+		return;
 	}
 	
 	//si presiono el boton 2, me cambio a otra cámara
@@ -77,6 +80,7 @@ function handleKeyPresses(){
 		vec3.scale(target,cameraPosition,100);
 		cameraPosition = [-20,-20,0];		
 		vec3.normalize(cameraPosition,cameraPosition);	
+		return;
 	}
 	//Si presiono Z=90 o X=88, para mover las pinzas de la grua
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
@@ -86,6 +90,7 @@ function handleKeyPresses(){
 		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.2){
 			scaleDeLasPinzas += 0.01;
 		}
+		return;
 	}
 	
 	//Si presiono C=67 o V=86, para mover la cabina
@@ -96,19 +101,22 @@ function handleKeyPresses(){
 		if(currentlyPressedKeys[86] && moverCabina < 8){
 			moverCabina += 0.02;
 		}
+		return;
 	}
 }
 
 //Testeo la ruedita del mouse
 //Ayuda de http://www.sitepoint.com/html5-javascript-mouse-wheel/
 function MouseWheelHandler(e) {
-	var e = window.event || e; // old IE support
-	e = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-	if ( e <= 0 && vec3.length(cameraPosition) < 20){
-		vec3.scale(cameraPosition,cameraPosition,1.1)
-	}
-	if(e > 0 && vec3.length(cameraPosition) > 2){
-			vec3.scale(cameraPosition,cameraPosition,0.9);
+	if(cameraMode = 1){
+		var e = window.event || e; // old IE support
+		e = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+		if ( e <= 0 && vec3.length(cameraPosition) < 20){
+			vec3.scale(cameraPosition,cameraPosition,1.1)
+		}
+		if(e > 0 && vec3.length(cameraPosition) > 2){
+				vec3.scale(cameraPosition,cameraPosition,0.9);
+		}
 	}
 }
 
