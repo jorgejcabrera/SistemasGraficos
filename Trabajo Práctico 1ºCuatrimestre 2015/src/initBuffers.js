@@ -24,19 +24,19 @@ function initTexture() {
 	craneTexture.image.onload = function() {		
 		handleLoadedTextureMosaic(craneTexture);
 	}
-	craneTexture.image.src = "src/textures/craneTexture4.jpg";
+	craneTexture.image.src = "src/textures/crane.png";
 	
 	skyTexture = gl.createTexture();
 	skyTexture.image = new Image();
 	skyTexture.image.onload = function() {		
 		handleLoadedTexture(skyTexture);
 	}
-	skyTexture.image.src = "src/textures/sky2.jpg";
+	skyTexture.image.src = "src/textures/sky.jpg";
 	
 	wheelTexture = gl.createTexture();
 	wheelTexture.image = new Image();
 	wheelTexture.image.onload = function() {		
-		handleLoadedTexture(wheelTexture);
+		handleLoadedTextureMosaic(wheelTexture);
 	}
 	wheelTexture.image.src = "src/textures/wheel2.jpg";	
 	
@@ -74,7 +74,8 @@ function handleLoadedTexture(texture) {
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
 	//esta forma para evitar utilizar texturas que tengan dimensiones de dos a la algo
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //gl.NEAREST is also allowed, instead of gl.LINEAR, as neither mipmap.
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); //gl.NEAREST is also allowed, instead of gl.LINEAR, as neither mipmap.
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);	
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); //Prevents s-coordinate wrapping (repeating).
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); //Prevents t-coordinate wrapping (repeating).
 	gl.bindTexture(gl.TEXTURE_2D, null);
@@ -85,7 +86,9 @@ function handleLoadedTextureMosaic(texture) {
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
 	//esta forma para evitar utilizar texturas que tengan dimensiones de dos a la algo
-	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //gl.NEAREST is also allowed, instead of gl.LINEAR, as neither mipmap.
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST); //gl.NEAREST is also allowed, instead of gl.LINEAR, as neither mipmap.
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	gl.generateMipmap(gl.TEXTURE_2D);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); //Prevents s-coordinate wrapping (repeating).
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT); //Prevents t-coordinate wrapping (repeating).
 	gl.bindTexture(gl.TEXTURE_2D, null);

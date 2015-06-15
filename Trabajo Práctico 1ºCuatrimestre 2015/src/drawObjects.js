@@ -82,8 +82,7 @@ function drawCabin(posX,posY,posZ,height){
 	var width = 0.05;
 	var posXRearWall = posX+distanceBeetwenWalls*0.5;
 	var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
-	var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
-	garras.initBuffers();
+	var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;	
 	//PARED TRASERA
 	cubo.draw([posXRearWall, posYRearWall, posZ],[longitudeRearWall,width, height-width],craneTexture);
 
@@ -110,7 +109,15 @@ function drawCabin(posX,posY,posZ,height){
 	//PARTE FRONTAL
 	cubo.draw([posXRearWall+longitudeRearWall-width*2-longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],craneTexture);
 	cubo.draw([posXRearWall-longitudeRearWall+width*2+longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],craneTexture);
-
+	
+	//AGARRE IZQUIERDO
+	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2],[width,width*10,width*.25],craneTexture);	//El +2 es porque antes media desde otro lado a otro lado
+	
+	//AGARRE DERECHO
+	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)],[width,width*10,width*.25],craneTexture);	//El +2 es porque antes media desde otro lado a otro lado
+	
+	//GARRAS
+	garras.initBuffers();
 	//PINZAS IZQUIERDAS
 	garras.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);	//El +2 es porque antes media desde otro lado a otro lado
 	garras.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);	//El +2 es porque antes media desde otro lado a otro lado
@@ -120,12 +127,6 @@ function drawCabin(posX,posY,posZ,height){
 	VAMOS A TENER QUE VARIAR ES EL PARAMETRO CONRRESPONDIENTE A LA ESCALA NO LA POSICION EN Z DE LAS PINZAS*/
 	garras.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);	//El +2 es porque antes media desde otro lado a otro lado
 	garras.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);	//El +2 es porque antes media desde otro lado a otro lado
-	
-	//AGARRE IZQUIERDO
-	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2],[width,width*10,width*.25],craneTexture);	//El +2 es porque antes media desde otro lado a otro lado
-	
-	//AGARRE DERECHO
-	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)],[width,width*10,width*.25],craneTexture);	//El +2 es porque antes media desde otro lado a otro lado
 }
 
 

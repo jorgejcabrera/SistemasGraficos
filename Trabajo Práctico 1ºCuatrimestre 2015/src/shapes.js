@@ -167,10 +167,10 @@ function pinza () {
 }
 
 function cube () {
-	this.webgl_position_buffer = null;
+	this.webgl_position_buffer = gl.createBuffer();
+	this.webgl_index_buffer = gl.createBuffer();
+	this.webgl_texture_coord_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = null;
-	this.webgl_texture_coord_buffer = null;
-	this.webgl_index_buffer = null;	
 	
 	this.vertices = [
 		-1.0,	1.0,	1.0,	//0
@@ -192,6 +192,8 @@ function cube () {
 		-1.0,	-1.0,	-1.0,	//14
 		1.0,	-1.0,	-1.0,	//15
 	];
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = 16;
 	
 	this.VertexIndices = [
 		0, 1, 2,   1, 2, 3,    		// Front face
@@ -201,6 +203,8 @@ function cube () {
 		1, 3, 5,   3, 5, 7, 		// Right face
 		0, 2, 4,   2, 4, 6  		// Left face
 	]
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = 36;
 	
     this.textureCoords = [
 	//para cada uno de los ocho vértices que estoy utilizando 	
@@ -223,29 +227,22 @@ function cube () {
 	  0.0, 1.0,
 	  1.0, 1.0,
     ];
-
+	this.webgl_texture_coord_buffer.itemSize = 2;
+	this.webgl_texture_coord_buffer.numItems = 16;
+	
 	this.initBuffers = function(){
-		//Vertices del cubo
-		this.webgl_position_buffer = gl.createBuffer();
+		//Vertices del cubo		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);	
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = 16;
-		//Index Vertex del cubo
-		this.webgl_index_buffer = gl.createBuffer();
+		//Index Vertex del cubo		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.VertexIndices), gl.STATIC_DRAW);
-		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = 36;
-		//Coordenadas de textura del cubo
-		this.webgl_texture_coord_buffer = gl.createBuffer();
+		//Coordenadas de textura del cubo		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
-		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = 16;	
 	}
 	
 	this.draw = function(where,scalator,texture){
