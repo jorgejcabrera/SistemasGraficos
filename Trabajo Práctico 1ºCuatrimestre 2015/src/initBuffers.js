@@ -31,7 +31,7 @@ function initTexture() {
 	skyTexture.image.onload = function() {		
 		handleLoadedTexture(skyTexture);
 	}
-	skyTexture.image.src = "src/textures/url.jpg";
+	skyTexture.image.src = "src/textures/sky2.jpg";
 	
 	wheelTexture = gl.createTexture();
 	wheelTexture.image = new Image();
@@ -50,9 +50,9 @@ function initTexture() {
 	waterTexture = gl.createTexture();
 	waterTexture.image = new Image();
 	waterTexture.image.onload = function() {		
-		handleLoadedTexture(waterTexture);
+		handleLoadedTextureMosaic(waterTexture);
 	}
-	waterTexture.image.src = "src/textures/water.png";
+	waterTexture.image.src = "src/textures/water5.jpg";
 	
 	mountainTexture = gl.createTexture();
 	mountainTexture.image = new Image();
@@ -77,5 +77,16 @@ function handleLoadedTexture(texture) {
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //gl.NEAREST is also allowed, instead of gl.LINEAR, as neither mipmap.
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); //Prevents s-coordinate wrapping (repeating).
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); //Prevents t-coordinate wrapping (repeating).
+	gl.bindTexture(gl.TEXTURE_2D, null);
+}
+
+function handleLoadedTextureMosaic(texture) {
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+	//esta forma para evitar utilizar texturas que tengan dimensiones de dos a la algo
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); //gl.NEAREST is also allowed, instead of gl.LINEAR, as neither mipmap.
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); //Prevents s-coordinate wrapping (repeating).
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT); //Prevents t-coordinate wrapping (repeating).
 	gl.bindTexture(gl.TEXTURE_2D, null);
 }

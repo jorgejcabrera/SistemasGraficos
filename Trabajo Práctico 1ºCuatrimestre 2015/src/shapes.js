@@ -17,10 +17,10 @@ function square () {
 	
     this.textureCoords = [
 	//para cada uno de los ocho vértices que estoy utilizando 	
-      0.0, 1.0,
-      1.0, 1.0,
+      0.0, 17.0,
+      17.0, 17.0,
       0.0, 0.0,
-      1.0, 0.0
+      17.0, 0.0
     ];
 	
 	this.initBuffers = function(){
