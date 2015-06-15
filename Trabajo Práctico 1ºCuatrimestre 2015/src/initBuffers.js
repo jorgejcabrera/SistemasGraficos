@@ -22,7 +22,7 @@ function initTexture() {
 	craneTexture = gl.createTexture();
 	craneTexture.image = new Image();
 	craneTexture.image.onload = function() {		
-		handleLoadedTexture(craneTexture);
+		handleLoadedTextureMosaic(craneTexture);
 	}
 	craneTexture.image.src = "src/textures/craneTexture4.jpg";
 	
