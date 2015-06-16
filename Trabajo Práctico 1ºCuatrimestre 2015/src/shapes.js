@@ -872,3 +872,142 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 	}	
 }
+
+
+function skyBox() {
+	this.webgl_position_buffer = gl.createBuffer();
+	this.webgl_index_buffer = gl.createBuffer();
+	this.webgl_texture_coord_buffer = gl.createBuffer();
+	this.webgl_normal_buffer = null;
+	
+	this.vertices = [
+	//Front -Z
+		-1.0,	-1.0,	0.0,	//0
+		1.0,	-1.0,	0.0,	//1
+		-1.0,	1.0,	0.0,	//2
+		1.0,	1.0,	0.0,	//3
+	//Right +X
+		1.0,	-1.0,	0.0,	//4
+		1.0,	1.0,	0.0,	//5
+		1.0,	-1.0,	1.0,	//6
+		1.0,	1.0,	1.0,	//7
+	//back +Z
+		1.0,	-1.0,	1.0,	//8
+		1.0,	1.0,	1.0,	//9
+		-1.0,	-1.0,	1.0,	//10
+		-1.0,	1.0,	1.0,	//11
+	//left -X
+		-1.0,	-1.0,	1.0,	//12
+		-1.0,	1.0,	1.0,	//13
+		-1.0,	-1.0,	0.0,	//14
+		-1.0,	1.0,	0.0,	//15
+	//top +Y
+		-1.0,	1.0,	0.0,	//16
+		-1.0,	1.0,	1.0,	//17
+		1.0,	1.0,	0.0,	//18
+		1.0,	1.0,	1.0,	//19
+	//bottom -Y
+		-1.0,	-1.0,	1.0,	//20
+		-1.0,	-1.0,	0.0,	//21
+		1.0,	-1.0,	1.0,	//22
+		1.0,	-1.0,	0.0,	//23
+	];
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = 24;
+	
+	this.VertexIndices = [
+		0, 1, 2,   1, 2, 3,    			// Front -Z
+		4, 5, 6,   5, 6, 7,    			// Right +X
+		8, 9, 10,   9, 10, 11,  		// back +Z
+		12, 13, 14,   13, 14, 15, 		// left -X
+		16, 17, 18,   17, 18, 19, 		// top +Y
+		20, 21, 22,   21, 22, 23  			// bottom -Y
+	]
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = 36;
+	
+    this.textureCoords = [
+	//Front -Z
+		0.25, 0.33,
+		0.50, 0.33,
+		0.25, 0.66, 
+		0.50,  0.66,
+	//Right +X
+		0.50, 0.34,
+		0.50, 0.65,
+		0.75, 0.34,
+		0.75, 0.65,
+	//back +Z
+		0.75, 0.33,
+		0.75, 0.66,
+		1.00, 0.33,
+		1.00, 0.66,
+	//left -X
+		0.00, 0.33,
+		0.00, 0.66,
+		0.25, 0.33,
+		0.25, 0.66,
+	//top +Y
+		0.25, 0.66,
+		0.25, 1.00,
+		0.50, 0.66,
+		0.50, 1.00,
+	//bottom -Y
+		0.25, 0.00,
+		0.25, 0.33,
+		0.50, 0.00,
+		0.50, 0.33,
+    ];
+	this.webgl_texture_coord_buffer.itemSize = 2;
+	this.webgl_texture_coord_buffer.numItems = 24;
+	
+	this.initBuffers = function(){
+		//Vertices del skyBox		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);	
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+		//Index Vertex del skyBox		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.VertexIndices), gl.STATIC_DRAW);
+		//Coordenadas de textura del skyBox		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
+	}
+	
+	this.draw = function(where,scalator,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}
+	
+	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);		
+		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		setMatrixUniforms();
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	
+}
