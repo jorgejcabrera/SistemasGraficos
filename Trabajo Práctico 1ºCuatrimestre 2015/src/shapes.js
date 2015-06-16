@@ -307,7 +307,7 @@ function cylinder(puntas,radio){ //puntas, radio
 	this.vertices.push(1.6);		//viene a ser el puntas * 2
 	this.vertices.push(0.0);		//viene a ser el puntas * 2+1
 	this.vertices.push(0.0);		//viene a ser el puntas * 2+1
-	this.vertices.push(-1.6);	//viene a ser el puntas * 2+1	
+	this.vertices.push(-1.6);		//viene a ser el puntas * 2+1	
 
 	//Y luego para usar el vertex index:
 	this.vertexIndex=[];
@@ -615,6 +615,9 @@ function Container(){
 	this.positionX=null;
 	this.positionY=null;
 	this.positionZ=null;
+	this.length=null;
+	this.width=null;
+	this.high=null;
 	this.webgl_position_buffer = null;
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
@@ -686,6 +689,14 @@ function Container(){
 		return this.positionY
 	}
 
+	this.getLength = function(){
+		return this.length
+	}
+
+	this.getWidth = function(){
+		return this.width
+	}
+
     this.initBuffers = function(){
     	//Buffer de vertices
     	this.webgl_position_buffer = gl.createBuffer();
@@ -710,6 +721,9 @@ function Container(){
     }
 	
 	this.draw = function(where,scalator,texture){
+		this.length=scalator[0];
+		this.width=scalator[1];
+		this.high=scalator[2];
 		mat4.identity(mMatrix);
 		mat4.translate(mMatrix,mMatrix, where);
 		mat4.scale(mMatrix, mMatrix,scalator);

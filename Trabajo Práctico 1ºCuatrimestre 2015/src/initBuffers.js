@@ -4,9 +4,13 @@ function initObjects() {
 	cilindro = new cylinder(36,1);	
 	ship = new Ship(4,3,5,320);	
 	garras = new pinza();	
-	container = new Container();	
 	cubo = new cube();
 	quad = new square();
+	containerYellow = new Container();
+	containerRed = new Container();	
+	containerBlue = new Container();
+	containerGreen = new Container();
+	containerGray = new Container();
 }
 
 var craneTexture;
