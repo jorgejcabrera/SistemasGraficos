@@ -85,10 +85,10 @@ function handleKeyPresses(){
 	//Si presiono Z=90 o X=88, para mover las pinzas de la grua
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
 		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
-			scaleDeLasPinzas -= 0.01;
+			scaleDeLasPinzas -= 0.08;
 		}
-		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.2){
-			scaleDeLasPinzas += 0.01;
+		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.35){
+			scaleDeLasPinzas += 0.05;
 		}
 		return;
 	}
