@@ -85,21 +85,20 @@ function handleKeyPresses(){
 	//Si presiono Z=90 o X=88, para mover las pinzas de la grua
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
 		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
-			scaleDeLasPinzas -= 0.08;
+			scaleDeLasPinzas -= 0.02;
 		}
 		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.35){
-			scaleDeLasPinzas += 0.05;
+			scaleDeLasPinzas += 0.02;
 		}
-		return;
 	}
 	
 	//Si presiono C=67 o V=86, para mover la cabina
 	if (currentlyPressedKeys[67] || currentlyPressedKeys[86]) {
 		if(currentlyPressedKeys[67] && moverCabina > -1.7){
-			moverCabina -= 0.02;
+			moverCabina -= 0.035;
 		}
 		if(currentlyPressedKeys[86] && moverCabina < 8){
-			moverCabina += 0.02;
+			moverCabina += 0.035;
 		}
 		return;
 	}
@@ -147,8 +146,8 @@ function onMouseMove(event) {
 			x = event.pageX+window.pageXOffset-event.target.offsetLeft;
 			y = event.pageY+window.pageYOffset-event.target.offsetTop;
 		}
-		testX = -(x - clickX)*128;
-		testY = (y - clickY)*64;
+		testX = -(x - clickX)*150;
+		testY = (y - clickY)*74;
 		phiAngle += degToRad(testX)/widthOfCanvas;
 		testLimit += degToRad(-testY)/heightOfCanvas;
 		if (testLimit >= degToRad(25) && testLimit <= degToRad(100)){

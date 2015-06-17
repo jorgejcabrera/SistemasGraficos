@@ -15,6 +15,12 @@ function initObjects() {
 
 var craneTexture;
 var nullTexture;
+var skyTexture;
+var wheelTexture;
+var floorTexture;
+var waterTexture;
+var mountainTexture;
+var pinzaTexture;
 function initTexture() {
 	nullTexture = gl.createTexture();
 	nullTexture.image = new Image();

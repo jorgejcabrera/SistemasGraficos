@@ -42,7 +42,7 @@
 	varying vec2 vTextureCoord;
 
     void main(void) {
-        gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyecciñon y la matriz de model-view
+        gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyección y la matriz de model-view
 		vTextureCoord = aTextureCoord;
     }
 </script>
@@ -57,7 +57,7 @@
     var gl;
     function initGL(canvas) {
         try {
-            gl = canvas.getContext("experimental-webgl");
+            gl = canvas.getContext("webgl");	//Mejora?
             gl.viewportWidth = canvas.width;
             gl.viewportHeight = canvas.height;
         } catch (e) {
@@ -146,7 +146,6 @@
 	var moveXCrane = 0;
 	var gruaAbajo = -3;
 	var ruedasAncho = -0.5*0.97;	//sale de la escala que le puse a la rueda
-	var spinning = false;
 	var scaleDeLasPinzas = 1;
 	var moverCabina = 0;
 
@@ -163,32 +162,30 @@
 	}
 	
     function drawScene() {
-		updateCamera();
-		updateObjects();
-    }
-	
-	function updateObjects(){
 		drawCrame(moveXCrane,2.0,1.0);   //incluye el piso por cuestiones de performance
 		drawSky([0,0,0],[60,60,60],90,[1,0,0]);
 		drawOcean([0,0,gruaAbajo+ruedasAncho-0.3],[55,55,1],waterTexture);							//Acá que vaya el mar
 		drawMountain([-23,2,-7],[1.2,2.2,3.1],180,[0,0,1]);
         //drawShip([23,-2,1],[2.0,2.0,2.0]);
-        drawContainers([3,1,-3],[1.25,0.5,0.5]);	
-	}
+        drawContainers([3,1,-3],[1.25,0.5,0.5]);
+    }
 	
 	function updateCamera(){
-		mat4.perspective(pMatrix,degToRad(70), gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
+		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);	//El tutorial dice que sirven
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);	//El tutorial dice que sirven
 		mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
+		mat4.perspective(pMatrix,degToRad(70), gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
 	}
 	
 	function tick() {
-		requestAnimFrame(tick);
+		requestAnimFrame(tick);		
 		handleKeyPresses();
+		updateCamera();
         drawScene();
 	}
 
-	var widthOfCanvas = 0;
-	var heightOfCanvas = 0;
+	var widthOfCanvas;
+	var heightOfCanvas;
     function webGLStart() {
         var canvas = document.getElementById("TP1C2015");	
 		widthOfCanvas = document.getElementById("TP1C2015").width;
@@ -211,7 +208,7 @@
 		initTexture();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.enable(gl.DEPTH_TEST);
+			gl.enable(gl.DEPTH_TEST);
 		
 		//Agregando soporte para el movimiento con teclado(¿Y mouse también?):
 		document.onkeydown = handleKeyDown;

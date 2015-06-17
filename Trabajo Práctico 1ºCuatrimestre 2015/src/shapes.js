@@ -1,19 +1,23 @@
 function square () {
-	this.webgl_position_buffer = null;
+	this.webgl_position_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = null;
-	this.webgl_texture_coord_buffer = null;
-	this.webgl_index_buffer = null;
-
+	this.webgl_texture_coord_buffer = gl.createBuffer();
+	this.webgl_index_buffer = gl.createBuffer();
+	
 	this.vertices = [
 		-1.0,	1.0,	0.0,	//0
 		1.0,	1.0,	0.0,	//1
 		-1.0,	-1.0,	0.0,	//2
 		1.0,	-1.0,	0.0		//3
 	];
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = 4;	
 	
 	this.vertexIndex = [
 		0, 1, 2,   1, 2, 3
 	]
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = 6;
 	
     this.textureCoords = [
 	//para cada uno de los ocho vértices que estoy utilizando 	
@@ -22,29 +26,22 @@ function square () {
       0.0, 0.0,
       17.0, 0.0
     ];
+	this.webgl_texture_coord_buffer.itemSize = 2;
+	this.webgl_texture_coord_buffer.numItems = 4;
 	
 	this.initBuffers = function(){
 		//Vertex
-		this.webgl_position_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);	
 		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = 4;	
 		//Index vertex
-		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);		
 		
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndex), gl.STATIC_DRAW);
-		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = 6;
 		//Coord textures
-		this.webgl_texture_coord_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 			
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
-		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = 4;
 	}
 	
 	this.draw = function(where,scalator,texture){
@@ -440,6 +437,58 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	this.webgl_texture_coord_buffer = null;
 	this.webgl_index_buffer = null;
 	
+	this.position_buffer = [];
+	this.normal_buffer = [];
+	this.texture_coord_buffer = [];
+
+	var latNumber;
+	var longNumber;
+
+	for (latNumber=0; latNumber <= this.latitudeBands; latNumber++) {
+		var theta = latNumber * Math.PI / this.latitudeBands;
+		var sinTheta = Math.sin(theta);
+		var cosTheta = Math.cos(theta);
+
+		for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
+			var phi = longNumber * 2 * Math.PI / this.longitudeBands;
+			var sinPhi = Math.sin(phi);
+			var cosPhi = Math.cos(phi);
+
+			var x = cosPhi * sinTheta;
+			var y = cosTheta;
+			var z = sinPhi * sinTheta;
+			var u = 1.0 - (longNumber / this.longitudeBands);
+			var v = 1.0 - (latNumber / this.latitudeBands);
+
+			this.normal_buffer.push(x);
+			this.normal_buffer.push(y);
+			this.normal_buffer.push(z);
+
+			this.texture_coord_buffer.push(u);
+			this.texture_coord_buffer.push(v);
+			
+			this.position_buffer.push(x);
+			this.position_buffer.push(y);
+			this.position_buffer.push(z);
+		}
+	}
+
+	// Buffer de indices de los triangulos
+	this.index_buffer = [];
+  
+	for (latNumber=0; latNumber < this.latitudeBands; latNumber++) {
+		for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
+			var first = (latNumber * (this.longitudeBands + 1)) + longNumber;
+			var second = first + this.longitudeBands + 1;
+			this.index_buffer.push(first);
+			this.index_buffer.push(second);
+			this.index_buffer.push(first + 1);
+
+			this.index_buffer.push(second);
+			this.index_buffer.push(second + 1);
+			this.index_buffer.push(first + 1);
+		}
+	}
 
 
 	// Se generan los vertices para la esfera, calculando los datos para una esfera de radio 1
@@ -447,60 +496,6 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	// La esfera se renderizara utilizando triangulos, para ello se arma un buffer de índices 
 	// a todos los triángulos de la esfera
 	this.initBuffers = function(){
-
-		this.position_buffer = [];
-		this.normal_buffer = [];
-		this.texture_coord_buffer = [];
-
-		var latNumber;
-		var longNumber;
-
-		for (latNumber=0; latNumber <= this.latitudeBands; latNumber++) {
-			var theta = latNumber * Math.PI / this.latitudeBands;
-			var sinTheta = Math.sin(theta);
-			var cosTheta = Math.cos(theta);
-
-			for (longNumber=0; longNumber <= this.longitudeBands; longNumber++) {
-				var phi = longNumber * 2 * Math.PI / this.longitudeBands;
-				var sinPhi = Math.sin(phi);
-				var cosPhi = Math.cos(phi);
-
-				var x = cosPhi * sinTheta;
-				var y = cosTheta;
-				var z = sinPhi * sinTheta;
-				var u = 1.0 - (longNumber / this.longitudeBands);
-				var v = 1.0 - (latNumber / this.latitudeBands);
-
-				this.normal_buffer.push(x);
-				this.normal_buffer.push(y);
-				this.normal_buffer.push(z);
-
-				this.texture_coord_buffer.push(u);
-				this.texture_coord_buffer.push(v);
-				
-				this.position_buffer.push(x);
-				this.position_buffer.push(y);
-				this.position_buffer.push(z);
-			}
-		}
-
-		// Buffer de indices de los triangulos
-		this.index_buffer = [];
-	  
-		for (latNumber=0; latNumber < this.latitudeBands; latNumber++) {
-			for (longNumber=0; longNumber < this.longitudeBands; longNumber++) {
-				var first = (latNumber * (this.longitudeBands + 1)) + longNumber;
-				var second = first + this.longitudeBands + 1;
-				this.index_buffer.push(first);
-				this.index_buffer.push(second);
-				this.index_buffer.push(first + 1);
-
-				this.index_buffer.push(second);
-				this.index_buffer.push(second + 1);
-				this.index_buffer.push(first + 1);
-			}
-		}
-
 		// Creación e Inicialización de los buffers a nivel de OpenGL
 		this.webgl_normal_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
@@ -742,10 +737,10 @@ function Container(){
 }
 
 function mountain (curveDetail,pasito, numberTall,radius) {
-	this.webgl_position_buffer = null;
+	this.webgl_position_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = null;
-	this.webgl_texture_coord_buffer = null;
-	this.webgl_index_buffer = null;
+	this.webgl_texture_coord_buffer = gl.createBuffer();
+	this.webgl_index_buffer = gl.createBuffer();
 	var puntosX = [];
 	var puntosY = [];
 	var puntosZ = [];	
@@ -800,7 +795,8 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 			vertices.push((numberTall-2)*2+i/10);
 		}
 	}
-	
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = this.vertices.length/3;
 	//Ahora le digo como usar esos vértices
 	this.vertexIndices = [];
 	
@@ -816,7 +812,10 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 				this.vertexIndices.push(numberTall*((indice-1)/2) + numberTall +1 + wasd);
 			}
 		}
-	}
+	}	
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = this.vertexIndices.length;
+	
 	//Y aca le pongo la textura al grid	
     this.textureCoords = [];
 	for (var indice = 0; indice < (this.vertices.length/3); indice++){
@@ -829,29 +828,22 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		}
 		this.textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}
+	this.webgl_texture_coord_buffer.itemSize = 2;
+	this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;
 	
 	this.initBuffers = function(){
-		//DEL VERTEX POSITION
-		this.webgl_position_buffer = gl.createBuffer();
+		//DEL VERTEX POSITION	
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-		this.webgl_position_buffer.itemSize = 3;
-		this.webgl_position_buffer.numItems = this.vertices.length/3;
-		//DEL INDEX VERTEX
-		this.webgl_index_buffer = gl.createBuffer();
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);		
+		//DEL INDEX VERTEX		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndices), gl.STATIC_DRAW);
-		this.webgl_index_buffer.itemSize = 1;
-		this.webgl_index_buffer.numItems = this.vertexIndices.length;
-		//DE LA TEXTURA
-		this.webgl_texture_coord_buffer = gl.createBuffer();
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndices), gl.STATIC_DRAW);		
+		//DE LA TEXTURA		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
-		this.webgl_texture_coord_buffer.itemSize = 2;
-		this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;	
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);	
 	}
 	
 	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
