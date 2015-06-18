@@ -35,11 +35,16 @@
 
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
+	attribute vec3 aVertexNormal;
 	attribute vec2 aTextureCoord;
 
     uniform mat4 uMMatrix;	
     uniform mat4 uVMatrix;
     uniform mat4 uPMatrix;
+	
+	uniform mat3 uNMatrix;
+	
+	uniform vec3 uLightingDirection;
 	uniform vec3 uAmbientColor;	//la luz ambiente
 	uniform vec3 uDirectionalColor;
 	
@@ -49,7 +54,10 @@
     void main(void) {
         gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyección y la matriz de model-view
 		vTextureCoord = aTextureCoord;
-		vLightWeighting = uAmbientColor + uDirectionalColor;
+		//vLightWeighting = uAmbientColor + uDirectionalColor;
+		vec3 transformedNormal = uNMatrix * aVertexNormal;
+		float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+		vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;		
     }
 </script>
 
@@ -128,12 +136,17 @@
         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 		
+		shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+        gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+		
 		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
 		gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
 		shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
+		shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
+        shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
 		shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
 		shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
     }
@@ -141,11 +154,17 @@
     var mMatrix = mat4.create();
     var vMatrix = mat4.create();
     var pMatrix = mat4.create();
-
+	var auxMat = mat4.create();
+	var normalMatrix = mat3.create();
+	
     function setMatrixUniforms() {
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
         gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
         gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
+		//mat4.multiply(auxMat, vMatrix, mMatrix);
+		//mat3.normalFromMat4(normalMatrix, auxMat);
+		mat3.normalFromMat4(normalMatrix, mMatrix);
+		gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 	
 	var intensidadLuz = 0.2;
@@ -156,8 +175,8 @@
 	//Luz del sol
 		var lightingDirection = [ 1.0, 1.0 ,1.0 ];
 		var adjustedLD = vec3.create();
-		vec3.normalize(lightingDirection, adjustedLD);
-		vec3.scale(adjustedLD, -1);
+		vec3.normalize(adjustedLD, lightingDirection);
+		vec3.scale(adjustedLD, adjustedLD, -1);
 		gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
 	//Intensidad del sol
 	    gl.uniform3f(shaderProgram.directionalColorUniform,intensidadSol+0.05,intensidadSol,intensidadSol);	//El +0.05 es para que sea mas anaranjado por el sol
@@ -186,10 +205,10 @@
 	}
 	
     function drawScene() {
-		drawCrame(moveXCrane,2.0,1.0);   //incluye el piso por cuestiones de performance
-		drawSky([0,0,0],[60,60,60],90,[1,0,0]);
-		drawOcean([0,0,gruaAbajo+ruedasAncho-0.3],[55,55,1],waterTexture);							//Acá que vaya el mar
-		drawMountain([-23,2,-7],[1.2,2.2,3.1],180,[0,0,1]);
+		//drawCrame(moveXCrane,2.0,1.0);   //incluye el piso por cuestiones de performance
+		//drawSky([0,0,0],[60,60,60],90,[1,0,0]);
+		//drawOcean([0,0,gruaAbajo+ruedasAncho-0.3],[55,55,1],waterTexture);							//Acá que vaya el mar
+		//drawMountain([-23,2,-7],[1.2,2.2,3.1],180,[0,0,1]);
         //drawShip([23,-2,1],[2.0,2.0,2.0]);
         drawContainers([3,1,-3],[1.25,0.5,0.5]);
     }
