@@ -767,8 +767,18 @@ function TexturedSphere(latitude_bands, longitude_bands){
 }
 
 function Ship (curveDetail,precision, numberTall,radius) {
-  /*
-  bezier = function(u, p0, p1, p2, p3){
+	this.webgl_position_buffer = gl.createBuffer();
+	this.webgl_normal_buffer = gl.createBuffer();
+	this.webgl_texture_coord_buffer = gl.createBuffer();
+	this.webgl_index_buffer = gl.createBuffer();
+	var puntosX = [];
+	var puntosY = [];
+	var puntosZ = [];	
+	
+	var numberOfPointsOfInterest = curveDetail;
+	
+	 
+  this.bezier = function(u, p0, p1, p2, p3){
       var cX = 3 * (p1.x - p0.x),
           bX = 3 * (p2.x - p1.x) - cX,
           aX = p3.x - p0.x - cX - bX;
@@ -781,33 +791,152 @@ function Ship (curveDetail,precision, numberTall,radius) {
       var y = (aY * Math.pow(u, 3)) + (bY * Math.pow(u, 2)) + (cY * u) + p0.y;
             
       return {x: x, y: y};
-    },
+    }
 
-    (function(){
-      var accuracy = 0.01, //this'll give the bezier 100 segments
-          p0 = {x: 0, y: 100}, //use whatever points you want obviously
-          p1 = {x: 33, y: 0},
-          p2 = {x: 66, y: 0},
-          p3 = {x: 100, y: 100},
-          p4 = {x: 5, y: 1650},
-          p5 = {x: 95, y: 1650},
-          ctx = document.createElement('canvas').getContext('2d');
+      var accuracy = 0.01; //this'll give the bezier 100 segments
+          var p0 = {x: 0, y: 10}; //use whatever points you want obviously
 
-      ctx.width = 500;
-      ctx.height = 500;
-      document.body.appendChild(ctx.canvas);
-      
-      ctx.moveTo(p0.x, p0.y);
-      for (var i=0; i<=1; i+=accuracy){
-         var p = bezier(i, p0, p1, p2, p3);
-         var q = bezier(i, p0, p4, p5,p3);
-         ctx.lineTo(p.x, p.y);
-         ctx.lineTo(q.x, q.y);
-      }
-  
-      ctx.stroke()
-    })()
-	*/
+         var p1 = {x: 3.3, y: 0};
+
+         var p2 = {x: 6.6, y: 0};
+
+         var p3 = {x: 10, y: 10};
+	
+         var p4 = {x: 0.5, y: 16.5};
+		
+         var p5 = {x: 9.5, y: 16.5};
+		
+         
+
+	
+	this.vertices = [];
+	this.normalVertex = [];
+
+	//Si yo uso B-Spline cúbica, tendré esta fórmula
+	
+	for (var u = 0; u <= 1; u+= precision){
+		var p = this.bezier(u, p0, p1, p2, p3);
+		
+		var valueX = p.x;	
+		var valueY = p.y
+		console.log(1);
+		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
+	}
+	
+	//Si yo uso B-Spline cúbica, tendré esta fórmula
+		
+	for (var u = 0; u <= 1; u+= precision){
+		var q = this.bezier(u, p0, p4, p5,p3);
+		
+		var valueX = p.x;	
+		var valueY = p.y
+		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
+	}
+	
+	
+	function pushVertix(valueX,valueY,vertices,normalVertex){
+		vertices.push(valueX);
+		normalVertex.push(valueX);
+		vertices.push(valueY);
+		normalVertex.push(valueY);
+		vertices.push(0);
+		normalVertex.push(0.1);
+		for (var i = 1; i <numberTall-1; i++){			
+			var scaler = 1/Math.pow(2,i);
+			vertices.push(valueX*scaler);
+			normalVertex.push(valueX);
+			vertices.push(valueY*scaler);
+			normalVertex.push(valueY);
+			vertices.push(i*2);
+			normalVertex.push(scaler*0.1);
+		}
+		for (var i = numberTall-1; i <numberTall; i++){
+			var scaler = 1/Math.pow(2,i);
+			vertices.push(valueX*scaler);
+			normalVertex.push(valueX);
+			vertices.push(valueY*scaler);
+			normalVertex.push(valueY);
+			vertices.push((numberTall-2)*2+i/10);
+			normalVertex.push(scaler*0.1);
+		}
+	}
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = this.vertices.length/3;
+	
+	this.webgl_normal_buffer.itemSize = 3;
+	this.webgl_normal_buffer.numItems = this.normalVertex.length/3;
+	//Ahora le digo como usar esos vértices
+	this.vertexIndices = [];
+	
+	for(var wasd = 0; wasd < numberTall-1; wasd++){
+		for (var indice = 0; numberTall*indice/2 +numberTall < (this.vertices.length/3); indice++){
+			if (indice % 2 == 0){
+				this.vertexIndices.push(numberTall*indice/2 + wasd);
+				this.vertexIndices.push(numberTall*indice/2 + 1 + wasd);
+				this.vertexIndices.push(numberTall*indice/2 + numberTall + wasd);					
+			}else{			
+				this.vertexIndices.push(numberTall*((indice-1)/2) + 1 + wasd);
+				this.vertexIndices.push(numberTall*((indice-1)/2) + numberTall + wasd);
+				this.vertexIndices.push(numberTall*((indice-1)/2) + numberTall +1 + wasd);
+			}
+		}
+	}	
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = this.vertexIndices.length;
+	
+	//Y aca le pongo la textura al grid	
+    this.textureCoords = [];
+	for (var indice = 0; indice < (this.vertices.length/3); indice++){
+		var textCoordFirstOpinion= indice % numberTall;		
+		var textCoordSecondOpinion = indice % (numberTall*2);
+		if(textCoordSecondOpinion < numberTall){
+			this.textureCoords.push(0.0);
+		}else{
+			this.textureCoords.push(1.0);
+		}
+		this.textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
+	}
+	this.webgl_texture_coord_buffer.itemSize = 2;
+	this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;
+	
+	this.initBuffers = function(){
+		//DEL VERTEX POSITION	
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);	
+		//Las normales
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normalVertex), gl.STATIC_DRAW);
+		//DEL INDEX VERTEX		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndices), gl.STATIC_DRAW);		
+		//DE LA TEXTURA		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);	
+	}
+	
+	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);		
+		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		setMatrixUniforms(mMatrix);
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	   
 }
 
 function Container(){

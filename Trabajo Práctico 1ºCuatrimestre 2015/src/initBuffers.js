@@ -2,7 +2,7 @@ function initObjects() {
 	mountain = new mountain(12,0.5,5,15);
 	sky = new TexturedSphere(24, 24);	
 	cilindro = new cylinder(36,1);	
-	ship = new Ship(4,3,5,320);	
+	ship = new Ship(12,0.1,15,15);	
 	garras = new pinza();	
 	cubo = new cube();
 	quad = new square();

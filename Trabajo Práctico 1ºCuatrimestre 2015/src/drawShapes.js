@@ -40,10 +40,9 @@ function drawContainers(where,scalator){
 	containerGray.draw(positionContainerGray,scalator,pinzaTexture);
 }
 
-function drawShip(where,scalator){
+function drawShip(where,scalator,degreesToRotate,axisToRotate){
 	ship.initBuffers();
-	drawShaper3D(where,scalator,ship.webgl_position_buffer,false,pinzaTexture,ship.webgl_texture_coord_buffer);
-	gl.drawElements(gl.TRIANGLES, ship.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	ship.drawOverload(where,scalator,degreesToRotate,axisToRotate,pinzaTexture);
 }
 
 function drawWallCrane(posX,posY,posZ){
