@@ -793,18 +793,17 @@ function Ship (curveDetail,precision, numberTall,radius) {
       return {x: x, y: y};
     }
 
-      var accuracy = 0.01; //this'll give the bezier 100 segments
-          var p0 = {x: 0, y: 10}; //use whatever points you want obviously
+		var p0 = {x: -10, y: 10}; //use whatever points you want obviously
 
-         var p1 = {x: 3.3, y: 0};
+		var p1 = {x: 3.3, y: 20};
 
-         var p2 = {x: 6.6, y: 0};
+		var p2 = {x: 6.6, y: 20};
 
-         var p3 = {x: 10, y: 10};
-	
-         var p4 = {x: 0.5, y: 16.5};
-		
-         var p5 = {x: 9.5, y: 16.5};
+		var p3 = {x: 10, y: 10};
+
+		var p4 = {x: 0.5, y: 16.5};
+
+		var p5 = {x: 9.5, y: 16.5};
 		
          
 
