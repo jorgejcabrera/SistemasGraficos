@@ -1036,22 +1036,6 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		puntosY.push(radius*Math.sin(alpha) + Math.sin(1.6*alpha)/3);
 		puntosZ.push(0);
 	}
-	puntosX.push(radius);
-	puntosY.push(radius);
-	puntosZ.push(0);
-	
-	puntosX.push(radius);
-	puntosY.push(radius);
-	puntosZ.push(0);
-	
-	puntosX.push(radius);
-	puntosY.push(radius);
-	puntosZ.push(0);
-	
-	puntosX.push(radius);
-	puntosY.push(radius);
-	puntosY.push(radius);
-	puntosZ.push(0);
 	
 	var cubicSpline = [
 		-1/6,  3/6,  -3/6,  1/6,
@@ -1059,6 +1043,27 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		-3/6,  0,  3/6,  0,
 		1/6,  4/6,  1/6,  0
 	]
+	
+		var currentUs = vec4.create();
+	vec4.set(currentUs,Math.pow(0,3),Math.pow(0,2),0,1);
+	vec4.transformMat4(currentUs, currentUs, cubicSpline);
+	var wasdX = vec4.dot(currentUs,[puntosX[0],puntosX[1],puntosX[2],puntosX[3]]);
+	var wasdY = vec4.dot(currentUs,[puntosY[0],puntosY[1],puntosY[2],puntosY[3]]);
+	puntosX.push(wasdX);
+	puntosY.push(wasdY);
+	puntosZ.push(0);
+	
+	puntosX.push(wasdX);
+	puntosY.push(wasdY);
+	puntosZ.push(0);
+	
+	puntosX.push(wasdX);
+	puntosY.push(wasdY);
+	puntosZ.push(0);
+	
+	puntosX.push(wasdX);
+	puntosY.push(wasdY);
+	puntosZ.push(0);
 	
 	this.vertices = [];
 	this.normalVertex = [];
