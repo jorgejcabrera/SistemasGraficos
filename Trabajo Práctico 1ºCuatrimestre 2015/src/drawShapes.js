@@ -97,7 +97,7 @@ function drawCrame(posX,posY,posZ){
     drawCabin(posX, posY+moverCabina, height, posZ );
 	
 	//LAS RUEDAS
-	drawWheels(posX,posY,posZ,distanceBeetwenWalls,height,width);
+	//drawWheels(posX,posY,posZ,distanceBeetwenWalls,height,width);
 }
 
 function drawWheels(posX,posY,posZ,distanceBeetwenWalls,distanciaRuedas,anchoGruaY){
