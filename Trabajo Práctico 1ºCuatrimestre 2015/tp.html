@@ -166,13 +166,13 @@
 		gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 	
-	var intensidadLuz = 0.2;
-	var intensidadSol = 0.4;
+	var intensidadLuzAmbiente = 0.05;
+	var intensidadSol = 0.35;
 	function initLuces(){
 	//Acá inicio mi primera luz que quiero que sea la de ambiente
-		gl.uniform3f(shaderProgram.ambientColorUniform,intensidadLuz,intensidadLuz,intensidadLuz+0.05);	//Luz tenue, el +0.05 es para que sea mas azul y le da efecto mas nocturno
+		gl.uniform3f(shaderProgram.ambientColorUniform,intensidadLuzAmbiente,intensidadLuzAmbiente,intensidadLuzAmbiente+0.05);	//Luz tenue, el +0.05 es para que sea mas azul y le da efecto mas nocturno
 	//Luz del sol
-		var lightingDirection = [ 0.0, -1.0 , 0.0 ];
+		var lightingDirection = [ 0.0, -1.0 , -0.5 ];
 		var adjustedLD = vec3.create();
 		vec3.normalize(adjustedLD, lightingDirection);
 		vec3.scale(adjustedLD, adjustedLD, -1);
