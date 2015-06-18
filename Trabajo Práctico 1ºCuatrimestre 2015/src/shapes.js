@@ -1036,18 +1036,23 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		puntosY.push(radius*Math.sin(alpha) + Math.sin(1.6*alpha)/3);
 		puntosZ.push(0);
 	}
-	puntosX.push(0);
-	puntosY.push(0);
+	puntosX.push(radius);
+	puntosY.push(radius);
 	puntosZ.push(0);
-		puntosX.push(0);
-	puntosY.push(0);
+	
+	puntosX.push(radius);
+	puntosY.push(radius);
 	puntosZ.push(0);
-		puntosX.push(0);
-	puntosY.push(0);
+	
+	puntosX.push(radius);
+	puntosY.push(radius);
 	puntosZ.push(0);
-		puntosX.push(0);
-	puntosY.push(0);
+	
+	puntosX.push(radius);
+	puntosY.push(radius);
+	puntosY.push(radius);
 	puntosZ.push(0);
+	
 	var cubicSpline = [
 		-1/6,  3/6,  -3/6,  1/6,
 		3/6,  -6/6,  3/6,  0,
