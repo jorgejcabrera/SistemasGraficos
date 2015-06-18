@@ -23,11 +23,13 @@
     precision mediump float;
 	
 	varying vec2 vTextureCoord; 
+	varying vec3 vLightWeighting;
 	
 	uniform sampler2D uSampler; 
 
     void main(void) {
-		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)); 
+		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
 }
 </script>
 
@@ -38,12 +40,15 @@
     uniform mat4 uMMatrix;	
     uniform mat4 uVMatrix;
     uniform mat4 uPMatrix;
+	uniform vec3 uAmbientColor;	//la luz ambiente
 	
 	varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
 
     void main(void) {
         gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyección y la matriz de model-view
 		vTextureCoord = aTextureCoord;
+		vLightWeighting = uAmbientColor;
     }
 </script>
 
@@ -128,6 +133,7 @@
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
 		shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
+		shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
     }
 
     var mMatrix = mat4.create();
@@ -139,6 +145,12 @@
         gl.uniformMatrix4fv(shaderProgram.vMatrixUniform, false, vMatrix);
         gl.uniformMatrix4fv(shaderProgram.mMatrixUniform, false, mMatrix);
     }
+	
+	var intensidadLuz = 0.2;
+	function initLuces(){
+	//Acá inicio mi primera luz que quiero que sea la de ambiente
+		gl.uniform3f(shaderProgram.ambientColorUniform,intensidadLuz,intensidadLuz,intensidadLuz);	//Luz tenue
+	}
 	
 	var cameraPosition = vec3.create();
 	var target = vec3.create();
@@ -159,6 +171,7 @@
 		phiAngle = Math.atan(initPosToTranslate[1]/initPosToTranslate[0]);	//para las rotaciones en el plano xy
 		target = [0,0,0];
 		cameraPosition = [radius*Math.cos(phiAngle)*Math.sin(thetaAngle),radius*Math.sin(phiAngle)*Math.sin(thetaAngle),radius*Math.cos(thetaAngle)];
+		initLuces();
 	}
 	
     function drawScene() {
