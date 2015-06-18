@@ -816,7 +816,6 @@ function Ship (curveDetail,precision, numberTall,radius) {
 	
 	for (var u = 0; u <= 1; u+= precision){
 		var p = this.bezier(u, p0, p1, p2, p3);
-		
 		var valueX = p.x;	
 		var valueY = p.y
 		console.log(1);
@@ -825,13 +824,13 @@ function Ship (curveDetail,precision, numberTall,radius) {
 	
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
 		
-	for (var u = 0; u <= 1; u+= precision){
+	/*for (var u = 0; u <= 1; u+= precision){
 		var q = this.bezier(u, p0, p4, p5,p3);
 		
-		var valueX = p.x;	
-		var valueY = p.y
+		var valueX = q.x;	
+		var valueY = q.y
 		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
-	}
+	}*/
 	
 	
 	function pushVertix(valueX,valueY,vertices,normalVertex){
@@ -841,24 +840,24 @@ function Ship (curveDetail,precision, numberTall,radius) {
 		normalVertex.push(valueY);
 		vertices.push(0);
 		normalVertex.push(0.1);
-		for (var i = 1; i <numberTall-1; i++){			
-			var scaler = 1/Math.pow(2,i);
+		for (var i = 1; i <numberTall; i++){			
+			var scaler = 1+0.1*i;
 			vertices.push(valueX*scaler);
 			normalVertex.push(valueX);
 			vertices.push(valueY*scaler);
 			normalVertex.push(valueY);
-			vertices.push(i*2);
+			vertices.push(scaler);
 			normalVertex.push(scaler*0.1);
 		}
-		for (var i = numberTall-1; i <numberTall; i++){
-			var scaler = 1/Math.pow(2,i);
+		/*for (var i = numberTall-1; i <numberTall; i++){
+			var scaler = 1+0.1*i;
 			vertices.push(valueX*scaler);
 			normalVertex.push(valueX);
 			vertices.push(valueY*scaler);
 			normalVertex.push(valueY);
-			vertices.push((numberTall-2)*2+i/10);
+			vertices.push(scaler);
 			normalVertex.push(scaler*0.1);
-		}
+		}*/
 	}
 	this.webgl_position_buffer.itemSize = 3;
 	this.webgl_position_buffer.numItems = this.vertices.length/3;
