@@ -793,13 +793,13 @@ function Ship (curveDetail,precision, numberTall,radius) {
       return {x: x, y: y};
     }
 
-		var p0 = {x: -10, y: 10}; //use whatever points you want obviously
+		var p0 = {x: -5, y: 0}; //use whatever points you want obviously
 
-		var p1 = {x: 3.3, y: 20};
+		var p1 = {x: -2.5, y: 10};
 
-		var p2 = {x: 6.6, y: 20};
+		var p2 = {x: 2.5, y: 10};
 
-		var p3 = {x: 10, y: 10};
+		var p3 = {x: 5, y: 0};
 
 		var p4 = {x: 0.5, y: 16.5};
 
@@ -817,7 +817,6 @@ function Ship (curveDetail,precision, numberTall,radius) {
 		var p = this.bezier(u, p0, p1, p2, p3);
 		var valueX = p.x;	
 		var valueY = p.y
-		console.log(1);
 		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
 	}
 	
