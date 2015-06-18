@@ -128,7 +128,8 @@ function drawCabin(posX,posY,posZ,height){
 	var width = 0.05;
 	var posXRearWall = posX+distanceBeetwenWalls*0.5;
 	var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
-	var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;	
+	var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
+	
 	//PARED TRASERA
 	cubo.draw([posXRearWall, posYRearWall, posZ],[longitudeRearWall,width, height-width],craneTexture);
 
