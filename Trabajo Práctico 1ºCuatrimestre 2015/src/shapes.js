@@ -1019,7 +1019,7 @@ function Container(){
 
 function mountain (curveDetail,pasito, numberTall,radius) {
 	this.webgl_position_buffer = gl.createBuffer();
-	this.webgl_normal_buffer = null;
+	this.webgl_normal_buffer = gl.createBuffer();
 	this.webgl_texture_coord_buffer = gl.createBuffer();
 	this.webgl_index_buffer = gl.createBuffer();
 	var puntosX = [];
@@ -1044,7 +1044,8 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		1/6,  4/6,  1/6,  0
 	]
 	
-	this.vertices = [];	
+	this.vertices = [];
+	this.normalVertex = [];
 
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
 	for (var curva = 0; curva<=puntosX.length -4; curva++){		
@@ -1055,29 +1056,41 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 			
 			var valueX = vec4.dot(currentUs,[puntosX[curva],puntosX[curva+1],puntosX[curva+2],puntosX[curva+3]]);	
 			var valueY = vec4.dot(currentUs,[puntosY[curva],puntosY[curva+1],puntosY[curva+2],puntosY[curva+3]]);
-			pushVertix(valueX,valueY,this.vertices)
+			pushVertix(valueX,valueY,this.vertices,this.normalVertex)
 		}
 	}
 	
-	function pushVertix(valueX,valueY,vertices){
+	function pushVertix(valueX,valueY,vertices,normalVertex){
 		vertices.push(valueX);
+		normalVertex.push(valueX);
 		vertices.push(valueY);
+		normalVertex.push(valueY);
 		vertices.push(0);
+		normalVertex.push(0.1);
 		for (var i = 1; i <numberTall-1; i++){			
 			var scaler = 1/Math.pow(2,i);
 			vertices.push(valueX*scaler);
+			normalVertex.push(valueX);
 			vertices.push(valueY*scaler);
+			normalVertex.push(valueY);
 			vertices.push(i*2);
+			normalVertex.push(scaler*0.1);
 		}
 		for (var i = numberTall-1; i <numberTall; i++){
 			var scaler = 1/Math.pow(2,i);
 			vertices.push(valueX*scaler);
+			normalVertex.push(valueX);
 			vertices.push(valueY*scaler);
+			normalVertex.push(valueY);
 			vertices.push((numberTall-2)*2+i/10);
+			normalVertex.push(scaler*0.1);
 		}
 	}
 	this.webgl_position_buffer.itemSize = 3;
 	this.webgl_position_buffer.numItems = this.vertices.length/3;
+	
+	this.webgl_normal_buffer.itemSize = 3;
+	this.webgl_normal_buffer.numItems = this.normalVertex.length/3;
 	//Ahora le digo como usar esos vértices
 	this.vertexIndices = [];
 	
@@ -1114,16 +1127,16 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 	
 	this.initBuffers = function(){
 		//DEL VERTEX POSITION	
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);	
+		//Las normales
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normalVertex), gl.STATIC_DRAW);
 		//DEL INDEX VERTEX		
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);		
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndices), gl.STATIC_DRAW);		
 		//DE LA TEXTURA		
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);	
 	}
 	
@@ -1133,15 +1146,21 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
 		mat4.scale(mMatrix, mMatrix,scalator);
 		
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);	
-		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
-		setMatrixUniforms();
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		setMatrixUniforms(mMatrix);
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 	}	
 }
