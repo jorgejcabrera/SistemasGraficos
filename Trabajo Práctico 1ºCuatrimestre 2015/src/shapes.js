@@ -1044,7 +1044,7 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		1/6,  4/6,  1/6,  0
 	]
 	
-		var currentUs = vec4.create();
+	var currentUs = vec4.create();
 	vec4.set(currentUs,Math.pow(0,3),Math.pow(0,2),0,1);
 	vec4.transformMat4(currentUs, currentUs, cubicSpline);
 	var wasdX = vec4.dot(currentUs,[puntosX[0],puntosX[1],puntosX[2],puntosX[3]]);
