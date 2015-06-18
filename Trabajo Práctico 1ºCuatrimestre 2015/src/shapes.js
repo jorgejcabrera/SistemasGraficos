@@ -455,28 +455,41 @@ function cylinder(puntas,radio){ //puntas, radio
 
 	var angulo = degToRad(360/puntas);
 	this.vertices = [];
+	this.vertexNormals = [];
 	
 	//Hago la tapa de arriba
 	for (i = 0; i < puntas ; i++){
      	var angle = i*angulo; 
     	this.vertices.push(Math.cos(angle)*radio);
+		this.vertexNormals.push(0.0);
 		this.vertices.push(Math.sin(angle)*radio);
+		this.vertexNormals.push(0.0);
 		this.vertices.push(2.0);
+		this.vertexNormals.push(1.0);
     }
 	//Hago la tapa de abajo
 	for (i = puntas; i < (puntas*2) ; i++){
      	var angle = i*angulo; 
     	this.vertices.push(Math.cos(angle)*radio);
+		this.vertexNormals.push(0.0);
 		this.vertices.push(Math.sin(angle)*radio);
+		this.vertexNormals.push(0.0);
 		this.vertices.push(-2.0);
+		this.vertexNormals.push(-1.0);
     }
 
 	this.vertices.push(0.0);		//viene a ser el puntas * 2
 	this.vertices.push(0.0);		//viene a ser el puntas * 2 
 	this.vertices.push(1.6);		//viene a ser el puntas * 2
+	this.vertexNormals.push(0.0);
+	this.vertexNormals.push(0.0);
+	this.vertexNormals.push(1.0);
 	this.vertices.push(0.0);		//viene a ser el puntas * 2+1
 	this.vertices.push(0.0);		//viene a ser el puntas * 2+1
-	this.vertices.push(-1.6);		//viene a ser el puntas * 2+1	
+	this.vertices.push(-1.6);		//viene a ser el puntas * 2+1
+	this.vertexNormals.push(0.0);
+	this.vertexNormals.push(0.0);
+	this.vertexNormals.push(-1.0);
 
 	//Y luego para usar el vertex index:
 	this.vertexIndex=[];
@@ -557,6 +570,13 @@ function cylinder(puntas,radio){ //puntas, radio
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
 		this.webgl_position_buffer.itemSize = 3;
 		this.webgl_position_buffer.numItems = (this.vertices.length / 3);
+		//Normales
+		this.webgl_normal_buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertexNormals), gl.STATIC_DRAW);
+		this.webgl_normal_buffer.itemSize = 3;
+		this.webgl_normal_buffer.numItems = (this.vertexNormals.length / 3);
 		//Index vertex del cilindro
 		this.webgl_index_buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -579,15 +599,21 @@ function cylinder(puntas,radio){ //puntas, radio
 		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
 		mat4.scale(mMatrix, mMatrix,scalator);
 		
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
-		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);	
-		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
-		setMatrixUniforms();
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		setMatrixUniforms(mMatrix);
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 	}
 }
@@ -721,19 +747,21 @@ function TexturedSphere(latitude_bands, longitude_bands){
 		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
 		mat4.scale(mMatrix, mMatrix,scalator);
 		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
 		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 		
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-		gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
-		
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		gl.uniform1i(shaderProgram.samplerUniform, 0);		
 		
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
-		setMatrixUniforms();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		setMatrixUniforms(mMatrix);
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
 	}	
 }
