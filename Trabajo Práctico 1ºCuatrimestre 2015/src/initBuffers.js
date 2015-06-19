@@ -77,6 +77,13 @@ function initTexture() {
 		handleLoadedTexture(pinzaTexture);
 	}
 	pinzaTexture.image.src = "src/textures/cord.jpg";
+	
+	shipTexture = gl.createTexture();
+	shipTexture.image = new Image();
+	shipTexture.image.onload = function() {		
+		handleLoadedTexture(shipTexture);
+	}
+	shipTexture.image.src = "src/textures/Ship.png";
 }
   
 function handleLoadedTexture(texture) {
