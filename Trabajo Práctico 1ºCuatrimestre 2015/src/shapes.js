@@ -766,7 +766,7 @@ function TexturedSphere(latitude_bands, longitude_bands){
 	}	
 }
 
-function Ship (curveDetail,precision, numberTall,radius) {
+function Ship (curveDetail,precision,numberTall) {
 	this.webgl_position_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = gl.createBuffer();
 	this.webgl_texture_coord_buffer = gl.createBuffer();
@@ -794,40 +794,24 @@ function Ship (curveDetail,precision, numberTall,radius) {
     }
 
 		var p0 = {x: -5, y: 0}; //use whatever points you want obviously
-
 		var p1 = {x: -2.5, y: 10};
-
 		var p2 = {x: 2.5, y: 10};
-
 		var p3 = {x: 5, y: 0};
-
 		var p4 = {x: -4, y: -10};
-
 		var p5 = {x: 4, y: -10};
-		
-         
-
-	
+		      
 	this.vertices = [];
 	this.normalVertex = [];
-
-	//Si yo uso B-Spline cúbica, tendré esta fórmula
 	
+	//curva bezier superior del barco
 	for (var u = 0; u <= 1; u+= precision){
 		var p = this.bezier(u, p0, p1, p2, p3);
 		var valueX = p.x;	
 		var valueY = p.y
 		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
 	}
-	for (var u = 0; u <= 1; u+= precision){
-		var q = this.bezier(u, p3, p3, p3,p3);
-		var valueX = q.x;	
-		var valueY = q.y
-		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
-	}
-	
-	//Si yo uso B-Spline cúbica, tendré esta fórmula
-		
+
+	//curva bezier inferior del barco
 	for (var u = 0; u <= 1; u+= precision){
 		var q = this.bezier(u, p3, p5, p4,p0);
 		var valueX = q.x;	
