@@ -2,7 +2,7 @@ function initObjects() {
 	mountain = new mountain(12,0.5,5,15);
 	sky = new TexturedSphere(24, 24);	
 	cilindro = new cylinder(36,1);	
-	ship = new Ship(12,0.1,2);	
+	ship = new Ship(12,0.1,4);	
 	garras = new pinza();	
 	cubo = new cube();
 	quad = new square();
@@ -11,6 +11,7 @@ function initObjects() {
 	containerBlue = new Container();
 	containerGreen = new Container();
 	containerGray = new Container();
+	floor = new Floor(ship.getVertexFloor());
 }
 
 var craneTexture;
@@ -28,6 +29,13 @@ function initTexture() {
 		handleLoadedTexture(nullTexture);
 	}
 	nullTexture.image.src = "src/textures/nullTexture.jpg";	
+
+	floorShipTexture = gl.createTexture();
+	floorShipTexture.image = new Image();
+	floorShipTexture.image.onload = function() {
+		handleLoadedTexture(floorShipTexture);
+	}
+	floorShipTexture.image.src = "src/textures/craneTexture6.jpg";	
 	
 	craneTexture = gl.createTexture();
 	craneTexture.image = new Image();

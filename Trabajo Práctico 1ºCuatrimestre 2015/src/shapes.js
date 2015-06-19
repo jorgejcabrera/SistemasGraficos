@@ -76,6 +76,85 @@ function square () {
 	}	
 }
 
+function Floor (vertexFloor) {
+	this.webgl_position_buffer = gl.createBuffer();
+	this.webgl_normal_buffer = gl.createBuffer();
+	this.webgl_texture_coord_buffer = gl.createBuffer();
+	this.webgl_index_buffer = gl.createBuffer();
+	
+	this.vertices = vertexFloor;
+	this.webgl_position_buffer.itemSize = 3;
+	this.webgl_position_buffer.numItems = vertexFloor.length/3;
+
+	this.normalVertex = [];
+	for(i = 0; i < vertexFloor.length/3; i++){
+		this.normalVertex.push(0);
+		this.normalVertex.push(0);
+		this.normalVertex.push(1);
+	}
+	
+	this.webgl_normal_buffer.itemSize = 3;
+	this.webgl_normal_buffer.numItems = this.normalVertex.length/3;
+
+	this.vertexIndex = [];
+	for(i=0; i<(vertexFloor.length)/3-2;i++){
+		this.vertexIndex.push(0);
+		this.vertexIndex.push(i+1);
+		this.vertexIndex.push(i+2);
+	}
+
+	this.webgl_index_buffer.itemSize = 1;
+	this.webgl_index_buffer.numItems = this.vertexIndex.length;
+	
+	this.textureCoords = [];
+	for(i = 0; i<this.vertexIndex.length;i++){
+		this.textureCoords.push(Math.random());
+		this.textureCoords.push(Math.random());
+	}
+
+	this.webgl_texture_coord_buffer.itemSize = 2;
+	this.webgl_texture_coord_buffer.numItems = this.vertexIndex.length;
+	
+	this.initBuffers = function(){
+		//Vertex
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);		
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+		//Normales
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);	
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normalVertex), gl.STATIC_DRAW);
+		//Index vertex
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);		
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndex), gl.STATIC_DRAW);
+		//Coord textures
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
+	}
+	
+	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		mat4.identity(mMatrix);
+		mat4.translate(mMatrix,mMatrix, where);		
+		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.scale(mMatrix, mMatrix,scalator);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
+		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
+        gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, this.webgl_normal_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);
+		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
+		
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
+		setMatrixUniforms(mMatrix);
+		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+	}	  
+}
+
 function pinza () {
 	this.webgl_position_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = gl.createBuffer();
@@ -831,6 +910,7 @@ function Ship (curveDetail,precision,numberTall) {
 		normalVertex.push(valueY);
 		vertices.push(0);
 		normalVertex.push(0.1);
+		console.log(numberTall)
 		for (var i = 1; i <numberTall; i++){			
 			var scaler = 1+0.1*i;
 			vertices.push(valueX*scaler);
@@ -840,7 +920,8 @@ function Ship (curveDetail,precision,numberTall) {
 			vertices.push(scaler+i);
 			normalVertex.push(scaler*0.1);
 
-			if ( i == numberTall-1){
+			if ( i == numberTall-2){
+				console.log("entro")
 				vertexFloor.push(valueX*scaler);
 				vertexFloor.push(valueY*scaler);
 				vertexFloor.push(scaler+i);
