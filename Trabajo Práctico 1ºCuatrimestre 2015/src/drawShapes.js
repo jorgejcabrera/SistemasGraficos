@@ -43,6 +43,7 @@ function drawContainers(where,scalator){
 function drawShip(where,scalator,degreesToRotate,axisToRotate){
 	ship.initBuffers();
 	ship.drawOverload(where,scalator,degreesToRotate,axisToRotate,shipTexture);
+	
 }
 
 function drawWallCrane(posX,posY,posZ){

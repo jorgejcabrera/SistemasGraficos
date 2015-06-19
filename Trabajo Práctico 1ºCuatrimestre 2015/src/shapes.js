@@ -802,24 +802,29 @@ function Ship (curveDetail,precision,numberTall) {
 		      
 	this.vertices = [];
 	this.normalVertex = [];
+	this.vertexFloor = [];
 	
 	//curva bezier superior del barco
 	for (var u = 0; u <= 1; u+= precision){
 		var p = this.bezier(u, p0, p1, p2, p3);
 		var valueX = p.x;	
 		var valueY = p.y
-		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
+		pushVertix(valueX,valueY,this.vertices,this.normalVertex,this.vertexFloor);
 	}
 
 	//curva bezier inferior del barco
 	for (var u = 0; u <= 1; u+= precision){
 		var q = this.bezier(u, p3, p5, p4,p0);
 		var valueX = q.x;	
-		var valueY = q.y
-		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
+		var valueY = q.y;
+		pushVertix(valueX,valueY,this.vertices,this.normalVertex,this.vertexFloor);
 	}
-	
-	function pushVertix(valueX,valueY,vertices,normalVertex){
+
+	this.getVertexFloor = function(){
+		return this.vertexFloor;
+	}
+
+	function pushVertix(valueX,valueY,vertices,normalVertex,vertexFloor){
 		vertices.push(valueX);
 		normalVertex.push(valueX);
 		vertices.push(valueY);
@@ -834,6 +839,12 @@ function Ship (curveDetail,precision,numberTall) {
 			normalVertex.push(valueY);
 			vertices.push(scaler+i);
 			normalVertex.push(scaler*0.1);
+
+			if ( i == numberTall-1){
+				vertexFloor.push(valueX*scaler);
+				vertexFloor.push(valueY*scaler);
+				vertexFloor.push(scaler+i);
+			}
 		}
 	}
 	this.webgl_position_buffer.itemSize = 3;
@@ -882,7 +893,7 @@ function Ship (curveDetail,precision,numberTall) {
 	}
 	this.webgl_texture_coord_buffer.itemSize = 2;
 	this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;
-	
+
 	this.initBuffers = function(){
 		//DEL VERTEX POSITION	
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);		
@@ -890,12 +901,12 @@ function Ship (curveDetail,precision,numberTall) {
 		//Las normales
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);		
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normalVertex), gl.STATIC_DRAW);
-		//DEL INDEX VERTEX		
+		//DEL INDEX VERTEX	
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);		
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.vertexIndices), gl.STATIC_DRAW);		
 		//DE LA TEXTURA		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_texture_coord_buffer);		
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);	
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.textureCoords), gl.STATIC_DRAW);
 	}
 	
 	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
