@@ -820,7 +820,7 @@ function Ship (curveDetail,precision, numberTall,radius) {
 		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
 	}
 	for (var u = 0; u <= 1; u+= precision){
-		var q = this.bezier(u, p0, p0, p0,p0);
+		var q = this.bezier(u, p3, p3, p3,p3);
 		var valueX = q.x;	
 		var valueY = q.y
 		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
@@ -829,7 +829,7 @@ function Ship (curveDetail,precision, numberTall,radius) {
 	//Si yo uso B-Spline cúbica, tendré esta fórmula
 		
 	for (var u = 0; u <= 1; u+= precision){
-		var q = this.bezier(u, p0, p4, p5,p3);
+		var q = this.bezier(u, p3, p5, p4,p0);
 		var valueX = q.x;	
 		var valueY = q.y
 		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
