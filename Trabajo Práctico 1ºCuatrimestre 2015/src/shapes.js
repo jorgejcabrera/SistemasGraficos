@@ -866,9 +866,17 @@ function Ship (curveDetail,precision,numberTall) {
 		var textCoordFirstOpinion= indice % numberTall;		
 		var textCoordSecondOpinion = indice % (numberTall*2);
 		if(textCoordSecondOpinion < numberTall){
-			this.textureCoords.push(0.0);
+			if(indice+1 <= numberTall*numberTall){
+				this.textureCoords.push(1.0);
+			}else{
+				this.textureCoords.push(0.0);
+			}
 		}else{
-			this.textureCoords.push(1.0);
+			if(indice+1 <= numberTall*numberTall){
+				this.textureCoords.push(1.0);
+			}else{
+				this.textureCoords.push(0.0);
+			}
 		}
 		this.textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}

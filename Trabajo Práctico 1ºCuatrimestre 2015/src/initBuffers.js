@@ -81,9 +81,9 @@ function initTexture() {
 	shipTexture = gl.createTexture();
 	shipTexture.image = new Image();
 	shipTexture.image.onload = function() {		
-		handleLoadedTexture(shipTexture);
+		handleLoadedTextureMosaic(shipTexture);
 	}
-	shipTexture.image.src = "src/textures/Ship.png";
+	shipTexture.image.src = "src/textures/Ship2.png";
 }
   
 function handleLoadedTexture(texture) {
