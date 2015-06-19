@@ -793,10 +793,10 @@ function Ship (curveDetail,precision,numberTall) {
       return {x: x, y: y};
     }
 
-		var p0 = {x: -5, y: 0}; //use whatever points you want obviously
-		var p1 = {x: -2.5, y: 10};
-		var p2 = {x: 2.5, y: 10};
-		var p3 = {x: 5, y: 0};
+		var p0 = {x: -2.5, y: 0}; //use whatever points you want obviously
+		var p1 = {x: -1.25, y: 10};
+		var p2 = {x: 1.25, y: 10};
+		var p3 = {x: 2.5, y: 0};
 		var p4 = {x: -4, y: -10};
 		var p5 = {x: 4, y: -10};
 		      
@@ -818,7 +818,6 @@ function Ship (curveDetail,precision,numberTall) {
 		var valueY = q.y
 		pushVertix(valueX,valueY,this.vertices,this.normalVertex)
 	}
-	
 	
 	function pushVertix(valueX,valueY,vertices,normalVertex){
 		vertices.push(valueX);
