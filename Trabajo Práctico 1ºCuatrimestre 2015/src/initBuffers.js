@@ -12,6 +12,7 @@ function initObjects() {
 	containerGreen = new Container();
 	containerGray = new Container();
 	floor = new Floor(ship.getVertexFloor());
+	top = new Floor(ship.getVertexTop());
 }
 
 var craneTexture;
@@ -29,6 +30,13 @@ function initTexture() {
 		handleLoadedTexture(nullTexture);
 	}
 	nullTexture.image.src = "src/textures/nullTexture.jpg";	
+
+	topShipTexture = gl.createTexture();
+	topShipTexture.image = new Image();
+	topShipTexture.image.onload = function() {
+		handleLoadedTexture(topShipTexture);
+	}
+	topShipTexture.image.src = "src/textures/craneTexture6.jpg";	
 
 	floorShipTexture = gl.createTexture();
 	floorShipTexture.image = new Image();

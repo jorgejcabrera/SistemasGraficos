@@ -882,13 +882,14 @@ function Ship (curveDetail,precision,numberTall) {
 	this.vertices = [];
 	this.normalVertex = [];
 	this.vertexFloor = [];
+	this.vertexTop = [];
 	
 	//curva bezier superior del barco
 	for (var u = 0; u <= 1; u+= precision){
 		var p = this.bezier(u, p0, p1, p2, p3);
 		var valueX = p.x;	
 		var valueY = p.y
-		pushVertix(valueX,valueY,this.vertices,this.normalVertex,this.vertexFloor);
+		pushVertix(valueX,valueY,this.vertices,this.normalVertex,this.vertexFloor,this.vertexTop);
 	}
 
 	//curva bezier inferior del barco
@@ -896,21 +897,30 @@ function Ship (curveDetail,precision,numberTall) {
 		var q = this.bezier(u, p3, p5, p4,p0);
 		var valueX = q.x;	
 		var valueY = q.y;
-		pushVertix(valueX,valueY,this.vertices,this.normalVertex,this.vertexFloor);
+		pushVertix(valueX,valueY,this.vertices,this.normalVertex,this.vertexFloor,this.vertexTop);
 	}
 
 	this.getVertexFloor = function(){
 		return this.vertexFloor;
 	}
 
-	function pushVertix(valueX,valueY,vertices,normalVertex,vertexFloor){
+	this.getVertexTop = function(){
+		return this.vertexTop;
+	}
+
+	function pushVertix(valueX,valueY,vertices,normalVertex,vertexFloor,vertexTop){
 		vertices.push(valueX);
 		normalVertex.push(valueX);
 		vertices.push(valueY);
 		normalVertex.push(valueY);
 		vertices.push(0);
 		normalVertex.push(0.1);
-		console.log(numberTall)
+		
+		//guardamos los vertices de la tapa del barco, que corresponde al primer nivel
+		vertexTop.push(valueX*(1));
+		vertexTop.push(valueY*(1));
+		vertexTop.push(0);
+		
 		for (var i = 1; i <numberTall; i++){			
 			var scaler = 1+0.1*i;
 			vertices.push(valueX*scaler);
@@ -920,8 +930,8 @@ function Ship (curveDetail,precision,numberTall) {
 			vertices.push(scaler+i);
 			normalVertex.push(scaler*0.1);
 
+			//guardamos los vertices de lo que sería el piso del barco, el nivel ante último
 			if ( i == numberTall-2){
-				console.log("entro")
 				vertexFloor.push(valueX*scaler);
 				vertexFloor.push(valueY*scaler);
 				vertexFloor.push(scaler+i);
