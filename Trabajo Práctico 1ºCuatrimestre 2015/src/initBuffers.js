@@ -12,7 +12,7 @@ function initObjects() {
 	containerGreen = new Container();
 	containerGray = new Container();
 	floor = new Floor(ship.getVertexFloor());
-	top = new Floor(ship.getVertexTop());
+	bottomShip = new Floor(ship.getVertexTop());
 }
 
 var craneTexture;
@@ -41,9 +41,9 @@ function initTexture() {
 	floorShipTexture = gl.createTexture();
 	floorShipTexture.image = new Image();
 	floorShipTexture.image.onload = function() {
-		handleLoadedTexture(floorShipTexture);
+		handleLoadedTextureMosaic(floorShipTexture);
 	}
-	floorShipTexture.image.src = "src/textures/craneTexture6.jpg";	
+	floorShipTexture.image.src = "src/textures/craneTexture3.jpg";	
 	
 	craneTexture = gl.createTexture();
 	craneTexture.image = new Image();
@@ -100,6 +100,13 @@ function initTexture() {
 		handleLoadedTextureMosaic(shipTexture);
 	}
 	shipTexture.image.src = "src/textures/Ship2.png";
+	
+	bottomShipTexture = gl.createTexture();
+	bottomShipTexture.image = new Image();
+	bottomShipTexture.image.onload = function() {		
+		handleLoadedTextureMosaic(bottomShipTexture);
+	}
+	bottomShipTexture.image.src = "src/textures/bottomOfShip.png";
 }
   
 function handleLoadedTexture(texture) {

@@ -107,9 +107,30 @@ function Floor (vertexFloor) {
 	this.webgl_index_buffer.numItems = this.vertexIndex.length;
 	
 	this.textureCoords = [];
+	var xMax = -100;
+	var xMin = 100;
+	var yMax = -100;
+	var yMin = 100;
+	//Aca veo las posiciones para las texturas
+	for (i=0; i <vertexFloor.length; i+=3){
+		if(vertexFloor[i] > xMax){
+			xMax = vertexFloor[i];
+		}
+		if(vertexFloor[i] < xMin){
+			xMin = vertexFloor[i];
+		}
+		if(vertexFloor[i+1] > yMax){
+			yMax = vertexFloor[i+1];
+		}
+		if(vertexFloor[i+1] < yMin){
+			yMin = vertexFloor[i+1];
+		}
+	}
+	var textureScaleX = xMax - xMin;
+	var textureScaleY = yMax - yMin;
 	for(i = 0; i<this.vertexIndex.length;i++){
-		this.textureCoords.push(Math.random());
-		this.textureCoords.push(Math.random());
+		this.textureCoords.push(3*(vertexFloor[i*3]-xMin)/textureScaleX);
+		this.textureCoords.push(5*(vertexFloor[i*3+1]-yMin)/textureScaleY);
 	}
 
 	this.webgl_texture_coord_buffer.itemSize = 2;
