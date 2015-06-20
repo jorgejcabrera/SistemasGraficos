@@ -983,23 +983,14 @@ function Ship (curveDetail,precision,numberTall) {
 	this.webgl_index_buffer.itemSize = 1;
 	this.webgl_index_buffer.numItems = this.vertexIndices.length;
 	
-	//Y aca le pongo la textura al grid	
+	//TEXTURAS
     this.textureCoords = [];
 	for (var indice = 0; indice < (this.vertices.length/3); indice++){
-		var textCoordFirstOpinion= indice % numberTall;		
-		var textCoordSecondOpinion = indice % (numberTall*2);
-		if(textCoordSecondOpinion < numberTall){
-			if(indice+1 <= numberTall*numberTall){
-				this.textureCoords.push(1.0);
-			}else{
-				this.textureCoords.push(0.0);
-			}
+		var textCoordFirstOpinion= indice % numberTall;
+		if(indice+1 <= numberTall*numberTall){
+			this.textureCoords.push(1.0);
 		}else{
-			if(indice+1 <= numberTall*numberTall){
-				this.textureCoords.push(1.0);
-			}else{
-				this.textureCoords.push(0.0);
-			}
+			this.textureCoords.push(0.0);
 		}
 		this.textureCoords.push(textCoordFirstOpinion*(  1/( numberTall-1 )  ) );	//ese cuatro es porque es el doble de alto que de ancho
 	}

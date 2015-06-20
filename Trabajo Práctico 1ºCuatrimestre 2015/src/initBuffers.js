@@ -99,7 +99,7 @@ function initTexture() {
 	shipTexture.image.onload = function() {		
 		handleLoadedTextureMosaic(shipTexture);
 	}
-	shipTexture.image.src = "src/textures/Ship2.png";
+	shipTexture.image.src = "src/textures/Ship3.png";
 	
 	bottomShipTexture = gl.createTexture();
 	bottomShipTexture.image = new Image();
