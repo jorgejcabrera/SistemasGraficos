@@ -80,6 +80,13 @@ function initTexture() {
 	}
 	waterTexture.image.src = "src/textures/water5.jpg";
 	
+	waterLTexture = gl.createTexture();
+	waterLTexture.image = new Image();
+	waterLTexture.image.onload = function() {		
+		handleLoadedTextureMosaic(waterLTexture);
+	}
+	waterLTexture.image.src = "src/textures/waterL.jpg";
+	
 	mountainTexture = gl.createTexture();
 	mountainTexture.image = new Image();
 	mountainTexture.image.onload = function() {		
