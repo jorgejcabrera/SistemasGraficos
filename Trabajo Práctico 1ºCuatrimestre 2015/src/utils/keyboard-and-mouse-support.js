@@ -21,7 +21,7 @@ function handleKeyPresses(){
 		vec3.multiply(normalizedCamera, target, [1,1,0]);	//Obtengo la dirección X-Y
 		vec3.normalize(normalizedCamera,normalizedCamera);
 		vec3.cross(normalizedCamera, normalizedCamera, [0,0,1]);	//Le hago esa rotación mágica de la que hable arriba 
-		vec3.scale(normalizedCamera,normalizedCamera,0.3);	//Le modifico la velocidad
+		vec3.scale(normalizedCamera,normalizedCamera,0.15);	//Le modifico la velocidad
 		//Teclas A o D
 		if (currentlyPressedKeys[65]){
 			vec3.sub(cameraPosition,cameraPosition, normalizedCamera);			
@@ -32,12 +32,21 @@ function handleKeyPresses(){
 	}
 	
 	if ( (currentlyPressedKeys[83] || currentlyPressedKeys[87]) && cameraMode == 2) {
+		if(walkingWobble > 100){
+			walkingWobbleMod = -1;
+		}
+		if(walkingWobble < -100){
+			walkingWobbleMod = 1;
+		}		
+		walkingWobble += 10*walkingWobbleMod;
+		
 		var normalizedCamera= vec3.create();
 		vec3.multiply(normalizedCamera, target, [1,1,0]);	//Obtengo la dirección X-Y
+		vec3.add(normalizedCamera,normalizedCamera,[0,0,walkingWobble]);
 		vec3.normalize(normalizedCamera,normalizedCamera);
-		vec3.scale(normalizedCamera,normalizedCamera,0.3);	//Le modifico la velocidad
+		vec3.scale(normalizedCamera,normalizedCamera,0.1);	//Le modifico la velocidad
 		//Teclas W o S
-		if (currentlyPressedKeys[83] && thetaAngle >= degToRad(1)){
+		if (currentlyPressedKeys[83] && thetaAngle >= degToRad(1)){			
 			vec3.sub(cameraPosition,cameraPosition, normalizedCamera);
 		}
 		if (currentlyPressedKeys[87] && thetaAngle <= degToRad(150)) {
@@ -110,7 +119,7 @@ function MouseWheelHandler(e) {
 	if(cameraMode == 1){
 		var e = window.event || e; // old IE support
 		e = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-		if ( e <= 0 && vec3.length(cameraPosition) < 20){
+		if ( e <= 0 && vec3.length(cameraPosition) < 22){
 			vec3.scale(cameraPosition,cameraPosition,1.1)
 		}
 		if(e > 0 && vec3.length(cameraPosition) > 2){
@@ -150,7 +159,7 @@ function onMouseMove(event) {
 		testY = (y - clickY)*74;
 		phiAngle += degToRad(testX)/widthOfCanvas;
 		testLimit += degToRad(-testY)/heightOfCanvas;
-		if (testLimit >= degToRad(25) && testLimit <= degToRad(100)){
+		if (testLimit >= degToRad(10) && testLimit <= degToRad(100)){
 			thetaAngle = testLimit;
 		}
 		clickX = x;
