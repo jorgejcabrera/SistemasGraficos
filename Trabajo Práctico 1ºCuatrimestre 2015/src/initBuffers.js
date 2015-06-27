@@ -1,6 +1,6 @@
 function initObjects() {
 	mountain = new mountain(12,0.5,5,15);
-	sky = new TexturedSphere(24, 24);	
+	sphere = new TexturedSphere(24, 24);	
 	cilindro = new cylinder(36,1);	
 	ship = new Ship(12,0.1,4);	
 	garras = new pinza();	
@@ -23,7 +23,14 @@ var floorTexture;
 var waterTexture;
 var mountainTexture;
 var pinzaTexture;
-function initTexture() {
+function initTexture() {	
+	skyTexture = gl.createTexture();
+	skyTexture.image = new Image();
+	skyTexture.image.onload = function() {		
+		handleLoadedTexture(skyTexture);
+	}
+	skyTexture.image.src = "src/textures/sky.jpg";
+	
 	nullTexture = gl.createTexture();
 	nullTexture.image = new Image();
 	nullTexture.image.onload = function() {
@@ -51,13 +58,6 @@ function initTexture() {
 		handleLoadedTextureMosaic(craneTexture);
 	}
 	craneTexture.image.src = "src/textures/crane.png";
-	
-	skyTexture = gl.createTexture();
-	skyTexture.image = new Image();
-	skyTexture.image.onload = function() {		
-		handleLoadedTexture(skyTexture);
-	}
-	skyTexture.image.src = "src/textures/sky.jpg";
 	
 	wheelTexture = gl.createTexture();
 	wheelTexture.image = new Image();
@@ -114,6 +114,13 @@ function initTexture() {
 		handleLoadedTextureMosaic(bottomShipTexture);
 	}
 	bottomShipTexture.image.src = "src/textures/bottomOfShip.png";
+	
+	whiteTexture = gl.createTexture();
+	whiteTexture.image = new Image();
+	whiteTexture.image.onload = function() {		
+		handleLoadedTextureMosaic(whiteTexture);
+	}
+	whiteTexture.image.src = "src/textures/white.png";	
 }
   
 function handleLoadedTexture(texture) {
@@ -126,6 +133,7 @@ function handleLoadedTexture(texture) {
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); //Prevents s-coordinate wrapping (repeating).
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); //Prevents t-coordinate wrapping (repeating).
 	gl.bindTexture(gl.TEXTURE_2D, null);
+	texture.finished = true;
 }
 
 function handleLoadedTextureMosaic(texture) {
@@ -139,4 +147,5 @@ function handleLoadedTextureMosaic(texture) {
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); //Prevents s-coordinate wrapping (repeating).
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT); //Prevents t-coordinate wrapping (repeating).
 	gl.bindTexture(gl.TEXTURE_2D, null);
+	texture.finished = true;
 }
