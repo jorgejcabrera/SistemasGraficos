@@ -14,6 +14,7 @@
 <script type="text/javascript" src="src/utils/webgl-utils.js"></script>
 <!-- Para los controles del teclado -->
 <script type="text/javascript" src="src/utils/keyboard-and-mouse-support.js"></script>
+<style type="text/css" src="src/utils/loading.css"></style>
 
 <script id="shader-fs" type="x-shader/x-fragment">
     #ifdef GL_ES
@@ -235,6 +236,10 @@
 		if ( skyTexture.finished == null ){
 			return; //Espera a que cargue la imagen mas pesada y ahi dibuja todo
 		}
+		var elements = document.getElementsByClassName("loading");
+		while(elements.length > 0){
+			elements[0].parentNode.removeChild(elements[0]);
+		}
 		gl.blendFunc(gl.ONE, gl.SRC_ALPHA);
 		gl.enable(gl.BLEND);
 		gl.disable(gl.DEPTH_TEST);
@@ -310,6 +315,79 @@
         color: white;
 		opacity: 0.1;
     }
+	
+	body {
+	  background-color: rgba(1, 1, 1, 0.0);
+	}
+
+	.loading,
+	.loading::before,
+	.loading::after {
+	  position: absolute;
+	  top: 35%;
+	  left: 45%;
+	  border: 8px solid rgba(255, 255, 255, 0.1);
+	  border-left-color: rgba(255, 255, 255, 0.4);
+	  -webkit-border-radius: 999px;
+	  -moz-border-radius: 999px;
+	  border-radius: 999px;
+	}
+
+	.loading {
+	  margin: -25px 0 0 -25px;
+	  height: 120px;
+	  width: 120px;
+	  -webkit-animation: animation-rotate 1000ms linear infinite;
+	  -moz-animation: animation-rotate 1000ms linear infinite;
+	  -o-animation: animation-rotate 1000ms linear infinite;
+	  animation: animation-rotate 1000ms linear infinite;
+	}
+
+	.loading::before {
+	  content: "";
+	  margin: -23px 0 0 -23px;
+	  height: 44px;
+	  width: 44px;
+	  -webkit-animation: animation-rotate 1000ms linear infinite;
+	  -moz-animation: animation-rotate 1000ms linear infinite;
+	  -o-animation: animation-rotate 1000ms linear infinite;
+	  animation: animation-rotate 1000ms linear infinite;
+	}
+
+	.loading::after {
+	  content: "";
+	  margin: -29px 0 0 -29px;
+	  height: 56px;
+	  width: 56px;
+	  -webkit-animation: animation-rotate 2000ms linear infinite;
+	  -moz-animation: animation-rotate 2000ms linear infinite;
+	  -o-animation: animation-rotate 2000ms linear infinite;
+	  animation: animation-rotate 2000ms linear infinite;
+	}
+
+	@-webkit-keyframes animation-rotate {
+	  100% {
+		-webkit-transform: rotate(360deg);
+	  }
+	}
+
+	@-moz-keyframes animation-rotate {
+	  100% {
+		-moz-transform: rotate(360deg);
+	  }
+	}
+
+	@-o-keyframes animation-rotate {
+	  100% {
+		-o-transform: rotate(360deg);
+	  }
+	}
+
+	@keyframes animation-rotate {
+	  100% {
+		transform: rotate(360deg);
+	  }
+	}	
 </style>
 
 </head>
@@ -317,6 +395,7 @@
 
 <body onload="webGLStart();" onmouseover="onMouseUp(event)">
     <canvas id="TP1C2015" onmousemove="onMouseMove(event)" onmouseup="onMouseUp(event)" onmousedown="onMouseDown(event)"  style="border: none;" width="1400" height="640"></canvas>
+	<div class="loading"></div>
 	<div id="headertext">66.71 Sistémas Gráficos - Primer Cuatrimestre 2015</div>
 	<div style="color:#0000FF;text-align:center;font: Helvetica 12pt;border: 1px solid black;">
 		<div>Presione 1 para cámara orbital.</div>
