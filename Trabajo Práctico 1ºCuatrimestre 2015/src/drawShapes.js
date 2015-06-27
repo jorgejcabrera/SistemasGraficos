@@ -100,8 +100,8 @@ function drawCrame(posX,posY,posZ){
     drawCabin(posX, posY+moverCabina, height, posZ );
 	
 	//Postes de Luz		
-	cubo.draw([-7,0,gruaAbajo+ruedasAncho-1+2],[0.08,0.08,3],craneTexture);
-	cubo.draw([13,0,gruaAbajo+ruedasAncho-1+2],[0.08,0.08,3],craneTexture);
+	cubo.draw([-7,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
+	cubo.draw([13,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
 	var bulbSize = 0.5;
 	sphere.initBuffers();
 	sphere.drawOverload([-7,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture);

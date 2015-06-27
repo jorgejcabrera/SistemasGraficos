@@ -47,16 +47,21 @@
 	uniform vec3 uLightingDirection;
 	uniform vec3 uAmbientColor;	//la luz ambiente
 	uniform vec3 uDirectionalColor;
+	uniform vec3 ulampLightOnePosition;
+	uniform vec3 ulampLightColour;
 	
 	varying vec2 vTextureCoord;
 	varying vec3 vLightWeighting;
 
     void main(void) {
-        gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);	//los posiciona segun la matrix de proyección y la matriz de model-view
+		vec4 mvPosition = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uPMatrix * mvPosition; 	//los posiciona segun la matrix de proyección y la matriz de model-view
+		vec3 lampLightDirection = normalize(ulampLightOnePosition - mvPosition.xyz);		
 		vTextureCoord = aTextureCoord;
 		vec3 transformedNormal = uNMatrix * aVertexNormal;
-		float directionalLightWeighting = max(dot(normalize(transformedNormal), normalize(uLightingDirection)), 0.0);		
-		vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;		
+		float directionalLightWeighting = max(dot(normalize(transformedNormal), normalize(uLightingDirection)), 0.0);
+		float lampLightWeighting = max(dot(normalize(transformedNormal), normalize(lampLightDirection)), 0.0);
+		vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + ulampLightColour * lampLightWeighting;		
     }
 </script>
 
@@ -148,6 +153,9 @@
         shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
 		shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
 		shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+		shaderProgram.lampLightOnePosition = gl.getUniformLocation(shaderProgram, "ulampLightOnePosition");
+		shaderProgram.lampLightColour = gl.getUniformLocation(shaderProgram, "ulampLightColour");
+		
     }
 
     var mMatrix = mat4.create();
@@ -179,6 +187,9 @@
 		gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
 	//Intensidad del sol
 	    gl.uniform3f(shaderProgram.directionalColorUniform,intensidadSol+0.05,intensidadSol,intensidadSol);	//El +0.05 es para que sea mas anaranjado por el sol
+	//Luz de la lampara
+	    gl.uniform3f(shaderProgram.lampLightOnePosition,1.0,1.0,1.0);
+		gl.uniform3f(shaderProgram.lampLightColour,0.5,0.3,0.0);	//Naranja
 	}
 	
 	var cameraPosition = vec3.create();
