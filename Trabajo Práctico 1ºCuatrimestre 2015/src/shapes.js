@@ -720,7 +720,7 @@ function cylinder(puntas,radio){ //puntas, radio
 
 
 //Veamos como hacer para que funcione la esfera con nuestro tp
-function TexturedSphere(latitude_bands, longitude_bands){
+function TexturedSphere(latitude_bands, longitude_bands, invertedLight){
 
 	this.latitudeBands = latitude_bands;
 	this.longitudeBands = longitude_bands;
@@ -758,10 +758,16 @@ function TexturedSphere(latitude_bands, longitude_bands){
 			var u = 1.0 - (longNumber / this.longitudeBands);
 			var v = 1.0 - (latNumber / this.latitudeBands);
 
-			this.normal_buffer.push(x);
-			this.normal_buffer.push(y);
-			this.normal_buffer.push(z);
-
+			if (invertedLight){
+				this.normal_buffer.push(-x);
+				this.normal_buffer.push(-y);
+				this.normal_buffer.push(-z);
+			}else{
+				this.normal_buffer.push(x);
+				this.normal_buffer.push(y);
+				this.normal_buffer.push(z);
+			}
+			
 			this.texture_coord_buffer.push(u);
 			this.texture_coord_buffer.push(v);
 			

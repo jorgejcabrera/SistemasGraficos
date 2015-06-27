@@ -1,6 +1,7 @@
 function initObjects() {
 	mountain = new mountain(12,0.5,5,15);
-	sphere = new TexturedSphere(24, 24);	
+	sphereSky = new TexturedSphere(24, 24,false);
+	sphereLamp = new TexturedSphere(24, 24,true);
 	cilindro = new cylinder(36,1);	
 	ship = new Ship(12,0.1,4);	
 	garras = new pinza();	

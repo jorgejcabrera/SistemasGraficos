@@ -1,6 +1,6 @@
 function drawSky(where, scalator,degreesToRotate,axisToRotate){
-	sphere.initBuffers();
-	sphere.drawOverload(where, scalator,degreesToRotate,axisToRotate,skyTexture);
+	sphereSky.initBuffers();
+	sphereSky.drawOverload(where, scalator,degreesToRotate,axisToRotate,skyTexture);
 }
 
 function drawOcean(where,scalator,texture){
@@ -76,7 +76,7 @@ function drawCrame(posX,posY,posZ){
 	cubo.initBuffers();
 	
 	//el piso
-	cubo.draw([5.5,4,gruaAbajo+ruedasAncho-1],[16,6,1],floorTexture);	//Ese -1 en la Z es por el alto de la grua
+	cubo.draw([4,4,gruaAbajo+ruedasAncho-1],[14,6,1],floorTexture);	//Ese -1 en la Z es por el alto de la grua
 
 	//PAREDES LATERALES
 	drawWallCrane(posX,posY,posZ);
@@ -101,11 +101,11 @@ function drawCrame(posX,posY,posZ){
 	
 	//Postes de Luz		
 	cubo.draw([-7,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
-	cubo.draw([13,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
+	cubo.draw([15,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
 	var bulbSize = 0.5;
-	sphere.initBuffers();
-	sphere.drawOverload([-7,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture);
-	sphere.drawOverload([13,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture);
+	sphereLamp.initBuffers();
+	sphereLamp.drawOverload([-7,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture);
+	sphereLamp.drawOverload([15,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture);
 	//LAS RUEDAS
 	drawWheels(posX,posY,posZ,distanceBeetwenWalls,height,width);
 }
