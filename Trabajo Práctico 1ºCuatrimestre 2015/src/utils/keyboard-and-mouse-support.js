@@ -59,12 +59,25 @@ function handleKeyPresses(){
 		//la letra Q o E
 		if (currentlyPressedKeys[81]) {
 			moveXCrane += 0.08;
-			spinning = true;
+			cilindro.setWheelRotation(-3);
 		}
 		if (currentlyPressedKeys[69]) {	
 			moveXCrane -= 0.08;
-			spinning = true;
+			cilindro.setWheelRotation(3)
 		}
+		
+		if(cameraMode == 3){
+			var distanceBeetwenWalls = 4;
+			var longitude = 0.20;
+			var width = 0.05;
+			var posY = 2.0;
+			var posZ = 1.0;
+			var posXRearWall = moveXCrane+distanceBeetwenWalls*0.5;
+			var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
+			var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
+			
+			vec3.set(cameraPosition,posXRearWall,posYRearWall+-0.4+moverCabina,4.0);		
+		}		
 		return;
 	}
 	
@@ -91,6 +104,26 @@ function handleKeyPresses(){
 		vec3.normalize(cameraPosition,cameraPosition);	
 		return;
 	}
+	
+	//si presiono el boton 3, me cambio a otra cámara
+	if (currentlyPressedKeys[51] && cameraMode != 3) {
+		cameraMode = 3;
+		var distanceBeetwenWalls = 4;
+		var longitude = 0.20;
+		var width = 0.05;
+		var posY = 2.0;
+		var posZ = 1.0;
+		var posXRearWall = moveXCrane+distanceBeetwenWalls*0.5;
+		var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
+		var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
+		vec3.set(cameraPosition,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),-Math.cos(thetaAngle));
+		vec3.normalize(cameraPosition,cameraPosition);
+		vec3.scale(target,cameraPosition,100);	
+	
+		vec3.set(cameraPosition,posXRearWall,posYRearWall+-0.4+moverCabina,4.0);
+		return;
+	}
+	
 	//Si presiono Z=90 o X=88, para mover las pinzas de la grua
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
 		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
@@ -104,11 +137,23 @@ function handleKeyPresses(){
 	//Si presiono C=67 o V=86, para mover la cabina
 	if (currentlyPressedKeys[67] || currentlyPressedKeys[86]) {
 		if(currentlyPressedKeys[67] && moverCabina > -1.7){
-			moverCabina -= 0.035;
+			moverCabina -= 0.035;			
 		}
 		if(currentlyPressedKeys[86] && moverCabina < 8){
 			moverCabina += 0.035;
 		}
+		if (cameraMode == 3){
+			var distanceBeetwenWalls = 4;
+			var longitude = 0.20;
+			var width = 0.05;
+			var posY = 2.0;
+			var posZ = 1.0;
+			var posXRearWall = moveXCrane+distanceBeetwenWalls*0.5;
+			var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
+			var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
+			
+			vec3.set(cameraPosition,posXRearWall,posYRearWall+-0.4+moverCabina,4.0);
+		}		
 		return;
 	}
 }
@@ -175,5 +220,11 @@ function onMouseMove(event) {
 			vec3.normalize(normalizedCamera,normalizedCamera);
 			vec3.scale(target,normalizedCamera,100);
 		}
+		if (cameraMode == 3){
+			vec3.set(normalizedCamera,Math.cos(phiAngle)*Math.sin(thetaAngle),Math.sin(phiAngle)*Math.sin(thetaAngle),-Math.cos(thetaAngle));
+			vec3.normalize(normalizedCamera,normalizedCamera);
+			vec3.scale(target,normalizedCamera,100);
+		}		
+		
 	}
 }

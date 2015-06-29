@@ -144,11 +144,10 @@ function drawCabin(posX,posY,posZ,height){
 	cubo.draw([posXRearWall, posYRearWall, posZ],[longitudeRearWall,width, height-width],craneTexture);
 
 	//PISO
-	cubo.draw([posXRearWall, posYRearWall-longitudeRearWall*0.75-width, posZ-height+width*2],[longitudeRearWall,longitudeRearWall*0.75, width],craneTexture);
 	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],craneTexture);
 	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],craneTexture);
-	cubo.draw([posXRearWall,posYRearWall-longitudeRearWall*0.75*2,posZ-height+width*7],[longitudeRearWall-width*2,width, width*4],craneTexture);
-
+	cubo.draw([posXRearWall,posYRearWall-longitudeRearWall*0.75*2,posZ-height+width*7],[longitudeRearWall-width*2,width, width*4],craneTexture);	
+	
 	//TECHO
 	cubo.draw([posXRearWall, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*2],[longitudeRearWall,longitudeRearWall*0.75, width],craneTexture);
 	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*7],[width,longitudeRearWall*0.75, width*4],craneTexture);
@@ -172,7 +171,6 @@ function drawCabin(posX,posY,posZ,height){
 	
 	//AGARRE DERECHO
 	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)],[width,width*10,width*.25],craneTexture);
-	
 	//GARRAS
 	garras.initBuffers();
 	

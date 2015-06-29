@@ -557,6 +557,7 @@ function cylinder(puntas,radio){ //puntas, radio
 	this.webgl_normal_buffer = null;
 	this.webgl_texture_coord_buffer = null;
 	this.webgl_index_buffer = null;
+	this.currentRotation = 0;
 
 	var angulo = degToRad(360/puntas);
 	this.vertices = [];
@@ -697,11 +698,16 @@ function cylinder(puntas,radio){ //puntas, radio
 		this.webgl_texture_coord_buffer.itemSize = 2;
 		this.webgl_texture_coord_buffer.numItems = this.textureCoords.length/2;
 	}
+
+	this.setWheelRotation = function (value){
+		this.currentRotation += value;
+	}
 	
 	this.draw = function(where,scalator,degreesToRotate,axisToRotate,texture){
 		mat4.identity(mMatrix);
-		mat4.translate(mMatrix,mMatrix, where);
+		mat4.translate(mMatrix,mMatrix, where);	
 		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
+		mat4.rotate(mMatrix, mMatrix, degToRad(this.currentRotation), [0.0,0.0,1.0]);
 		mat4.scale(mMatrix, mMatrix,scalator);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
