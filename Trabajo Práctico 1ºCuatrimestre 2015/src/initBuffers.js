@@ -79,7 +79,7 @@ function initTexture() {
 	waterTexture.image.onload = function() {		
 		handleLoadedTextureMosaic(waterTexture);
 	}
-	waterTexture.image.src = "src/textures/water5.jpg";
+	waterTexture.image.src = "src/textures/water6.jpg";
 	
 	waterLTexture = gl.createTexture();
 	waterLTexture.image = new Image();
