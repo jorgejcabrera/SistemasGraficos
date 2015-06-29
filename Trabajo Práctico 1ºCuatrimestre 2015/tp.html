@@ -47,13 +47,13 @@
 		
 		vec3 lampLightDirectionOne = normalize(ulampLightOnePosition - vModelPosition.xyz);
 		float lampLightWeightingOne = max(dot(normal, normalize(lampLightDirectionOne)), 0.0);
-		vec3 reflectionDirectionOne = normalize(reflect(-lampLightDirectionOne, normal));		
-		float specularLampLightWeightingOne = pow(max(dot(reflectionDirectionOne, eyeDirection), 0.0), 32.0);
+		vec3 reflectionDirectionOne = normalize(reflect(-lampLightDirectionOne, -normal));			//Recomiendan ponerle +normal
+		float specularLampLightWeightingOne = pow(max(dot(reflectionDirectionOne, eyeDirection), 0.0), uMaterialShininess);
 		
 		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - vModelPosition.xyz);
 		float lampLightWeightingTwo = max(dot(normal, normalize(lampLightDirectionTwo)), 0.0);
-		vec3 reflectionDirectionTwo = normalize(reflect(-lampLightDirectionTwo, normal));		
-		float specularLampLightWeightingTwo = pow(max(dot(reflectionDirectionTwo, eyeDirection), 0.0), 32.0);
+		vec3 reflectionDirectionTwo = normalize(reflect(-lampLightDirectionTwo, -normal));		//Recomiendan ponerle +normal
+		float specularLampLightWeightingTwo = pow(max(dot(reflectionDirectionTwo, eyeDirection), 0.0), uMaterialShininess);
 
 		float distOne = length(ulampLightOnePosition - vModelPosition.xyz);
 		float distTwo = length(ulampLightTwoPosition - vModelPosition.xyz);
@@ -75,6 +75,7 @@
     attribute vec3 aVertexPosition;
 	attribute vec3 aVertexNormal;
 	attribute vec2 aTextureCoord;
+	attribute float aShininess;
 
     uniform mat4 uMMatrix;	
     uniform mat4 uVMatrix;
@@ -177,7 +178,7 @@
 		
 		shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
 		gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
-
+		
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
 		shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
@@ -188,6 +189,7 @@
 		shaderProgram.lampLightOnePosition = gl.getUniformLocation(shaderProgram, "ulampLightOnePosition");
 		shaderProgram.lampLightTwoPosition = gl.getUniformLocation(shaderProgram, "ulampLightTwoPosition");
 		shaderProgram.lampLightColour = gl.getUniformLocation(shaderProgram, "ulampLightColour");
+		shaderProgram.materialShininessUniform = gl.getUniformLocation(shaderProgram, "uMaterialShininess");
 		shaderProgram.lampLightColourSpecular = gl.getUniformLocation(shaderProgram, "uLampLightColourSpecular");
 		
     }

@@ -66,7 +66,8 @@ function square () {
 		
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		gl.uniform1i(shaderProgram.samplerUniform, 0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 522.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -168,7 +169,8 @@ function Floor (vertexFloor) {
 		
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1i(shaderProgram.samplerUniform, 0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);		
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -337,7 +339,8 @@ function pinza () {
 		
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		gl.uniform1i(shaderProgram.samplerUniform, 0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 532.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -516,6 +519,7 @@ function cube () {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1f(shaderProgram.materialShininessUniform, 7.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -540,6 +544,7 @@ function cube () {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -711,6 +716,7 @@ function cylinder(puntas,radio){ //puntas, radio
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -864,7 +870,8 @@ function TexturedSphere(latitude_bands, longitude_bands, invertedLight){
 		
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1i(shaderProgram.samplerUniform, 0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);		
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -1035,7 +1042,8 @@ function Ship (curveDetail,precision,numberTall) {
 		
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1i(shaderProgram.samplerUniform, 0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 532.0);		
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -1243,6 +1251,7 @@ function Container(){
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -1412,6 +1421,7 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);		
+		gl.uniform1f(shaderProgram.materialShininessUniform, 1.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
@@ -1531,7 +1541,8 @@ function skyBox() {
 		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		gl.uniform1i(shaderProgram.samplerUniform, 0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 9999.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -1549,7 +1560,8 @@ function skyBox() {
 		gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, this.webgl_texture_coord_buffer.itemSize, gl.FLOAT, false, 0, 0);
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.uniform1i(shaderProgram.samplerUniform, 0);	
+		gl.uniform1i(shaderProgram.samplerUniform, 0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 9999.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
 		gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, this.webgl_position_buffer.itemSize, gl.FLOAT, false, 0, 0);
