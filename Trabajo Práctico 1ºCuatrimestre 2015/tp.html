@@ -34,7 +34,6 @@
 	varying vec3 vTransformedNormal;
 	varying vec4 vMVPosition;
 	varying vec4 vModelPosition;
-	varying vec3 vVertexPosition;
 	
 	uniform sampler2D uSampler; 
 
@@ -46,15 +45,16 @@
 		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - vModelPosition.xyz);
 		float lampLightWeightingTwo = max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionTwo)), 0.0);
 
-		float distOne = length(ulampLightOnePosition - vModelPosition.xyz - vVertexPosition);
-		float distTwo = length(ulampLightTwoPosition - vModelPosition.xyz - vVertexPosition);
-		if (distOne <= 2.0){
-			distOne = 4.0;
+		float distOne = length(ulampLightOnePosition - vModelPosition.xyz);
+		float distTwo = length(ulampLightTwoPosition - vModelPosition.xyz);
+	//Se usa para atenuar el color de la bola
+		if (distOne <= 1.0){
+			distOne = 5.0;
 		}
-		if (distTwo <= 3.0){
-			distTwo = 4.0;
+		if (distTwo <= 1.0){
+			distTwo = 5.0;
 		}
-		vec3 lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + ulampLightColour * 8.0*(lampLightWeightingOne/distOne + lampLightWeightingTwo/distTwo);		
+		vec3 lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + ulampLightColour * 12.0*(lampLightWeightingOne/distOne + lampLightWeightingTwo/distTwo);		
 		
 		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
         gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
@@ -76,7 +76,6 @@
 	varying vec3 vTransformedNormal;
 	varying vec4 vMVPosition;
 	varying vec4 vModelPosition;
-	varying vec3 vVertexPosition;
 
     void main(void) {
 		vMVPosition = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
@@ -85,7 +84,6 @@
 		vTransformedNormal = uNMatrix * aVertexNormal;
 		
 		vModelPosition = uMMatrix * vec4(aVertexPosition, 1.0);
-		vVertexPosition = aVertexPosition;
     }
 </script>
 
@@ -199,8 +197,8 @@
 		gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
     }
 	
-	var intensidadLuzAmbiente = 0.15;
-	var intensidadSol = 0.35;
+	var intensidadLuzAmbiente = 0.1;
+	var intensidadSol = 0.3;
 	function initLuces(){
 	//Acá inicio mi primera luz que quiero que sea la de ambiente
 		gl.uniform3f(shaderProgram.ambientColorUniform,intensidadLuzAmbiente,intensidadLuzAmbiente,intensidadLuzAmbiente+0.05);	//Luz tenue, el +0.05 es para que sea mas azul y le da efecto mas nocturno
