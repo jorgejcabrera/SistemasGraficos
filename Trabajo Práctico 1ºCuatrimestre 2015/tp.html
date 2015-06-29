@@ -22,15 +22,42 @@
     #endif
 
     precision mediump float;
+
+	uniform vec3 uLightingDirection;
+	uniform vec3 uAmbientColor;	//la luz ambiente
+	uniform vec3 uDirectionalColor;
+	uniform vec3 ulampLightOnePosition;
+	uniform vec3 ulampLightTwoPosition;
+	uniform vec3 ulampLightColour;
 	
-	varying vec2 vTextureCoord; 
-	varying vec3 vLightWeighting;
+	varying vec2 vTextureCoord;
+	varying vec3 vTransformedNormal;
+	varying vec4 vMVPosition;
+	varying vec4 vModelPosition;
+	varying vec3 vVertexPosition;
 	
 	uniform sampler2D uSampler; 
 
     void main(void) {
+		float directionalLightWeighting = max(dot(normalize(vTransformedNormal), normalize(uLightingDirection)), 0.0);
+	//Me fijo el angulo de la luz puntual
+		vec3 lampLightDirectionOne = normalize(ulampLightOnePosition - vModelPosition.xyz);
+		float lampLightWeightingOne = max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionOne)), 0.0);		
+		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - vModelPosition.xyz);
+		float lampLightWeightingTwo = max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionTwo)), 0.0);
+
+		float distOne = length(ulampLightOnePosition - vModelPosition.xyz - vVertexPosition);
+		float distTwo = length(ulampLightTwoPosition - vModelPosition.xyz - vVertexPosition);
+		if (distOne <= 2.0){
+			distOne = 4.0;
+		}
+		if (distTwo <= 3.0){
+			distTwo = 4.0;
+		}
+		vec3 lightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + ulampLightColour * 8.0*(lampLightWeightingOne/distOne + lampLightWeightingTwo/distTwo);		
+		
 		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-        gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+        gl_FragColor = vec4(textureColor.rgb * lightWeighting, textureColor.a);
 }
 </script>
 
@@ -45,37 +72,20 @@
 	
 	uniform mat3 uNMatrix;
 	
-	uniform vec3 uLightingDirection;
-	uniform vec3 uAmbientColor;	//la luz ambiente
-	uniform vec3 uDirectionalColor;
-	uniform vec3 ulampLightOnePosition;
-	uniform vec3 ulampLightTwoPosition;
-	uniform vec3 ulampLightColour;
-	
 	varying vec2 vTextureCoord;
-	varying vec3 vLightWeighting;
+	varying vec3 vTransformedNormal;
+	varying vec4 vMVPosition;
+	varying vec4 vModelPosition;
+	varying vec3 vVertexPosition;
 
     void main(void) {
-		vec4 mvPosition = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
-		vec4 modelPosition = uMMatrix * vec4(aVertexPosition, 1.0);
-		gl_Position = uPMatrix * mvPosition; 	//los posiciona segun la matrix de proyección y la matriz de model-view				
+		vMVPosition = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uPMatrix * vMVPosition; 	//los posiciona segun la matrix de proyección y la matriz de model-view	
 		vTextureCoord = aTextureCoord;
-		vec3 transformedNormal = uNMatrix * aVertexNormal;
-		float directionalLightWeighting = max(dot(normalize(transformedNormal), normalize(uLightingDirection)), 0.0);
-		//Me fijo el angulo de la luz puntual
-		vec3 lampLightDirectionOne = normalize(ulampLightOnePosition - modelPosition.xyz);
-		float lampLightWeightingOne = max(dot(normalize(transformedNormal), normalize(lampLightDirectionOne)), 0.0);
-		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - modelPosition.xyz);
-		float lampLightWeightingTwo = max(dot(normalize(transformedNormal), normalize(lampLightDirectionTwo)), 0.0);
-		float distOne = length(ulampLightOnePosition - modelPosition.xyz - aVertexPosition);
-		float distTwo = length(ulampLightTwoPosition - modelPosition.xyz - aVertexPosition);
-		if (distOne <= 2.0){
-			distOne = 4.0;
-		}
-		if (distTwo <= 3.0){
-			distTwo = 4.0;
-		}
-		vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting + ulampLightColour * 8.0*(lampLightWeightingOne/distOne + lampLightWeightingTwo/distTwo);		
+		vTransformedNormal = uNMatrix * aVertexNormal;
+		
+		vModelPosition = uMMatrix * vec4(aVertexPosition, 1.0);
+		vVertexPosition = aVertexPosition;
     }
 </script>
 
