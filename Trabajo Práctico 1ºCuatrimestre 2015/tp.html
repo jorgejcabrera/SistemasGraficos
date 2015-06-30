@@ -36,6 +36,7 @@
 	varying vec2 vTextureCoord;
 	varying vec3 vTransformedNormal;
 	varying vec4 vModelPosition;
+	varying vec4 vMVPosition;
 	
 	varying mat4 vMMatrix;
 	varying mat4 vVMatrix;
@@ -47,7 +48,7 @@
 		vec4 normalMapeadaPosicion = vMMatrix * textureNormalLighting;
 		vec4 normalMapeadaVista = vVMatrix * vMMatrix * textureNormalLighting;
 		
-		float directionalLightWeighting = max(dot(normalize(normalMapeadaPosicion.xyz), normalize(uLightingDirection)), 0.0);
+		float directionalLightWeighting = max(dot(normalize(uLightingDirection), normalize(vModelPosition.xyz)), 0.0);
 	//Me fijo el angulo de la luz puntual
 		vec3 eyeDirection = normalize(-uTarget.xyz);	//No creo que sea esto...
 		vec3 normal = normalize(normalMapeadaPosicion.xyz);	//Tal vez quede redundante aplicarle modulo uno a la normal
@@ -233,7 +234,7 @@
     }
 	
 	var intensidadLuzAmbiente = 0.1;
-	var intensidadSol = 0.3;
+	var intensidadSol = 0.05;
 	function initLuces(){
 	//Acá inicio mi primera luz que quiero que sea la de ambiente
 		gl.uniform3f(shaderProgram.ambientColorUniform,intensidadLuzAmbiente,intensidadLuzAmbiente,intensidadLuzAmbiente+0.05);	//Luz tenue, el +0.05 es para que sea mas azul y le da efecto mas nocturno

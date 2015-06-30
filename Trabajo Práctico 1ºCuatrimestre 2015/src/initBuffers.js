@@ -32,19 +32,12 @@ function initTexture() {
 	}
 	skyTexture.image.src = "src/textures/sky.jpg";
 	
-	nullTexture = gl.createTexture();
-	nullTexture.image = new Image();
-	nullTexture.image.onload = function() {
-		handleLoadedTexture(nullTexture);
+	skyTexture.N = gl.createTexture();
+	skyTexture.N.image = new Image();
+	skyTexture.N.image.onload = function() {		
+		handleLoadedTexture(skyTexture.N);
 	}
-	nullTexture.image.src = "src/textures/nullTexture.jpg";	
-
-	topShipTexture = gl.createTexture();
-	topShipTexture.image = new Image();
-	topShipTexture.image.onload = function() {
-		handleLoadedTexture(topShipTexture);
-	}
-	topShipTexture.image.src = "src/textures/craneTexture6.jpg";	
+	skyTexture.N.image.src = "src/textures/skyN.png";	
 
 	floorShipTexture = gl.createTexture();
 	floorShipTexture.image = new Image();
@@ -67,12 +60,26 @@ function initTexture() {
 	}
 	craneTexture.image.src = "src/textures/crane.png";
 	
+	craneTexture.N = gl.createTexture();
+	craneTexture.N.image = new Image();
+	craneTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(craneTexture.N);
+	}
+	craneTexture.N.image.src = "src/textures/craneN.png";	
+	
 	wheelTexture = gl.createTexture();
 	wheelTexture.image = new Image();
 	wheelTexture.image.onload = function() {		
 		handleLoadedTextureMosaic(wheelTexture);
 	}
-	wheelTexture.image.src = "src/textures/wheel2.jpg";	
+	wheelTexture.image.src = "src/textures/wheel2.jpg";
+	
+	wheelTexture.N = gl.createTexture();
+	wheelTexture.N.image = new Image();
+	wheelTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(wheelTexture.N);
+	}
+	wheelTexture.N.image.src = "src/textures/wheel2N.png";	
 	
 	floorTexture = gl.createTexture();
 	floorTexture.image = new Image();
@@ -95,6 +102,13 @@ function initTexture() {
 	}
 	waterTexture.image.src = "src/textures/water6.jpg";
 	
+	waterTexture.N = gl.createTexture();
+	waterTexture.N.image = new Image();
+	waterTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(waterTexture.N);
+	}
+	waterTexture.N.image.src = "src/textures/water6N.png";	
+	
 	waterLTexture = gl.createTexture();
 	waterLTexture.image = new Image();
 	waterLTexture.image.onload = function() {		
@@ -102,12 +116,26 @@ function initTexture() {
 	}
 	waterLTexture.image.src = "src/textures/waterL.jpg";
 	
+	waterLTexture.N = gl.createTexture();
+	waterLTexture.N.image = new Image();
+	waterLTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(waterLTexture.N);
+	}
+	waterLTexture.N.image.src = "src/textures/waterLN.png";	
+	
 	mountainTexture = gl.createTexture();
 	mountainTexture.image = new Image();
 	mountainTexture.image.onload = function() {		
 		handleLoadedTexture(mountainTexture);
 	}
 	mountainTexture.image.src = "src/textures/rock4.jpg";
+	
+	mountainTexture.N = gl.createTexture();
+	mountainTexture.N.image = new Image();
+	mountainTexture.N.image.onload = function() {		
+		handleLoadedTexture(mountainTexture.N);
+	}
+	mountainTexture.N.image.src = "src/textures/rock4N.png";	
 	
 	pinzaTexture = gl.createTexture();
 	pinzaTexture.image = new Image();
@@ -130,6 +158,13 @@ function initTexture() {
 	}
 	shipTexture.image.src = "src/textures/Ship3.png";
 	
+	shipTexture.N = gl.createTexture();
+	shipTexture.N.image = new Image();
+	shipTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(shipTexture.N);
+	}
+	shipTexture.N.image.src = "src/textures/Ship3N.png";	
+	
 	bottomShipTexture = gl.createTexture();
 	bottomShipTexture.image = new Image();
 	bottomShipTexture.image.onload = function() {		
@@ -137,12 +172,26 @@ function initTexture() {
 	}
 	bottomShipTexture.image.src = "src/textures/bottomOfShip.png";
 	
+	bottomShipTexture.N = gl.createTexture();
+	bottomShipTexture.N.image = new Image();
+	bottomShipTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(bottomShipTexture.N);
+	}
+	bottomShipTexture.N.image.src = "src/textures/bottomOfShipN.png";	
+	
 	whiteTexture = gl.createTexture();
 	whiteTexture.image = new Image();
 	whiteTexture.image.onload = function() {		
 		handleLoadedTextureMosaic(whiteTexture);
 	}
-	whiteTexture.image.src = "src/textures/white.png";	
+	whiteTexture.image.src = "src/textures/white.png";
+	
+	whiteTexture.N = gl.createTexture();
+	whiteTexture.N.image = new Image();
+	whiteTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(whiteTexture.N);
+	}
+	whiteTexture.N.image.src = "src/textures/whiteN.png";	
 }
   
 function handleLoadedTexture(texture) {

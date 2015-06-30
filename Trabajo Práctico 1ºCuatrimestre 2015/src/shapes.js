@@ -752,7 +752,7 @@ function cylinder(puntas,radio){ //puntas, radio
         gl.bindTexture(gl.TEXTURE_2D, texture.N);
         gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
 		
-		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 99999.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
