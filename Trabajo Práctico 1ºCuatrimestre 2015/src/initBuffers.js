@@ -51,7 +51,14 @@ function initTexture() {
 	floorShipTexture.image.onload = function() {
 		handleLoadedTextureMosaic(floorShipTexture);
 	}
-	floorShipTexture.image.src = "src/textures/craneTexture3.jpg";	
+	floorShipTexture.image.src = "src/textures/craneTexture3.jpg";
+
+	floorShipTexture.N = gl.createTexture();
+	floorShipTexture.N.image = new Image();
+	floorShipTexture.N.image.onload = function() {
+		handleLoadedTextureMosaic(floorShipTexture.N);
+	}
+	floorShipTexture.N.image.src = "src/textures/craneTexture3N.png";	
 	
 	craneTexture = gl.createTexture();
 	craneTexture.image = new Image();
@@ -74,12 +81,12 @@ function initTexture() {
 	}
 	floorTexture.image.src = "src/textures/floor2.jpg";
 
-	floorTextureN = gl.createTexture();
-	floorTextureN.image = new Image();
-	floorTextureN.image.onload = function() {		
-		handleLoadedTexture(floorTextureN);
+	floorTexture.N = gl.createTexture();
+	floorTexture.N.image = new Image();
+	floorTexture.N.image.onload = function() {		
+		handleLoadedTexture(floorTexture.N);
 	}
-	floorTextureN.image.src = "src/textures/floor2N.png";
+	floorTexture.N.image.src = "src/textures/floor2N.png";
 	
 	waterTexture = gl.createTexture();
 	waterTexture.image = new Image();
@@ -108,6 +115,13 @@ function initTexture() {
 		handleLoadedTexture(pinzaTexture);
 	}
 	pinzaTexture.image.src = "src/textures/cord.jpg";
+
+	pinzaTexture.N = gl.createTexture();
+	pinzaTexture.N.image = new Image();
+	pinzaTexture.N.image.onload = function() {		
+		handleLoadedTexture(pinzaTexture.N);
+	}
+	pinzaTexture.N.image.src = "src/textures/cordN.png";
 	
 	shipTexture = gl.createTexture();
 	shipTexture.image = new Image();

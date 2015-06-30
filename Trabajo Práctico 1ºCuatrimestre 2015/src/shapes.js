@@ -67,7 +67,11 @@ function square () {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 522.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -171,7 +175,11 @@ function Floor (vertexFloor) {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);		
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -342,7 +350,11 @@ function pinza () {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 532.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -524,7 +536,7 @@ function cube () {
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
 		
 		gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, floorTextureN);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
         gl.uniform1i(shaderProgram.normalSamplerUniform, 1);
 		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 644.0);
@@ -552,7 +564,11 @@ function cube () {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+	
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);	
+	
 		gl.uniform1f(shaderProgram.materialShininessUniform, 644.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -731,7 +747,11 @@ function cylinder(puntas,radio){ //puntas, radio
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -887,7 +907,11 @@ function TexturedSphere(latitude_bands, longitude_bands, invertedLight){
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);		
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -1060,7 +1084,11 @@ function Ship (curveDetail,precision,numberTall) {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 532.0);		
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -1269,7 +1297,11 @@ function Container(){
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);		
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -1440,7 +1472,11 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 1.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
@@ -1562,7 +1598,11 @@ function skyBox() {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 9999.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -1582,7 +1622,11 @@ function skyBox() {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);		
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 9999.0);
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
