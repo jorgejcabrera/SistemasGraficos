@@ -33,6 +33,8 @@
 	uniform vec3 uTarget;
 	uniform float uMaterialShininess;
 	
+	uniform bool uUseReflection;
+	
 	varying vec2 vTextureCoord;
 	varying vec3 vTransformedNormal;
 	varying vec4 vModelPosition;
@@ -79,14 +81,17 @@
 			distTwo = 5.0;
 		}
 		vec3 lightWeighting = ulampLightColour * 12.0*(lampLightWeightingOne/distOne + lampLightWeightingTwo/distTwo) + 10.0*uLampLightColourSpecular * (specularLampLightWeightingOne/distOne + specularLampLightWeightingTwo/distTwo);		
-		
-		//vec3 espejoReflejado = reflect(eyeDirection, -vModelPosition.xyz);
-		//float valueX = acos((espejoReflejado.z)/(sqrt(espejoReflejado.x*espejoReflejado.x + espejoReflejado.y*espejoReflejado.y + espejoReflejado.z*espejoReflejado.z)));
-		//float valueY = atan(espejoReflejado.y/espejoReflejado.x);		
-		//vec4 textureColorD = texture2D(uNormalSampler, vec2(valueY, valueX));
 		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 		
-        gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
+		if(uUseReflection){
+			vec3 espejoReflejado = reflect(vModelPosition.xyz, eyeDirection);
+			float valueX = acos((espejoReflejado.z)/(sqrt(espejoReflejado.x*espejoReflejado.x + espejoReflejado.y*espejoReflejado.y + espejoReflejado.z*espejoReflejado.z)));
+			float valueY = atan(espejoReflejado.y/espejoReflejado.x);		
+			vec4 textureColorD = texture2D(uNormalSampler, vec2(valueX, valueY));
+			gl_FragColor = vec4(textureColorD.rgb/10.0 + textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
+		}else{
+			gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
+		}       
 }
 </script>
 
@@ -219,7 +224,7 @@
 		shaderProgram.target = gl.getUniformLocation(shaderProgram, "uTarget");
 		shaderProgram.materialShininessUniform = gl.getUniformLocation(shaderProgram, "uMaterialShininess");
 		shaderProgram.lampLightColourSpecular = gl.getUniformLocation(shaderProgram, "uLampLightColourSpecular");
-		
+		shaderProgram.useReflectionUniform = gl.getUniformLocation(shaderProgram, "uUseReflection");		
     }
 
     var mMatrix = mat4.create();
@@ -268,7 +273,7 @@
 	var moverCabina = 0;
 	var walkingWobble = 0;
 	var walkingWobbleMod = 1;
-
+	var reflection = false;
 	function initVariables () {
 		//Esto que hago acá es para que pongas en coordenadas cartesianas X,Y,Z donde queres
 		//que empiece la camara al iniciarse, y despues las traduzco a cordenadas esfericas
@@ -280,6 +285,7 @@
 		target = [0,0,0];
 		cameraPosition = [radius*Math.cos(phiAngle)*Math.sin(thetaAngle),radius*Math.sin(phiAngle)*Math.sin(thetaAngle),radius*Math.cos(thetaAngle)];
 		initLuces();
+		gl.uniform1i(shaderProgram.useReflectionUniform, reflection);
 	}
 	
     function drawScene() {

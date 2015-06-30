@@ -51,7 +51,7 @@ function initTexture() {
 	floorShipTexture.N.image.onload = function() {
 		handleLoadedTextureMosaic(floorShipTexture.N);
 	}
-	floorShipTexture.N.image.src = "src/textures/craneTexture3N.png";	
+	floorShipTexture.N.image.src = "src/textures/skyR.jpg";	
 	
 	craneTexture = gl.createTexture();
 	craneTexture.image = new Image();
@@ -163,7 +163,7 @@ function initTexture() {
 	shipTexture.N.image.onload = function() {		
 		handleLoadedTextureMosaic(shipTexture.N);
 	}
-	shipTexture.N.image.src = "src/textures/Ship3N.png";	
+	shipTexture.N.image.src = "src/textures/waterL.jpg";	
 	
 	bottomShipTexture = gl.createTexture();
 	bottomShipTexture.image = new Image();
@@ -191,7 +191,7 @@ function initTexture() {
 	whiteTexture.N.image.onload = function() {		
 		handleLoadedTextureMosaic(whiteTexture.N);
 	}
-	whiteTexture.N.image.src = "src/textures/whiteN.png";	
+	whiteTexture.N.image.src = "src/textures/skyR.jpg";	
 }
   
 function handleLoadedTexture(texture) {

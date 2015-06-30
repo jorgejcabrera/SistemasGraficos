@@ -158,6 +158,7 @@ function Floor (vertexFloor) {
 	}
 	
 	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		gl.uniform1i(shaderProgram.useReflectionUniform, true);
 		mat4.identity(mMatrix);
 		mat4.translate(mMatrix,mMatrix, where);		
 		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
@@ -185,6 +186,7 @@ function Floor (vertexFloor) {
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+		gl.uniform1i(shaderProgram.useReflectionUniform, false);
 	}	  
 }
 
@@ -889,7 +891,8 @@ function TexturedSphere(latitude_bands, longitude_bands, invertedLight){
 		/////////////////////////////////
 	}
 
-	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture,reflect){
+		gl.uniform1i(shaderProgram.useReflectionUniform, reflect);
 		mat4.identity(mMatrix);
 		mat4.translate(mMatrix,mMatrix, where);		
 		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
@@ -917,6 +920,7 @@ function TexturedSphere(latitude_bands, longitude_bands, invertedLight){
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+		gl.uniform1i(shaderProgram.useReflectionUniform, false);
 	}	
 }
 
@@ -1067,6 +1071,7 @@ function Ship (curveDetail,precision,numberTall) {
 	}
 	
 	this.drawOverload = function(where,scalator,degreesToRotate,axisToRotate,texture){
+		gl.uniform1i(shaderProgram.useReflectionUniform, true);
 		mat4.identity(mMatrix);
 		mat4.translate(mMatrix,mMatrix, where);		
 		mat4.rotate(mMatrix, mMatrix, degToRad(degreesToRotate), axisToRotate);
@@ -1094,6 +1099,7 @@ function Ship (curveDetail,precision,numberTall) {
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);
 		gl.drawElements(gl.TRIANGLES, this.webgl_index_buffer.numItems, gl.UNSIGNED_SHORT, 0);
+		gl.uniform1i(shaderProgram.useReflectionUniform, false);
 	}	   
 }
 

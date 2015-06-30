@@ -1,6 +1,6 @@
 function drawSky(where, scalator,degreesToRotate,axisToRotate){
 	sphereSky.initBuffers();
-	sphereSky.drawOverload(where, scalator,degreesToRotate,axisToRotate,skyTexture);
+	sphereSky.drawOverload(where, scalator,degreesToRotate,axisToRotate,skyTexture,false);
 }
 
 function drawOcean(where,scalator,texture){
@@ -105,8 +105,8 @@ function drawCrame(posX,posY,posZ){
 	cubo.draw([15,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
 	var bulbSize = 0.5;
 	sphereLamp.initBuffers();
-	sphereLamp.drawOverload([-7,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture);
-	sphereLamp.drawOverload([15,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture);
+	sphereLamp.drawOverload([-7,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture,true);
+	sphereLamp.drawOverload([15,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture,true);
 	//LAS RUEDAS
 	drawWheels(posX,posY,posZ,distanceBeetwenWalls,height,width);
 }
