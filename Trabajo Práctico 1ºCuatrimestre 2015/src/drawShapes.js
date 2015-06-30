@@ -77,6 +77,7 @@ function drawCrame(posX,posY,posZ){
 	
 	//el piso
 	cubo.draw([4,4,gruaAbajo+ruedasAncho-1],[14,6,1],floorTexture);	//Ese -1 en la Z es por el alto de la grua
+	cubo.draw([32,4,gruaAbajo+ruedasAncho-1],[14,6,1],floorTexture);	//Ese -1 en la Z es por el alto de la grua
 
 	//PAREDES LATERALES
 	drawWallCrane(posX,posY,posZ);
