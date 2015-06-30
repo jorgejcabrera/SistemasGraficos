@@ -522,7 +522,11 @@ function cube () {
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
-		gl.uniform1i(shaderProgram.normalSamplerUniform, 0);
+		
+		gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, floorTextureN);
+        gl.uniform1i(shaderProgram.normalSamplerUniform, 1);
+		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 644.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);

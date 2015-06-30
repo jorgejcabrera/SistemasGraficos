@@ -36,24 +36,36 @@
 	varying vec2 vTextureCoord;
 	varying vec3 vTransformedNormal;
 	varying vec4 vModelPosition;
-
+	
+	varying mat4 vMMatrix;
+	varying mat4 vVMatrix;
 	
 	uniform sampler2D uSampler; 
 	uniform sampler2D uNormalSampler; 
     void main(void) {
-		float directionalLightWeighting = max(dot(normalize(vTransformedNormal), normalize(uLightingDirection)), 0.0);
+		vec4 textureNormalLighting = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		vec4 normalMapeadaPosicion = vMMatrix * textureNormalLighting;
+		vec4 normalMapeadaVista = vVMatrix * vMMatrix * textureNormalLighting;
+		
+		float directionalLightWeighting = max(dot(normalize(normalMapeadaPosicion.xyz), normalize(uLightingDirection)), 0.0);
 	//Me fijo el angulo de la luz puntual
 		vec3 eyeDirection = normalize(-uTarget.xyz);	//No creo que sea esto...
-		vec3 normal = normalize(vTransformedNormal);	//Tal vez quede redundante aplicarle modulo uno a la normal
+		vec3 normal = normalize(normalMapeadaPosicion.xyz);	//Tal vez quede redundante aplicarle modulo uno a la normal
+		
+		vec3 normalMap = normalize(normalMapeadaVista.xyz);
 		
 		vec3 lampLightDirectionOne = normalize(ulampLightOnePosition - vModelPosition.xyz);
 		float lampLightWeightingOne = max(dot(normal, normalize(lampLightDirectionOne)), 0.0);
-		vec3 reflectionDirectionOne = normalize(reflect(-lampLightDirectionOne, normal));			//Recomiendan ponerle +normal
+		lampLightWeightingOne += max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionOne)), 0.0);
+		lampLightWeightingOne /= 2.0;
+		vec3 reflectionDirectionOne = normalize(reflect(-lampLightDirectionOne, normalMap));			//Recomiendan ponerle +normal
 		float specularLampLightWeightingOne = pow(max(dot(reflectionDirectionOne, eyeDirection), 0.0), uMaterialShininess);
 		
 		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - vModelPosition.xyz);
 		float lampLightWeightingTwo = max(dot(normal, normalize(lampLightDirectionTwo)), 0.0);
-		vec3 reflectionDirectionTwo = normalize(reflect(-lampLightDirectionTwo, normal));		//Recomiendan ponerle +normal
+		lampLightWeightingTwo += max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionTwo)), 0.0);
+		lampLightWeightingTwo /= 2.0;		
+		vec3 reflectionDirectionTwo = normalize(reflect(-lampLightDirectionTwo, normalMap));		//Recomiendan ponerle +normal
 		float specularLampLightWeightingTwo = pow(max(dot(reflectionDirectionTwo, eyeDirection), 0.0), uMaterialShininess);
 
 		float distOne = length(ulampLightOnePosition - vModelPosition.xyz);
@@ -67,9 +79,8 @@
 		}
 		vec3 lightWeighting = ulampLightColour * 12.0*(lampLightWeightingOne/distOne + lampLightWeightingTwo/distTwo) + 10.0*uLampLightColourSpecular * (specularLampLightWeightingOne/distOne + specularLampLightWeightingTwo/distTwo);		
 		
-		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-		vec4 textureNormalLighting = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));	
-        gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting * (textureNormalLighting.r + textureNormalLighting.g +textureNormalLighting.b)/3.0), textureColor.a);
+		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));		
+        gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 }
 </script>
 
@@ -90,6 +101,8 @@
 	varying vec4 vMVPosition;
 	varying vec4 vModelPosition;
 
+	varying mat4 vMMatrix;
+	varying mat4 vVMatrix;
     void main(void) {
 		vMVPosition = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
 		gl_Position = uPMatrix * vMVPosition; 	//los posiciona segun la matrix de proyección y la matriz de model-view	
@@ -97,6 +110,9 @@
 		vTransformedNormal = uNMatrix * aVertexNormal;
 		
 		vModelPosition = uMMatrix * vec4(aVertexPosition, 1.0);
+		
+		vMMatrix = uMMatrix;
+		vVMatrix = uVMatrix;
     }
 </script>
 
