@@ -73,6 +73,13 @@ function initTexture() {
 		handleLoadedTexture(floorTexture);
 	}
 	floorTexture.image.src = "src/textures/floor2.jpg";
+
+	floorTextureN = gl.createTexture();
+	floorTextureN.image = new Image();
+	floorTextureN.image.onload = function() {		
+		handleLoadedTexture(floorTextureN);
+	}
+	floorTextureN.image.src = "src/textures/floor2N.png";
 	
 	waterTexture = gl.createTexture();
 	waterTexture.image = new Image();
