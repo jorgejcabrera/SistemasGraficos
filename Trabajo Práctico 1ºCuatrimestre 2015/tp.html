@@ -296,7 +296,7 @@
 		//gl.disable(gl.DEPTH_TEST);
 		cubo.initBuffers();
 		cubo.draw([moveXCrane+2,moverCabina-3.2375,3.1],[0.55,0.4125, 0.05],waterLTexture);	//Piso transparentón		
-		drawSky([0,0,0],[70,70,70],90,[1,0,0]);
+		drawSky([0,0,0],[90,90,90],90,[1,0,0]);
 		drawOcean([0,0,gruaAbajo+ruedasAncho-0.3],[55,55,1],waterTexture);		//Acá que vaya el mar
 		drawOcean([0,0,gruaAbajo+ruedasAncho-0.4],[55,55,1],waterTexture);		//Acá que vaya el mar
 		drawOcean([0,0,gruaAbajo+ruedasAncho-0.5],[55,55,1],waterTexture);		//Acá que vaya el mar
@@ -313,7 +313,7 @@
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);	//El tutorial dice que sirven
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);	//El tutorial dice que sirven
 		mat4.lookAt(vMatrix,cameraPosition,target,[0.0,0.0,1.0]);
-		mat4.perspective(pMatrix,degToRad(70), gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
+		mat4.perspective(pMatrix,degToRad(70), gl.viewportWidth / gl.viewportHeight, 0.1, 150.0);
 	}
 	
 	function tick() {
