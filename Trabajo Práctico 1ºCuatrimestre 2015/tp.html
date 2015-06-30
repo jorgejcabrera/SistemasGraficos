@@ -80,7 +80,12 @@
 		}
 		vec3 lightWeighting = ulampLightColour * 12.0*(lampLightWeightingOne/distOne + lampLightWeightingTwo/distTwo) + 10.0*uLampLightColourSpecular * (specularLampLightWeightingOne/distOne + specularLampLightWeightingTwo/distTwo);		
 		
-		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));		
+		//vec3 espejoReflejado = reflect(eyeDirection, -vModelPosition.xyz);
+		//float valueX = acos((espejoReflejado.z)/(sqrt(espejoReflejado.x*espejoReflejado.x + espejoReflejado.y*espejoReflejado.y + espejoReflejado.z*espejoReflejado.z)));
+		//float valueY = atan(espejoReflejado.y/espejoReflejado.x);		
+		//vec4 textureColorD = texture2D(uNormalSampler, vec2(valueY, valueX));
+		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+		
         gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 }
 </script>
