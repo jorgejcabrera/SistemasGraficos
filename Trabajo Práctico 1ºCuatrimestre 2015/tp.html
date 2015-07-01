@@ -57,19 +57,22 @@
 		vec3 normal = normalize(normalMapeadaPosicion.xyz);	//Tal vez quede redundante aplicarle modulo uno a la normal
 		
 		vec3 normalMap = normalize(normalMapeadaVista.xyz);
+		float x = normalMapeadaVista.x/normalMapeadaVista.a;
+		float y = normalMapeadaVista.y/normalMapeadaVista.a;
+		float z = normalMapeadaVista.z/normalMapeadaVista.a;
 		
 		vec3 lampLightDirectionOne = normalize(ulampLightOnePosition - vModelPosition.xyz);
 		float lampLightWeightingOne = max(dot(normal, normalize(lampLightDirectionOne)), 0.0);
 		lampLightWeightingOne += max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionOne)), 0.0);
 		lampLightWeightingOne /= 2.0;
-		vec3 reflectionDirectionOne = normalize(reflect(-lampLightDirectionOne, normalMap));			//Recomiendan ponerle +normal
+		vec3 reflectionDirectionOne = normalize(reflect(-lampLightDirectionOne, textureNormalLighting.xyz));			//Recomiendan ponerle +normal
 		float specularLampLightWeightingOne = pow(max(dot(reflectionDirectionOne, eyeDirection), 0.0), uMaterialShininess);
 		
 		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - vModelPosition.xyz);
 		float lampLightWeightingTwo = max(dot(normal, normalize(lampLightDirectionTwo)), 0.0);
 		lampLightWeightingTwo += max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionTwo)), 0.0);
 		lampLightWeightingTwo /= 2.0;		
-		vec3 reflectionDirectionTwo = normalize(reflect(-lampLightDirectionTwo, normalMap));		//Recomiendan ponerle +normal
+		vec3 reflectionDirectionTwo = normalize(reflect(-lampLightDirectionTwo, textureNormalLighting.xyz));		//Recomiendan ponerle +normal
 		float specularLampLightWeightingTwo = pow(max(dot(reflectionDirectionTwo, eyeDirection), 0.0), uMaterialShininess);
 
 		float distOne = length(ulampLightOnePosition - vModelPosition.xyz);
@@ -94,6 +97,7 @@
 			gl_FragColor = vec4(textureColorD.rgb/10.0 + textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 		}else{
 			gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
+			//gl_FragColor = vec4(normal,1.0);
 		}       
 }
 </script>
