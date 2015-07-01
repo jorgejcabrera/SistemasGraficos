@@ -65,7 +65,21 @@ function initTexture() {
 	craneTexture.N.image.onload = function() {		
 		handleLoadedTextureMosaic(craneTexture.N);
 	}
-	craneTexture.N.image.src = "src/textures/craneN.png";	
+	craneTexture.N.image.src = "src/textures/craneN.png";
+	
+	craneRTexture = gl.createTexture();
+	craneRTexture.image = new Image();
+	craneRTexture.image.onload = function() {		
+		handleLoadedTextureMosaic(craneRTexture);
+	}
+	craneRTexture.image.src = "src/textures/crane.png";	
+	
+	craneRTexture.N = gl.createTexture();
+	craneRTexture.N.image = new Image();
+	craneRTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(craneRTexture.N);
+	}
+	craneRTexture.N.image.src = "src/textures/skyR.jpg";
 	
 	wheelTexture = gl.createTexture();
 	wheelTexture.image = new Image();

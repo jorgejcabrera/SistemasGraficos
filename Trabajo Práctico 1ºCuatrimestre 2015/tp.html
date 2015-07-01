@@ -31,6 +31,7 @@
 	uniform vec3 ulampLightColour;
 	uniform vec3 uLampLightColourSpecular;
 	uniform vec3 uTarget;
+	uniform vec3 uCameraPos;
 	uniform float uMaterialShininess;
 	
 	uniform bool uUseReflection;
@@ -84,10 +85,12 @@
 		vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 		
 		if(uUseReflection){
-			vec3 espejoReflejado = reflect(vModelPosition.xyz, eyeDirection);
+			float piValue = 3.14159265359;
+			vec3 espejoReflejado = normalize(reflect(vModelPosition.xyz, normalize(uCameraPos-vModelPosition.xyz)));
 			float valueX = acos((espejoReflejado.z)/(sqrt(espejoReflejado.x*espejoReflejado.x + espejoReflejado.y*espejoReflejado.y + espejoReflejado.z*espejoReflejado.z)));
-			float valueY = atan(espejoReflejado.y/espejoReflejado.x);		
-			vec4 textureColorD = texture2D(uNormalSampler, vec2(valueX, valueY));
+			float valueY = atan(espejoReflejado.y/espejoReflejado.x);
+			//vec4 textureColorD = texture2D(uNormalSampler, vec2(0.5+sin(valueX)/2.0, 0.5+valueY/piValue));
+			vec4 textureColorD = texture2D(uNormalSampler, vec2(valueY*2.0/piValue,valueX*2.0/piValue));
 			gl_FragColor = vec4(textureColorD.rgb/10.0 + textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 		}else{
 			gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
@@ -222,6 +225,7 @@
 		shaderProgram.lampLightTwoPosition = gl.getUniformLocation(shaderProgram, "ulampLightTwoPosition");
 		shaderProgram.lampLightColour = gl.getUniformLocation(shaderProgram, "ulampLightColour");
 		shaderProgram.target = gl.getUniformLocation(shaderProgram, "uTarget");
+		shaderProgram.cameraPos = gl.getUniformLocation(shaderProgram, "uCameraPos");
 		shaderProgram.materialShininessUniform = gl.getUniformLocation(shaderProgram, "uMaterialShininess");
 		shaderProgram.lampLightColourSpecular = gl.getUniformLocation(shaderProgram, "uLampLightColourSpecular");
 		shaderProgram.useReflectionUniform = gl.getUniformLocation(shaderProgram, "uUseReflection");		
@@ -315,9 +319,10 @@
 		drawOcean([0,0,gruaAbajo+ruedasAncho-0.9],[55,55,1],waterTexture);		//Acá que vaya el mar
 		drawOcean([0,0,gruaAbajo+ruedasAncho-2.3],[55,55,1],waterTexture);		//Acá que vaya el mar
 		drawOcean([0,0,gruaAbajo+ruedasAncho-5.3],[55,55,1],waterTexture);		//Acá que vaya el mar
-		var wasd = vec3.create();
-		vec3.sub(wasd, target,cameraPosition);
-		gl.uniform3fv(shaderProgram.target,wasd);
+		var uniformTarget = vec3.create();
+		vec3.sub(uniformTarget, target,cameraPosition);
+		gl.uniform3fv(shaderProgram.target,uniformTarget);
+		gl.uniform3fv(shaderProgram.cameraPos,cameraPosition);
     }
 	
 	function updateCamera(){

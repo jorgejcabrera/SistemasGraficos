@@ -98,11 +98,13 @@ function drawCrame(posX,posY,posZ){
     cubo.draw([posX+distanceBeetwenWalls*0.5, posY-longitude*6+distanceBeetwenWalls*1.5, height + posZ - width ],[ (distanceBeetwenWalls * 0.5) * 1/5 + width * 3, distanceBeetwenWalls * 0.15, distanceBeetwenWalls * 0.15],craneTexture);
 
     //CABINA
-    drawCabin(posX, posY+moverCabina, height, posZ );
+    drawCabin(posX, posY+moverCabina, height, posZ,craneRTexture);	
 	
-	//Postes de Luz		
-	cubo.draw([-7,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
-	cubo.draw([15,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneTexture);
+	//Postes de Luz	
+	gl.uniform1i(shaderProgram.useReflectionUniform, true);
+	cubo.draw([-7,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneRTexture);
+	cubo.draw([15,0,gruaAbajo+ruedasAncho+2],[0.08,0.08,2],craneRTexture);
+	gl.uniform1i(shaderProgram.useReflectionUniform, false);
 	var bulbSize = 0.5;
 	sphereLamp.initBuffers();
 	sphereLamp.drawOverload([-7,0,0.8], [bulbSize,bulbSize,bulbSize],0,[0,0,0],whiteTexture,true);
@@ -133,45 +135,45 @@ function drawWheels(posX,posY,posZ,distanceBeetwenWalls,distanciaRuedas,anchoGru
 	cilindro.draw([posX+distanceBeetwenWalls,posY+anchoGruaY+scaleZ*4/2+distanciaRuedas,-posZ-radio],wheelScale,90, [1,0,0],wheelTexture);
 }
 
-function drawCabin(posX,posY,posZ,height){
+function drawCabin(posX,posY,posZ,height, texture){
 	var distanceBeetwenWalls = 4;
 	var longitude = 0.20;
 	var width = 0.05;
 	var posXRearWall = posX+distanceBeetwenWalls*0.5;
 	var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
 	var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
-	
+	gl.uniform1i(shaderProgram.useReflectionUniform, true);
 	//PARED TRASERA
-	cubo.draw([posXRearWall, posYRearWall, posZ],[longitudeRearWall,width, height-width],craneTexture);
+	cubo.draw([posXRearWall, posYRearWall, posZ],[longitudeRearWall,width, height-width],texture);
 
 	//PISO
-	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],craneTexture);
-	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],craneTexture);
-	cubo.draw([posXRearWall,posYRearWall-longitudeRearWall*0.75*2,posZ-height+width*7],[longitudeRearWall-width*2,width, width*4],craneTexture);	
+	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],texture);
+	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ-height+width*7],[width,longitudeRearWall*0.75, width*4],texture);
+	cubo.draw([posXRearWall,posYRearWall-longitudeRearWall*0.75*2,posZ-height+width*7],[longitudeRearWall-width*2,width, width*4],texture);	
 	
 	//TECHO
-	cubo.draw([posXRearWall, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*2],[longitudeRearWall,longitudeRearWall*0.75, width],craneTexture);
-	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*7],[width,longitudeRearWall*0.75, width*4],craneTexture);
-	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*7],[width,longitudeRearWall*0.75, width*4],craneTexture);
-	cubo.draw([posXRearWall, posYRearWall-longitudeRearWall*0.75*2, posZ+height-width*7],[longitudeRearWall-width*2,width, width*4],craneTexture);
+	cubo.draw([posXRearWall, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*2],[longitudeRearWall,longitudeRearWall*0.75, width],texture);
+	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*7],[width,longitudeRearWall*0.75, width*4],texture);
+	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width, posZ+height-width*7],[width,longitudeRearWall*0.75, width*4],texture);
+	cubo.draw([posXRearWall, posYRearWall-longitudeRearWall*0.75*2, posZ+height-width*7],[longitudeRearWall-width*2,width, width*4],texture);
 
 	//LATERALES IZQUIERDOS
-	cubo.draw([posXRearWall-longitudeRearWall+width,posYRearWall-width*4, posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],craneTexture);
-	cubo.draw([posXRearWall-longitudeRearWall+width,posYRearWall-longitudeRearWall*0.75*2+longitudeRearWall*0.75*0.25-width,posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],craneTexture);
+	cubo.draw([posXRearWall-longitudeRearWall+width,posYRearWall-width*4, posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],texture);
+	cubo.draw([posXRearWall-longitudeRearWall+width,posYRearWall-longitudeRearWall*0.75*2+longitudeRearWall*0.75*0.25-width,posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],texture);
 
 	//LATERALES DERECHOS	
-	cubo.draw([posXRearWall+longitudeRearWall-width,posYRearWall-width*4,posZ],[width,longitudeRearWall*0.75*0.25, height-width-2*(width*5)],craneTexture);
-	cubo.draw([posXRearWall+longitudeRearWall-width,posYRearWall-longitudeRearWall*0.75*2+longitudeRearWall*0.75*0.25-width,posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],craneTexture);
+	cubo.draw([posXRearWall+longitudeRearWall-width,posYRearWall-width*4,posZ],[width,longitudeRearWall*0.75*0.25, height-width-2*(width*5)],texture);
+	cubo.draw([posXRearWall+longitudeRearWall-width,posYRearWall-longitudeRearWall*0.75*2+longitudeRearWall*0.75*0.25-width,posZ],[width,longitudeRearWall*0.75*0.25, height-11*width],texture);
 
 	//PARTE FRONTAL
-	cubo.draw([posXRearWall+longitudeRearWall-width*2-longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],craneTexture);
-	cubo.draw([posXRearWall-longitudeRearWall+width*2+longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],craneTexture);
-	
+	cubo.draw([posXRearWall+longitudeRearWall-width*2-longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],texture);
+	cubo.draw([posXRearWall-longitudeRearWall+width*2+longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],texture);
+gl.uniform1i(shaderProgram.useReflectionUniform, false);	
 	//AGARRE IZQUIERDO
-	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2],[width,width*10,width*.25],craneTexture);
+	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2],[width,width*10,width*.25],texture);
 	
 	//AGARRE DERECHO
-	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)],[width,width*10,width*.25],craneTexture);
+	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)],[width,width*10,width*.25],texture);
 	//GARRAS
 	garras.initBuffers();
 	
