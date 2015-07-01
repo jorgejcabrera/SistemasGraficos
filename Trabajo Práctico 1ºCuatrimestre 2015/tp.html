@@ -45,7 +45,7 @@
 	varying mat4 vVMatrix;
 	
 	uniform sampler2D uSampler; 
-	uniform sampler2D uNormalSampler; 
+	uniform sampler2D uNormalSampler;
     void main(void) {
 		vec4 textureNormalLighting = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t));
 		vec4 normalMapeadaPosicion = vMMatrix * textureNormalLighting;
@@ -86,11 +86,11 @@
 		
 		if(uUseReflection){
 			float piValue = 3.14159265359;
-			vec3 espejoReflejado = normalize(reflect(vModelPosition.xyz, normalize(uCameraPos-vModelPosition.xyz)));
+			vec3 espejoReflejado = normalize(reflect(normalize(normalMapeadaVista.xyz), normalize(uCameraPos-vModelPosition.xyz)));
 			float valueX = acos((espejoReflejado.z)/(sqrt(espejoReflejado.x*espejoReflejado.x + espejoReflejado.y*espejoReflejado.y + espejoReflejado.z*espejoReflejado.z)));
 			float valueY = atan(espejoReflejado.y/espejoReflejado.x);
 			//vec4 textureColorD = texture2D(uNormalSampler, vec2(0.5+sin(valueX)/2.0, 0.5+valueY/piValue));
-			vec4 textureColorD = texture2D(uNormalSampler, vec2(valueY*2.0/piValue,valueX*2.0/piValue));
+			vec4 textureColorD = texture2D(uNormalSampler, vec2(valueY/piValue,valueX/piValue));
 			gl_FragColor = vec4(textureColorD.rgb/10.0 + textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 		}else{
 			gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
