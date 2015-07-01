@@ -97,6 +97,9 @@
 			float valueY = atan(espejoReflejado.y/espejoReflejado.x);
 			vec4 textureColorD = texture2D(uNormalSampler, vec2(valueY/piValue,valueX/piValue));
 			gl_FragColor = vec4(textureColorD.rgb/10.0 + textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
+			//float valueY = atan(espejoReflejado.y/espejoReflejado.x);
+			//vec4 textureColorD = texture2D(uNormalSampler, vec2(espejoReflejado.x/m + 0.5, espejoReflejado.y/m + 0.5));
+			//gl_FragColor = vec4(textureColorD.rgb/10.0 + textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 		}else{
 			gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 			//gl_FragColor = vec4(normal,1.0);
