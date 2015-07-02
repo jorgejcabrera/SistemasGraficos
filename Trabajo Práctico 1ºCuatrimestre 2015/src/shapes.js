@@ -1029,7 +1029,7 @@ function Ship (curveDetail,precision,numberTall) {
 		vertices.push(valueY);
 		normalVertex.push(valueY);
 		vertices.push(0);
-		normalVertex.push(0.1);
+		normalVertex.push(0);
 		
 		//guardamos los vertices de la tapa del barco, que corresponde al primer nivel
 		vertexTop.push(valueX*(1));
@@ -1043,7 +1043,7 @@ function Ship (curveDetail,precision,numberTall) {
 			vertices.push(valueY*scaler);
 			normalVertex.push(valueY);
 			vertices.push(scaler+i);
-			normalVertex.push(scaler*0.1);
+			normalVertex.push(-i*1.2);
 
 			//guardamos los vertices de lo que sería el piso del barco, el nivel ante último
 			if ( i == numberTall-2){
@@ -1420,30 +1420,30 @@ function mountain (curveDetail,pasito, numberTall,radius) {
 		}
 	}
 	
-	function pushVertix(valueX,valueY,vertices,normalVertex){
+	function pushVertix(valueX,valueY,vertices,normalVertex){		
 		vertices.push(valueX);
 		normalVertex.push(valueX);
 		vertices.push(valueY);
 		normalVertex.push(valueY);
-		vertices.push(0);
-		normalVertex.push(0.1);
-		for (var i = 1; i <numberTall-1; i++){			
+		vertices.push(-0.5);
+		normalVertex.push(1);
+		for (var i = 1; i <numberTall-1; i++){		
 			var scaler = 1/Math.pow(2,i);
 			vertices.push(valueX*scaler);
 			normalVertex.push(valueX);
 			vertices.push(valueY*scaler);
 			normalVertex.push(valueY);
 			vertices.push(i*2);
-			normalVertex.push(scaler*0.1);
+			normalVertex.push(i*3);
 		}
 		for (var i = numberTall-1; i <numberTall; i++){
 			var scaler = 1/Math.pow(2,i);
 			vertices.push(valueX*scaler);
-			normalVertex.push(valueX);
+			normalVertex.push(0);
 			vertices.push(valueY*scaler);
-			normalVertex.push(valueY);
+			normalVertex.push(0);
 			vertices.push((numberTall-2)*2+i/10);
-			normalVertex.push(scaler*0.1);
+			normalVertex.push(1);
 		}
 	}
 	this.webgl_position_buffer.itemSize = 3;

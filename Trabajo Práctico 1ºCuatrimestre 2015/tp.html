@@ -39,7 +39,6 @@
 	varying vec2 vTextureCoord;
 	varying vec3 vTransformedNormal;
 	varying vec4 vModelPosition;
-	varying vec4 vMVPosition;
 	
 	varying mat4 vMMatrix;
 	varying mat4 vVMatrix;
@@ -48,30 +47,19 @@
 	uniform sampler2D uNormalSampler;
     void main(void) {
 		vec4 textureNormalLighting = texture2D(uNormalSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-		vec4 normalMapeadaPosicion = vMMatrix * textureNormalLighting;
 		vec4 normalMapeadaVista = vVMatrix * vMMatrix * textureNormalLighting;
 		
 		float directionalLightWeighting = max(dot(normalize(uLightingDirection), normalize(vModelPosition.xyz)), 0.0);
 	//Me fijo el angulo de la luz puntual
 		vec3 eyeDirection = normalize(-uTarget.xyz);	//No creo que sea esto...
-		vec3 normal = normalize(normalMapeadaPosicion.xyz);	//Tal vez quede redundante aplicarle modulo uno a la normal
-		
-		vec3 normalMap = normalize(normalMapeadaVista.xyz);
-		float x = normalMapeadaVista.x/normalMapeadaVista.a;
-		float y = normalMapeadaVista.y/normalMapeadaVista.a;
-		float z = normalMapeadaVista.z/normalMapeadaVista.a;
 		
 		vec3 lampLightDirectionOne = normalize(ulampLightOnePosition - vModelPosition.xyz);
-		float lampLightWeightingOne = max(dot(normal, normalize(lampLightDirectionOne)), 0.0);
-		lampLightWeightingOne += max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionOne)), 0.0);
-		lampLightWeightingOne /= 2.0;
+		float lampLightWeightingOne = max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionOne)), 0.0);
 		vec3 reflectionDirectionOne = normalize(reflect(-lampLightDirectionOne, textureNormalLighting.xyz));			//Recomiendan ponerle +normal
 		float specularLampLightWeightingOne = pow(max(dot(reflectionDirectionOne, eyeDirection), 0.0), uMaterialShininess);
 		
-		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - vModelPosition.xyz);
-		float lampLightWeightingTwo = max(dot(normal, normalize(lampLightDirectionTwo)), 0.0);
-		lampLightWeightingTwo += max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionTwo)), 0.0);
-		lampLightWeightingTwo /= 2.0;		
+		vec3 lampLightDirectionTwo = normalize(ulampLightTwoPosition - vModelPosition.xyz);		
+		float lampLightWeightingTwo = max(dot(normalize(vTransformedNormal), normalize(lampLightDirectionTwo)), 0.0);		
 		vec3 reflectionDirectionTwo = normalize(reflect(-lampLightDirectionTwo, textureNormalLighting.xyz));		//Recomiendan ponerle +normal
 		float specularLampLightWeightingTwo = pow(max(dot(reflectionDirectionTwo, eyeDirection), 0.0), uMaterialShininess);
 
@@ -102,7 +90,6 @@
 			//gl_FragColor = vec4(textureColorD.rgb/10.0 + textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
 		}else{
 			gl_FragColor = vec4(textureColor.rgb * (uAmbientColor + uDirectionalColor * directionalLightWeighting + lightWeighting), textureColor.a);
-			//gl_FragColor = vec4(normal,1.0);
 		}       
 }
 </script>
@@ -121,14 +108,12 @@
 	
 	varying vec2 vTextureCoord;
 	varying vec3 vTransformedNormal;
-	varying vec4 vMVPosition;
 	varying vec4 vModelPosition;
 
 	varying mat4 vMMatrix;
 	varying mat4 vVMatrix;
     void main(void) {
-		vMVPosition = uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);
-		gl_Position = uPMatrix * vMVPosition; 	//los posiciona segun la matrix de proyección y la matriz de model-view	
+		gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);; 	//los posiciona segun la matrix de proyección y la matriz de model-view	
 		vTextureCoord = aTextureCoord;
 		vTransformedNormal = uNMatrix * aVertexNormal;
 		
@@ -312,8 +297,8 @@
 		gl.disable(gl.BLEND);
 		gl.enable(gl.DEPTH_TEST);	
 		drawCrame(moveXCrane,2.0,1.0);   //incluye el piso por cuestiones de performance
-		drawMountain([-53,2,-7],[3.2,7.2,7.1],180,[0,0,1]);
-		drawShip([11,-8,-4.5],[1.2,2.5,0.7], 270, [0,0,1]);		
+		drawMountain([-53,2,-15],[4.2,8.2,8.1],180,[0,0,1]);
+		drawShip([11,-8,-6.5],[1.2,2.5,1.1], 270, [0,0,1]);		
 		drawContainers([3,1,-3],[1.25,0.5,0.5]);
 		gl.blendFunc(gl.ONE, gl.SRC_ALPHA);
 		gl.enable(gl.BLEND);
@@ -321,13 +306,13 @@
 		cubo.initBuffers();
 		cubo.draw([moveXCrane+2,moverCabina-3.2375,3.1],[0.55,0.4125, 0.05],waterLTexture);	//Piso transparentón		
 		drawSky([0,0,0],[90,90,90],90,[1,0,0]);
-		drawOcean([0,0,gruaAbajo+ruedasAncho-0.3],[55,55,1],waterTexture);		//Acá que vaya el mar
-		drawOcean([0,0,gruaAbajo+ruedasAncho-0.4],[55,55,1],waterTexture);		//Acá que vaya el mar
-		drawOcean([0,0,gruaAbajo+ruedasAncho-0.5],[55,55,1],waterTexture);		//Acá que vaya el mar
-		drawOcean([0,0,gruaAbajo+ruedasAncho-0.7],[55,55,1],waterTexture);		//Acá que vaya el mar
-		drawOcean([0,0,gruaAbajo+ruedasAncho-0.9],[55,55,1],waterTexture);		//Acá que vaya el mar
-		drawOcean([0,0,gruaAbajo+ruedasAncho-2.3],[55,55,1],waterTexture);		//Acá que vaya el mar
-		drawOcean([0,0,gruaAbajo+ruedasAncho-5.3],[55,55,1],waterTexture);		//Acá que vaya el mar
+		drawOcean([0,0,gruaAbajo+ruedasAncho-1.3],[55,55,1],waterTexture);		//Acá que vaya el mar
+		drawOcean([0,0,gruaAbajo+ruedasAncho-1.4],[55,55,1],waterTexture);		//Acá que vaya el mar
+		drawOcean([0,0,gruaAbajo+ruedasAncho-1.5],[55,55,1],waterTexture);		//Acá que vaya el mar
+		drawOcean([0,0,gruaAbajo+ruedasAncho-1.7],[55,55,1],waterTexture);		//Acá que vaya el mar
+		drawOcean([0,0,gruaAbajo+ruedasAncho-1.9],[55,55,1],waterTexture);		//Acá que vaya el mar
+		drawOcean([0,0,gruaAbajo+ruedasAncho-3.3],[55,55,1],waterTexture);		//Acá que vaya el mar
+		drawOcean([0,0,gruaAbajo+ruedasAncho-6.3],[55,55,1],waterTexture);		//Acá que vaya el mar
 		var uniformTarget = vec3.create();
 		vec3.sub(uniformTarget, target,cameraPosition);
 		gl.uniform3fv(shaderProgram.target,uniformTarget);

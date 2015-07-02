@@ -116,6 +116,20 @@ function initTexture() {
 	}
 	floorTexture.N.image.src = "src/textures/floor2N.png";
 	
+	floorTexture2 = gl.createTexture();
+	floorTexture2.image = new Image();
+	floorTexture2.image.onload = function() {		
+		handleLoadedTexture(floorTexture2);
+	}
+	floorTexture2.image.src = "src/textures/floor22.jpg";
+
+	floorTexture2.N = gl.createTexture();
+	floorTexture2.N.image = new Image();
+	floorTexture2.N.image.onload = function() {		
+		handleLoadedTexture(floorTexture2.N);
+	}
+	floorTexture2.N.image.src = "src/textures/floor2N.png";
+	
 	waterTexture = gl.createTexture();
 	waterTexture.image = new Image();
 	waterTexture.image.onload = function() {		
