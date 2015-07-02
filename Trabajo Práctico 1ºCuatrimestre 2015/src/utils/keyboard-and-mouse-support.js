@@ -128,6 +128,10 @@ function handleKeyPresses(){
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
 		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
 			scaleDeLasPinzas -= 0.02;
+			if(levantarContainer()){
+				actualizarPosicionContainer();
+			}
+
 		}
 		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.35){
 			scaleDeLasPinzas += 0.02;
@@ -156,6 +160,18 @@ function handleKeyPresses(){
 		}		
 		return;
 	}
+}
+
+function levantarContainer(){
+	var containers=bufferContainers;
+	for (i = 0; i < bufferContainers.length ; i++){
+		//me fijo si la posicion de algun container coincide con la de la pinza
+    }
+}
+
+function actualizarPosicionContainer(){
+	//mientras muevo el container tengo que ir actualizado la posicion del mismo y si 
+	//coincide con la posicion del piso del barco lo suelto
 }
 
 //Testeo la ruedita del mouse

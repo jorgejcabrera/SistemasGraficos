@@ -195,6 +195,24 @@ function pinza () {
 	this.webgl_normal_buffer = gl.createBuffer();
 	this.webgl_texture_coord_buffer = gl.createBuffer();
 	this.webgl_index_buffer = gl.createBuffer();
+	this.positionX=null;
+	this.positionY=null;
+	this.positionZ=null;
+	
+	this.getPositionZ = function(){
+		return this.positionZ
+	}
+	this.getPositionX = function(){
+		return this.positionX
+	}
+	this.getPositionY = function(){
+		return this.positionY
+	}
+    this.setPosition=function(where){
+		this.positionX=where[1];
+		this.positionY=where[1];
+		this.positionZ=where[2];
+	}
 
 	this.vertices = [
 	//Front face
@@ -372,6 +390,24 @@ function cube () {
 	this.webgl_index_buffer = gl.createBuffer();
 	this.webgl_texture_coord_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = gl.createBuffer();
+
+	this.positionX=null;
+	this.positionY=null;
+	this.positionZ=null;
+	this.getPositionZ = function(){
+		return this.positionZ
+	}
+	this.getPositionX = function(){
+		return this.positionX
+	}
+	this.getPositionY = function(){
+		return this.positionY
+	}
+    this.setPosition=function(where){
+		this.positionX=where[1];
+		this.positionY=where[1];
+		this.positionZ=where[2];
+	}
 	
 	this.vertices = [
 		// Front face
@@ -1258,6 +1294,10 @@ function Container(){
 
 	this.getPositionY = function(){
 		return this.positionY
+	}
+
+	this.getPositionZ = function(){
+		return this.positionZ
 	}
 
 	this.getLength = function(){

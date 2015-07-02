@@ -168,22 +168,27 @@ function drawCabin(posX,posY,posZ,height, texture){
 	//PARTE FRONTAL
 	cubo.draw([posXRearWall+longitudeRearWall-width*2-longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],texture);
 	cubo.draw([posXRearWall-longitudeRearWall+width*2+longitudeRearWall*0.75*0.25,posYRearWall-longitudeRearWall*0.75*2,posZ],[longitudeRearWall*0.75*0.25,width, height-width-2*(width*5)],texture);
-gl.uniform1i(shaderProgram.useReflectionUniform, false);	
+	gl.uniform1i(shaderProgram.useReflectionUniform, false);	
+	
 	//AGARRE IZQUIERDO
 	cubo.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width,posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2],[width,width*10,width*.25],texture);
 	
 	//AGARRE DERECHO
 	cubo.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)],[width,width*10,width*.25],texture);
+	
 	//GARRAS
 	garras.initBuffers();
 	
 	//PINZAS IZQUIERDAS
 	garras.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture)
 	garras.draw([posXRearWall-longitudeRearWall+width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);
-
+	
 	//PINZAS DERECHAS
 	garras.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width-width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);
 	garras.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);
+
+	//SETEO LA POSICION DEL PUNTO INTERMEDIO ENTRE AMBAS PINZAS
+	cubo.setPosition([posXRearWall, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)]);
 }
 
 

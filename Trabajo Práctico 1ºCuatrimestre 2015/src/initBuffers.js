@@ -14,6 +14,13 @@ function initObjects() {
 	containerGray = new Container();
 	floor = new Floor(ship.getVertexFloor());
 	bottomShip = new Floor(ship.getVertexTop());
+	bufferContainers = new Array();
+
+	bufferContainers.push(containerYellow);
+	bufferContainers.push(containerRed);
+	bufferContainers.push(containerBlue);
+	bufferContainers.push(containerGreen);
+	bufferContainers.push(containerGray);
 }
 
 var craneTexture;
