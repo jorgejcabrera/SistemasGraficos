@@ -12,10 +12,13 @@ function handleKeyUp(event) {
 		spinning = false;
 	}
 }
-  
+ 
+ 
 //Al estar adentro del tick, se llamaria siempre
 //Los codigos de las teclas fueron sacados de esta página http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 function handleKeyPresses(){	
+	cargandoContainer=false;
+
 	if ( (currentlyPressedKeys[65] || currentlyPressedKeys[68]) && cameraMode == 2){ //TODO METER ACA QUE ES LA CAMARA DOS Y SE MUEVE EL PJ) 
 		//Me voy a mover como con W/S pero roto como 90 grados, o sea como que cambio de Y a X y de X a Y
 		var normalizedCamera= vec3.create();
@@ -168,13 +171,14 @@ function handleKeyPresses(){
 
 //PRE: el buffer de containers nunca esta vacio, con lo cual no puede devolver 0
 //POST: devuelve la posicion del container que hay q levantar
-function levantarContainer(){
-	for (i = 0; i < bufferContainers.length ; i++){
-		container= bufferContainers[i]
-		if(distance(container.getPositionX(),container.getPositionY(),container.getPositionZ()) <= 0.7)
-			return i
-    }
-    return bufferContainers.length
+function levantarContainer(cargandoContainer){
+	for (var i=0;i< bufferContainers.length;i++){
+		distances=distance(bufferContainers[i].getPositionX(),bufferContainers[i].getPositionY(),bufferContainers[i].getPositionZ());
+		if( distances <= 0.70){
+			return i;
+		}
+	}
+    return bufferContainers.length;
 }
 
 //POST: devuelve la distancia entre las garras y algún container

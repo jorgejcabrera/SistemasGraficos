@@ -209,7 +209,7 @@ function pinza () {
 		return this.positionY
 	}
     this.setPosition=function(where){
-		this.positionX=where[1];
+		this.positionX=where[0];
 		this.positionY=where[1];
 		this.positionZ=where[2];
 	}
@@ -404,7 +404,7 @@ function cube () {
 		return this.positionY
 	}
     this.setPosition=function(where){
-		this.positionX=where[1];
+		this.positionX=where[0];
 		this.positionY=where[1];
 		this.positionZ=where[2];
 	}
@@ -1147,6 +1147,24 @@ function Container(){
 	this.width=null;
 	this.high=null;
 
+	this.positionX=null;
+	this.positionY=null;
+	this.positionZ=null;
+	this.getPositionZ = function(){
+		return this.positionZ
+	}
+	this.getPositionX = function(){
+		return this.positionX
+	}
+	this.getPositionY = function(){
+		return this.positionY
+	}
+    this.setPosition=function(where){
+		this.positionX=where[0];
+		this.positionY=where[1];
+		this.positionZ=where[2];
+	}
+
 	this.webgl_position_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = gl.createBuffer();
 	this.webgl_texture_coord_buffer = gl.createBuffer();
@@ -1284,7 +1302,7 @@ function Container(){
 	this.webgl_texture_coord_buffer.numItems = 24;
 	
     this.setPosition=function(where){
-		this.positionX=where[1];
+		this.positionX=where[0];
 		this.positionY=where[1];
 		this.positionZ=where[2];
 	}
