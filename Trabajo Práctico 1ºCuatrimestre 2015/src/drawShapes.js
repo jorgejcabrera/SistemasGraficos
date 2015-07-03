@@ -13,7 +13,7 @@ function drawMountain(where,scalator,degreesToRotate,axisToRotate){
 	mountain.drawOverload(where,scalator,degreesToRotate,axisToRotate,mountainTexture);
 }
 
-function drawContainer(where,scalator){
+function drawContainers(where,scalator){
 	containerRed.setPosition([where[0],where[1],where[2]]);
 	containerRed.initBuffers();
 	containerRed.draw([where[0],where[1],where[2]],scalator,pinzaTexture);

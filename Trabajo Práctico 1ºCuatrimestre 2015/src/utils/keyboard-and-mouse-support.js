@@ -184,6 +184,9 @@ function distance(posX,posY,posZ){
 
 function actualizarPosicionContainer(posContainerBuffer){
 	container = bufferContainers[posContainerBuffer];
+	posicionesContainers[posContainerBuffer*3]=garras.getPositionX();
+	posicionesContainers[posContainerBuffer*3+1]=garras.getPositionY();
+	posicionesContainers[posContainerBuffer*3+2]=garras.getPositionZ();
 	container.setPosition([garras.getPositionX(),garras.getPositionY(),garras.getPositionZ()]);
 }
 
