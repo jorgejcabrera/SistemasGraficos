@@ -156,7 +156,7 @@ function handleKeyPresses(){
 	
 	//Si presiono C=67 o V=86, para mover la cabina
 	if (currentlyPressedKeys[67] || currentlyPressedKeys[86]) {
-		if(currentlyPressedKeys[67] && moverCabina > -1.7){
+		if(currentlyPressedKeys[67] && moverCabina > -6){
 			moverCabina -= 0.035;
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){

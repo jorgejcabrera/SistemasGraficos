@@ -40,13 +40,20 @@ function drawContainers(where,scalator){
 	containerGray.draw([where[12],where[13],where[14]],scalator,pinzaTexture);
 }
 
-function drawShip(where,scalator,degreesToRotate,axisToRotate){
+var cabinBotScale = [1,2,2];
+var cabinTopScale = [1.6,2.5,0.3];
+function drawShip(where,scalator,degreesToRotate,axisToRotate){	
 	ship.initBuffers();
 	ship.drawOverload(where,scalator,degreesToRotate,axisToRotate,shipTexture);
 	floor.initBuffers();
 	floor.drawOverload(where,scalator,degreesToRotate,axisToRotate,floorShipTexture);
 	bottomShip.initBuffers();
 	bottomShip.drawOverload(where,scalator,degreesToRotate,axisToRotate,bottomShipTexture);
+	cubo.initBuffers();
+	gl.uniform1i(shaderProgram.useReflectionUniform, true);
+	cubo.draw([where[0]+14,where[1],-1],cabinBotScale,shipDoorTexture);
+	cubo.draw([where[0]+14,where[1],1.3],cabinTopScale,shipDoorTexture);
+	gl.uniform1i(shaderProgram.useReflectionUniform, false);
 }
 
 function drawWallCrane(posX,posY,posZ){
@@ -73,6 +80,7 @@ function drawCrame(posX,posY,posZ){
 	var width = 0.10;
 	var longitude = 0.20;
 	var distanceBeetwenWalls=4;
+	var longBar = 2;
 	cubo.initBuffers();
 	
 	//el piso
@@ -88,11 +96,11 @@ function drawCrame(posX,posY,posZ){
 	cubo.draw([ posX+distanceBeetwenWalls*0.5, posY+height-longitude*4 , height+posZ-width ],[distanceBeetwenWalls-height/2-longitude ,width*2,width],craneTexture);
 
     //SOPORTE
-    cubo.draw([posX+distanceBeetwenWalls*0.5+(distanceBeetwenWalls*0.5)/5 , posY - longitude * 6 , height + posZ - width],[longitude,distanceBeetwenWalls * 1.5,width*1.5],craneTexture);
-   	cubo.draw([posX+distanceBeetwenWalls*0.5-(distanceBeetwenWalls*0.5)/5 , posY - longitude * 6 , height + posZ - width],[longitude,distanceBeetwenWalls * 1.5,width*1.5],craneTexture);
+    cubo.draw([posX+distanceBeetwenWalls*0.5+(distanceBeetwenWalls*0.5)/5 , posY -3.8 , height + posZ - width],[longitude,distanceBeetwenWalls * longBar,width*1.5],craneTexture);
+   	cubo.draw([posX+distanceBeetwenWalls*0.5-(distanceBeetwenWalls*0.5)/5 , posY -3.8, height + posZ - width],[longitude,distanceBeetwenWalls * longBar,width*1.5],craneTexture);
 
     //UNION ENTRE AMBOS SOPORTES
-    cubo.draw([posX+distanceBeetwenWalls*0.5, posY-longitude*6-distanceBeetwenWalls*1.5- width, height + posZ - width ],[ (distanceBeetwenWalls * 0.5) * 1/5 + width * 2,  width, width * 1.5],craneTexture);
+    cubo.draw([posX+distanceBeetwenWalls*0.5, posY-longitude*6-distanceBeetwenWalls*1.5- width -4.6, height + posZ - width ],[ (distanceBeetwenWalls * 0.5) * 1/5 + width * 2,  width, width * 1.5],craneTexture);
 
     //CONTRAPESO
     cubo.draw([posX+distanceBeetwenWalls*0.5, posY-longitude*6+distanceBeetwenWalls*1.5, height + posZ - width ],[ (distanceBeetwenWalls * 0.5) * 1/5 + width * 3, distanceBeetwenWalls * 0.15, distanceBeetwenWalls * 0.15],craneTexture);

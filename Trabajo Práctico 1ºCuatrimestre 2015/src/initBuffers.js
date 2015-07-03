@@ -226,7 +226,21 @@ function initTexture() {
 	whiteTexture.N.image.onload = function() {		
 		handleLoadedTextureMosaic(whiteTexture.N);
 	}
-	whiteTexture.N.image.src = "src/textures/skyR.jpg";	
+	whiteTexture.N.image.src = "src/textures/skyR.jpg";
+
+	shipDoorTexture = gl.createTexture();
+	shipDoorTexture.image = new Image();
+	shipDoorTexture.image.onload = function() {		
+		handleLoadedTexture(shipDoorTexture);
+	}
+	shipDoorTexture.image.src = "src/textures/shipDoor.png";
+	
+	shipDoorTexture.N = gl.createTexture();
+	shipDoorTexture.N.image = new Image();
+	shipDoorTexture.N.image.onload = function() {		
+		handleLoadedTextureMosaic(shipDoorTexture.N);
+	}
+	shipDoorTexture.N.image.src = "src/textures/skyR.jpg";	
 }
   
 function handleLoadedTexture(texture) {
