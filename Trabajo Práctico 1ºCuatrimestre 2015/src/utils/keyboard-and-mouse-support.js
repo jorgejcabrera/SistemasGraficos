@@ -179,7 +179,7 @@ function levantarContainer(){
 
 //POST: devuelve la distancia entre las garras y algún container
 function distance(posX,posY,posZ){
-	return Math.sqrt(posX-garras.getPositionX())*(posX-garras.getPositionX())+(posY-garras.getPositionY())*(posY-garras.getPositionY())+(posZ-garras.getPositionZ())*(posZ-garras.getPositionZ())
+	return Math.sqrt((posX-garras.getPositionX())*(posX-garras.getPositionX())+(posY-garras.getPositionY())*(posY-garras.getPositionY())+(posZ-garras.getPositionZ())*(posZ-garras.getPositionZ()))
 }
 
 function actualizarPosicionContainer(posContainerBuffer){
