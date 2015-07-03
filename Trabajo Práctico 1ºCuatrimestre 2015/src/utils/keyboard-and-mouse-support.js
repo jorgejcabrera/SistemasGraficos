@@ -157,10 +157,18 @@ function handleKeyPresses(){
 	//Si presiono C=67 o V=86, para mover la cabina
 	if (currentlyPressedKeys[67] || currentlyPressedKeys[86]) {
 		if(currentlyPressedKeys[67] && moverCabina > -1.7){
-			moverCabina -= 0.035;			
+			moverCabina -= 0.035;
+			posContainerBuffer = levantarContainer();
+			if(cargandoContainer){
+				actualizarPosicionContainer(posContainerBuffer);
+			}		
 		}
 		if(currentlyPressedKeys[86] && moverCabina < 8){
 			moverCabina += 0.035;
+			posContainerBuffer = levantarContainer();
+			if(cargandoContainer){
+				actualizarPosicionContainer(posContainerBuffer);
+			}
 		}
 		if (cameraMode == 3){
 			var distanceBeetwenWalls = 4;
