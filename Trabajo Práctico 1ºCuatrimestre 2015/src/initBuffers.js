@@ -16,8 +16,8 @@ function initObjects() {
 	bottomShip = new Floor(ship.getVertexTop());
 	bufferContainers = new Array();
 
-	bufferContainers.push(containerYellow);
 	bufferContainers.push(containerRed);
+	bufferContainers.push(containerYellow);
 	bufferContainers.push(containerBlue);
 	bufferContainers.push(containerGreen);
 	bufferContainers.push(containerGray);

@@ -64,7 +64,7 @@ function handleKeyPresses(){
 			cilindro.setWheelRotation(-3);
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		if (currentlyPressedKeys[69]) {	
@@ -72,7 +72,7 @@ function handleKeyPresses(){
 			cilindro.setWheelRotation(3)
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		
@@ -160,14 +160,14 @@ function handleKeyPresses(){
 			moverCabina -= 0.035;
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}		
 		}
 		if(currentlyPressedKeys[86] && moverCabina < 8){
 			moverCabina += 0.035;
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		if (cameraMode == 3){
