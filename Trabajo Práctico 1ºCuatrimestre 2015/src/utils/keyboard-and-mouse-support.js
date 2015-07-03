@@ -4,6 +4,17 @@ var currentlyPressedKeys = {};
 //se llaman solo una vez y cuando se presiona una tecla
 function handleKeyDown(event) {
 	currentlyPressedKeys[event.keyCode] = true;
+	
+	if (currentlyPressedKeys[32]) {
+		if(cargandoContainer){
+			actualizarPosicionContainer(levantarContainer(),-0.60);
+			cargandoContainer=false;
+		}else{
+			if( levantarContainer() < bufferContainers.length){
+				cargandoContainer=true;
+			}
+		}
+	}	
 }
 
 function handleKeyUp(event) {
@@ -34,17 +45,8 @@ function handleKeyPresses(){
 	}
 	
 	if ( (currentlyPressedKeys[83] || currentlyPressedKeys[87]) && cameraMode == 2) {
-		if(walkingWobble > 100){
-			walkingWobbleMod = -1;
-		}
-		if(walkingWobble < -100){
-			walkingWobbleMod = 1;
-		}		
-		walkingWobble += 10*walkingWobbleMod;
-		
 		var normalizedCamera= vec3.create();
 		vec3.multiply(normalizedCamera, target, [1,1,0]);	//Obtengo la dirección X-Y
-		vec3.add(normalizedCamera,normalizedCamera,[0,0,walkingWobble]);
 		vec3.normalize(normalizedCamera,normalizedCamera);
 		vec3.scale(normalizedCamera,normalizedCamera,0.1);	//Le modifico la velocidad
 		//Teclas W o S
@@ -62,17 +64,15 @@ function handleKeyPresses(){
 		if (currentlyPressedKeys[81]) {
 			moveXCrane += 0.08;
 			cilindro.setWheelRotation(-3);
-			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
+				actualizarPosicionContainer(levantarContainer(),-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		if (currentlyPressedKeys[69]) {	
 			moveXCrane -= 0.08;
-			cilindro.setWheelRotation(3)
-			posContainerBuffer = levantarContainer();
+			cilindro.setWheelRotation(3);	
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
+				actualizarPosicionContainer(levantarContainer(),-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		
@@ -138,18 +138,14 @@ function handleKeyPresses(){
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
 		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
 			scaleDeLasPinzas -= 0.02;
-			posContainerBuffer = levantarContainer();
-			if( posContainerBuffer < bufferContainers.length){
-				cargandoContainer=true;
-				actualizarPosicionContainer(posContainerBuffer,-0.45);	//hardcodeada la correccion para que las pinzas queden por encima del container
+			if(cargandoContainer){				
+				actualizarPosicionContainer(levantarContainer(),-0.45);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.35){
 			scaleDeLasPinzas += 0.02;
-			posContainerBuffer = levantarContainer();
-			if( posContainerBuffer < bufferContainers.length){
-				cargandoContainer=true;
-				actualizarPosicionContainer(posContainerBuffer,-0.60);	//hardcodeada la correccion para que las pinzas queden por encima del container
+			if(cargandoContainer){
+				actualizarPosicionContainer(levantarContainer(),-0.60);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 	}
@@ -158,16 +154,14 @@ function handleKeyPresses(){
 	if (currentlyPressedKeys[67] || currentlyPressedKeys[86]) {
 		if(currentlyPressedKeys[67] && moverCabina > -6){
 			moverCabina -= 0.035;
-			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
+				actualizarPosicionContainer(levantarContainer(),-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}		
 		}
 		if(currentlyPressedKeys[86] && moverCabina < 8){
 			moverCabina += 0.035;
-			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer,-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
+				actualizarPosicionContainer(levantarContainer(),-0.55);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		if (cameraMode == 3){
@@ -182,17 +176,7 @@ function handleKeyPresses(){
 			vec3.set(cameraPosition,posXRearWall,posYRearWall+-0.4+moverCabina,4.0);
 		}		
 		return;
-	}
-	
-	if (currentlyPressedKeys[32]) {
-		if(cargandoContainer){
-			actualizarPosicionContainer(levantarContainer(),-0.60);
-			cargandoContainer=false;
-		}
-		return;
-	}
-	
-	
+	}	
 }
 
 //PRE: el buffer de containers nunca esta vacio, con lo cual no puede devolver 0
@@ -200,7 +184,7 @@ function handleKeyPresses(){
 function levantarContainer(cargandoContainer){
 	for (var i=0;i< bufferContainers.length;i++){
 		distances=distance(bufferContainers[i].getPositionX(),bufferContainers[i].getPositionY(),bufferContainers[i].getPositionZ());
-		if( distances <= 0.70){
+		if( distances <= 0.75){
 			return i;
 		}
 	}

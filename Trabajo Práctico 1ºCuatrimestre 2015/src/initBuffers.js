@@ -192,6 +192,20 @@ function initTexture() {
 		handleLoadedTexture(containerBTexture);
 	}
 	containerBTexture.image.src = "src/textures/container_difusemap.jpg";
+	
+	containerRTexture = gl.createTexture();
+	containerRTexture.image = new Image();
+	containerRTexture.image.onload = function() {		
+		handleLoadedTexture(containerRTexture);
+	}
+	containerRTexture.image.src = "src/textures/container_difusemaprojo.jpg";
+
+	containerATexture = gl.createTexture();
+	containerATexture.image = new Image();
+	containerATexture.image.onload = function() {		
+		handleLoadedTexture(containerATexture);
+	}
+	containerATexture.image.src = "src/textures/container_difusemapamarillo.jpg";	
 
 	containerBTexture.N = gl.createTexture();
 	containerBTexture.N.image = new Image();

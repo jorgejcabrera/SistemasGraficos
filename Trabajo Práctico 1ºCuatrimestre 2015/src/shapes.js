@@ -1345,7 +1345,7 @@ function Container(){
 		gl.uniform1i(shaderProgram.samplerUniform, 0);
 
 		gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, texture.N);
+        gl.bindTexture(gl.TEXTURE_2D, containerBTexture.N);
         gl.uniform1i(shaderProgram.normalSamplerUniform, 1);
 		
 		gl.uniform1f(shaderProgram.materialShininessUniform, 92.0);
