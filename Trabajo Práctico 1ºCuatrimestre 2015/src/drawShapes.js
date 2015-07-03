@@ -13,7 +13,7 @@ function drawMountain(where,scalator,degreesToRotate,axisToRotate){
 	mountain.drawOverload(where,scalator,degreesToRotate,axisToRotate,mountainTexture);
 }
 
-function drawContainers(where,scalator){
+function drawContainer(where,scalator){
 	var distanceBeetwenContainers=0.5;
 	containerRed.setPosition(where);
 	containerRed.initBuffers();

@@ -1146,6 +1146,7 @@ function Container(){
 	this.length=null;
 	this.width=null;
 	this.high=null;
+
 	this.webgl_position_buffer = gl.createBuffer();
 	this.webgl_normal_buffer = gl.createBuffer();
 	this.webgl_texture_coord_buffer = gl.createBuffer();
@@ -1287,23 +1288,18 @@ function Container(){
 		this.positionY=where[1];
 		this.positionZ=where[2];
 	}
-
 	this.getPositionX = function(){
 		return this.positionX
 	}
-
 	this.getPositionY = function(){
 		return this.positionY
 	}
-
 	this.getPositionZ = function(){
 		return this.positionZ
 	}
-
 	this.getLength = function(){
 		return this.length
 	}
-
 	this.getWidth = function(){
 		return this.width
 	}

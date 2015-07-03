@@ -129,16 +129,17 @@ function handleKeyPresses(){
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
 		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
 			scaleDeLasPinzas -= 0.02;
-			console.log(levantarContainer())
-			if(levantarContainer()){
-				actualizarPosicionContainer();
+			posContainerBuffer = levantarContainer();
+			if( posContainerBuffer < bufferContainers.length){
+				actualizarPosicionContainer(posContainerBuffer);
 			}
-
 		}
 		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.35){
 			scaleDeLasPinzas += 0.02;
-			console.log(levantarContainer())
-
+			posContainerBuffer = levantarContainer();
+			if( posContainerBuffer < bufferContainers.length){
+				actualizarPosicionContainer(posContainerBuffer);
+			}
 		}
 	}
 	
@@ -158,31 +159,32 @@ function handleKeyPresses(){
 			var posZ = 1.0;
 			var posXRearWall = moveXCrane+distanceBeetwenWalls*0.5;
 			var longitudeRearWall = (distanceBeetwenWalls*0.5)*1/5+width*3;
-			var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;
-			
+			var posYRearWall = posY-longitude*6-distanceBeetwenWalls*1.5-width+longitudeRearWall*0.75*6;			
 			vec3.set(cameraPosition,posXRearWall,posYRearWall+-0.4+moverCabina,4.0);
 		}		
 		return;
 	}
 }
 
+//PRE: el buffer de containers nunca esta vacio, con lo cual no puede devolver 0
+//POST: devuelve la posicion del container que hay q levantar
 function levantarContainer(){
-	console.log(garras.getPositionX())
 	for (i = 0; i < bufferContainers.length ; i++){
 		container= bufferContainers[i]
-		if( distance(container.getPositionX(),container.getPositionY(),container.getPositionZ()) <= 0.5)
-			return true
+		if(distance(container.getPositionX(),container.getPositionY(),container.getPositionZ()) <= 0.7)
+			return i
     }
-    return false
+    return bufferContainers.length
 }
 
+//POST: devuelve la distancia entre las garras y algún container
 function distance(posX,posY,posZ){
 	return Math.sqrt(posX-garras.getPositionX())*(posX-garras.getPositionX())+(posY-garras.getPositionY())*(posY-garras.getPositionY())+(posZ-garras.getPositionZ())*(posZ-garras.getPositionZ())
 }
 
-function actualizarPosicionContainer(){
-	//mientras muevo el container tengo que ir actualizado la posicion del mismo y si 
-	//coincide con la posicion del piso del barco lo suelto
+function actualizarPosicionContainer(posContainerBuffer){
+	container = bufferContainers[posContainerBuffer];
+	container.setPosition([garras.getPositionX(),garras.getPositionY(),garras.getPositionZ()]);
 }
 
 //Testeo la ruedita del mouse
