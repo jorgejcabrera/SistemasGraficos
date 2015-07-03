@@ -52,8 +52,8 @@ function handleKeyPresses(){
 			vec3.sub(cameraPosition,cameraPosition, normalizedCamera);
 		}
 		if (currentlyPressedKeys[87] && thetaAngle <= degToRad(150)) {
-			vec3.add(cameraPosition,cameraPosition, normalizedCamera);
-		}	
+				vec3.add(cameraPosition,cameraPosition, normalizedCamera);
+			}	
 		return;
 	}
 	
@@ -64,7 +64,7 @@ function handleKeyPresses(){
 			cilindro.setWheelRotation(-3);
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);
 			}
 		}
 		if (currentlyPressedKeys[69]) {	
@@ -72,7 +72,7 @@ function handleKeyPresses(){
 			cilindro.setWheelRotation(3)
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);
 			}
 		}
 		
@@ -141,7 +141,7 @@ function handleKeyPresses(){
 			posContainerBuffer = levantarContainer();
 			if( posContainerBuffer < bufferContainers.length){
 				cargandoContainer=true;
-				actualizarPosicionContainer(posContainerBuffer);
+				actualizarPosicionContainer(posContainerBuffer,-0.45);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.35){
@@ -149,7 +149,7 @@ function handleKeyPresses(){
 			posContainerBuffer = levantarContainer();
 			if( posContainerBuffer < bufferContainers.length){
 				cargandoContainer=true;
-				actualizarPosicionContainer(posContainerBuffer);
+				actualizarPosicionContainer(posContainerBuffer,-0.60);	//hardcodeada la correccion para que las pinzas queden por encima del container
 			}
 		}
 	}
@@ -160,14 +160,14 @@ function handleKeyPresses(){
 			moverCabina -= 0.035;
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);
 			}		
 		}
 		if(currentlyPressedKeys[86] && moverCabina < 8){
 			moverCabina += 0.035;
 			posContainerBuffer = levantarContainer();
 			if(cargandoContainer){
-				actualizarPosicionContainer(posContainerBuffer);
+				actualizarPosicionContainer(posContainerBuffer,-0.55);
 			}
 		}
 		if (cameraMode == 3){
@@ -202,12 +202,12 @@ function distance(posX,posY,posZ){
 	return Math.sqrt((posX-garras.getPositionX())*(posX-garras.getPositionX())+(posY-garras.getPositionY())*(posY-garras.getPositionY())+(posZ-garras.getPositionZ())*(posZ-garras.getPositionZ()))
 }
 
-function actualizarPosicionContainer(posContainerBuffer){
+function actualizarPosicionContainer(posContainerBuffer,correcion){
 	container = bufferContainers[posContainerBuffer];
 	posicionesContainers[posContainerBuffer*3]=garras.getPositionX();
 	posicionesContainers[posContainerBuffer*3+1]=garras.getPositionY();
-	posicionesContainers[posContainerBuffer*3+2]=garras.getPositionZ();
-	container.setPosition([garras.getPositionX(),garras.getPositionY(),garras.getPositionZ()]);
+	posicionesContainers[posContainerBuffer*3+2]=garras.getPositionZ()+correcion;
+	container.setPosition([garras.getPositionX(),garras.getPositionY(),garras.getPositionZ()+correcion]);
 }
 
 //Testeo la ruedita del mouse
