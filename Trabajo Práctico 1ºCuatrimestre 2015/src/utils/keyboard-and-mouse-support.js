@@ -13,11 +13,9 @@ function handleKeyUp(event) {
 	}
 }
  
- 
 //Al estar adentro del tick, se llamaria siempre
 //Los codigos de las teclas fueron sacados de esta página http://www.cambiaresearch.com/articles/15/javascript-char-codes-key-codes
 function handleKeyPresses(){	
-	cargandoContainer=false;
 
 	if ( (currentlyPressedKeys[65] || currentlyPressedKeys[68]) && cameraMode == 2){ //TODO METER ACA QUE ES LA CAMARA DOS Y SE MUEVE EL PJ) 
 		//Me voy a mover como con W/S pero roto como 90 grados, o sea como que cambio de Y a X y de X a Y
@@ -64,10 +62,18 @@ function handleKeyPresses(){
 		if (currentlyPressedKeys[81]) {
 			moveXCrane += 0.08;
 			cilindro.setWheelRotation(-3);
+			posContainerBuffer = levantarContainer();
+			if(cargandoContainer){
+				actualizarPosicionContainer(posContainerBuffer);
+			}
 		}
 		if (currentlyPressedKeys[69]) {	
 			moveXCrane -= 0.08;
 			cilindro.setWheelRotation(3)
+			posContainerBuffer = levantarContainer();
+			if(cargandoContainer){
+				actualizarPosicionContainer(posContainerBuffer);
+			}
 		}
 		
 		if(cameraMode == 3){
@@ -134,6 +140,7 @@ function handleKeyPresses(){
 			scaleDeLasPinzas -= 0.02;
 			posContainerBuffer = levantarContainer();
 			if( posContainerBuffer < bufferContainers.length){
+				cargandoContainer=true;
 				actualizarPosicionContainer(posContainerBuffer);
 			}
 		}
@@ -141,6 +148,7 @@ function handleKeyPresses(){
 			scaleDeLasPinzas += 0.02;
 			posContainerBuffer = levantarContainer();
 			if( posContainerBuffer < bufferContainers.length){
+				cargandoContainer=true;
 				actualizarPosicionContainer(posContainerBuffer);
 			}
 		}

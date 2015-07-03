@@ -1301,20 +1301,6 @@ function Container(){
 	this.webgl_texture_coord_buffer.itemSize = 2;
 	this.webgl_texture_coord_buffer.numItems = 24;
 	
-    this.setPosition=function(where){
-		this.positionX=where[0];
-		this.positionY=where[1];
-		this.positionZ=where[2];
-	}
-	this.getPositionX = function(){
-		return this.positionX
-	}
-	this.getPositionY = function(){
-		return this.positionY
-	}
-	this.getPositionZ = function(){
-		return this.positionZ
-	}
 	this.getLength = function(){
 		return this.length
 	}
