@@ -272,6 +272,13 @@
 	var walkingWobble = 0;
 	var walkingWobbleMod = 1;
 	var reflection = false;
+	var posicionesContainers = [
+		3.0,	1.0,	-3,	//posicion del primer container
+		3.0,	-1.0,	-3,	//posicion del segundo container
+		-1.0,	1.0,	-3,	//posicion del tercer container
+		-1.0,	-1.0,	-3,	//posicion del 4to container
+		7.0,	0.0,	-3	//posicion del 5to container
+	];
 	function initVariables () {
 		//Esto que hago acá es para que pongas en coordenadas cartesianas X,Y,Z donde queres
 		//que empiece la camara al iniciarse, y despues las traduzco a cordenadas esfericas
@@ -299,7 +306,8 @@
 		drawCrame(moveXCrane,2.0,1.0);   //incluye el piso por cuestiones de performance
 		drawMountain([-53,2,-15],[4.2,8.2,8.1],180,[0,0,1]);
 		drawShip([11,-8,-6.5],[1.2,2.5,1.1], 270, [0,0,1]);		
-		drawContainer([3,1,-3],[1.25,0.5,0.5]);
+		drawContainer(posicionesContainers,[1.25,0.5,0.5]);
+
 		gl.blendFunc(gl.ONE, gl.SRC_ALPHA);
 		gl.enable(gl.BLEND);
 		//gl.disable(gl.DEPTH_TEST);

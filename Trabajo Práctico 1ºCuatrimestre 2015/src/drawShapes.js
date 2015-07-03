@@ -14,30 +14,25 @@ function drawMountain(where,scalator,degreesToRotate,axisToRotate){
 }
 
 function drawContainer(where,scalator){
-	var distanceBeetwenContainers=0.5;
-	containerRed.setPosition(where);
+	containerRed.setPosition([where[0],where[1],where[2]]);
 	containerRed.initBuffers();
-	containerRed.draw(where,scalator,pinzaTexture);
+	containerRed.draw([where[0],where[1],where[2]],scalator,pinzaTexture);
 
-	var positionContainerYellow = [ where[0]+scalator[0]*2+distanceBeetwenContainers, where[1], where[2]];
-	containerYellow.setPosition(positionContainerYellow);
+	containerYellow.setPosition([where[3],where[4],where[5]]);
 	containerYellow.initBuffers();
-	containerYellow.draw(positionContainerYellow,scalator,pinzaTexture);
+	containerYellow.draw([where[3],where[4],where[5]],scalator,pinzaTexture);
 
-	var positionContainerBlue = [ where[0]-scalator[0]*2-distanceBeetwenContainers, where[1], where[2]];
-	containerBlue.setPosition(positionContainerBlue);
+	containerBlue.setPosition([where[6],where[7],where[8]]);
 	containerBlue.initBuffers();
-	containerBlue.draw(positionContainerBlue,scalator,pinzaTexture);
+	containerBlue.draw([where[6],where[7],where[8]],scalator,pinzaTexture);
 
-	var positionContainerGreen = [ where[0], where[1]-scalator[1]*2-distanceBeetwenContainers, where[2]];
-	containerGreen.setPosition(positionContainerGreen);
+	containerGreen.setPosition([where[9],where[10],where[11]]);
 	containerGreen.initBuffers();
-	containerGreen.draw(positionContainerGreen,scalator,pinzaTexture);
+	containerGreen.draw([where[9],where[10],where[11]],scalator,pinzaTexture);
 
-	var positionContainerGray = [ where[0]-scalator[0]*2-distanceBeetwenContainers, where[1]-scalator[1]*2-distanceBeetwenContainers, where[2]];
-	containerGray.setPosition(positionContainerGray);
+	containerGray.setPosition([where[12],where[13],where[14]]);
 	containerGray.initBuffers();
-	containerGray.draw(positionContainerGray,scalator,pinzaTexture);
+	containerGray.draw([where[12],where[13],where[14]],scalator,pinzaTexture);
 }
 
 function drawShip(where,scalator,degreesToRotate,axisToRotate){
