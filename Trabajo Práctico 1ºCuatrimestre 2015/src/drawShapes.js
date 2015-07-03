@@ -17,27 +17,27 @@ function drawContainers(where,scalator){
 	//se dibuja el 1er container
 	containerRed.setPosition([where[0],where[1],where[2]]);
 	containerRed.initBuffers();
-	containerRed.draw([where[0],where[1],where[2]],scalator,pinzaTexture);
+	containerRed.draw([where[0],where[1],where[2]],scalator,containerBTexture);
 
 	//se dibuja el 2do container
 	containerYellow.setPosition([where[3],where[4],where[5]]);
 	containerYellow.initBuffers();
-	containerYellow.draw([where[3],where[4],where[5]],scalator,pinzaTexture);
+	containerYellow.draw([where[3],where[4],where[5]],scalator,containerBTexture);
 
 	//se dibuja el 3er container
 	containerBlue.setPosition([where[6],where[7],where[8]]);
 	containerBlue.initBuffers();
-	containerBlue.draw([where[6],where[7],where[8]],scalator,pinzaTexture);
+	containerBlue.draw([where[6],where[7],where[8]],scalator,containerBTexture);
 
 	//se dibuja el 4to container
 	containerGreen.setPosition([where[9],where[10],where[11]]);
 	containerGreen.initBuffers();
-	containerGreen.draw([where[9],where[10],where[11]],scalator,pinzaTexture);
+	containerGreen.draw([where[9],where[10],where[11]],scalator,containerBTexture);
 
 	//se dibuja el 5to container
 	containerGray.setPosition([where[12],where[13],where[14]]);
 	containerGray.initBuffers();
-	containerGray.draw([where[12],where[13],where[14]],scalator,pinzaTexture);
+	containerGray.draw([where[12],where[13],where[14]],scalator,containerBTexture);
 }
 
 var cabinBotScale = [1,2,2];

@@ -1263,40 +1263,40 @@ function Container(){
 	
     this.textureCoords = [
 		// Front face
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
+		0.0, 0.3475,
+		0.79, 0.3475,
+		0.79, 0.6,
+		0.0, 0.6,
 
 		// Back face
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
+		0.0, 0.3475,
+		0.79, 0.3475,
+		0.79, 0.6,
+		0.0, 0.6,
 
 		// Top face
-		0.0, 1.0,
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
+		1.0, 0.0,	//1 0
+		1.0, 0.32,	//1 32
+		0.0, 0.32,	//0 32
+		0.0, 0.0,	//0 0
 
 		// Bottom face
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
-		1.0, 0.0,
+		0.0, 0.0,	//1 0
+		1.0, 0.0,	//1 32
+		1.0, 0.32,	//0 32
+		0.0, 0.32,	//0 0
 
 		// Right face
-		1.0, 0.0,
-		1.0, 1.0,
+		0.0, 0.62,
+		0.37, 0.62,
+		0.37, 1.0,
 		0.0, 1.0,
-		0.0, 0.0,
 
 		// Left face
-		0.0, 0.0,
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0
+		0.37, 0.62,
+		0.37, 1.0,
+		0.0, 1.0,
+		0.0, 0.62
     ];
 	this.webgl_texture_coord_buffer.itemSize = 2;
 	this.webgl_texture_coord_buffer.numItems = 24;
@@ -1348,7 +1348,7 @@ function Container(){
         gl.bindTexture(gl.TEXTURE_2D, texture.N);
         gl.uniform1i(shaderProgram.normalSamplerUniform, 1);
 		
-		gl.uniform1f(shaderProgram.materialShininessUniform, 32.0);
+		gl.uniform1f(shaderProgram.materialShininessUniform, 92.0);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
 		setMatrixUniforms(mMatrix);

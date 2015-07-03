@@ -183,6 +183,16 @@ function handleKeyPresses(){
 		}		
 		return;
 	}
+	
+	if (currentlyPressedKeys[32]) {
+		if(cargandoContainer){
+			actualizarPosicionContainer(levantarContainer(),-0.60);
+			cargandoContainer=false;
+		}
+		return;
+	}
+	
+	
 }
 
 //PRE: el buffer de containers nunca esta vacio, con lo cual no puede devolver 0

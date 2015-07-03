@@ -186,6 +186,20 @@ function initTexture() {
 	}
 	pinzaTexture.N.image.src = "src/textures/cordN.png";
 	
+	containerBTexture = gl.createTexture();
+	containerBTexture.image = new Image();
+	containerBTexture.image.onload = function() {		
+		handleLoadedTexture(containerBTexture);
+	}
+	containerBTexture.image.src = "src/textures/container_difusemap.jpg";
+
+	containerBTexture.N = gl.createTexture();
+	containerBTexture.N.image = new Image();
+	containerBTexture.N.image.onload = function() {		
+		handleLoadedTexture(containerBTexture.N);
+	}
+	containerBTexture.N.image.src = "src/textures/container_difusemapN.png";	
+	
 	shipTexture = gl.createTexture();
 	shipTexture.image = new Image();
 	shipTexture.image.onload = function() {		
