@@ -1,5 +1,6 @@
-var currentlyPressedKeys = {};
+document.write("<script type='text/javascript' src='../src/initBuffers.js'></script>"); 
 
+var currentlyPressedKeys = {};
 //se llaman solo una vez y cuando se presiona una tecla
 function handleKeyDown(event) {
 	currentlyPressedKeys[event.keyCode] = true;
@@ -128,6 +129,7 @@ function handleKeyPresses(){
 	if (currentlyPressedKeys[88] || currentlyPressedKeys[90]) {
 		if(currentlyPressedKeys[88] && scaleDeLasPinzas > 0.3){
 			scaleDeLasPinzas -= 0.02;
+			console.log(levantarContainer())
 			if(levantarContainer()){
 				actualizarPosicionContainer();
 			}
@@ -135,6 +137,8 @@ function handleKeyPresses(){
 		}
 		if(currentlyPressedKeys[90] && scaleDeLasPinzas < 1.35){
 			scaleDeLasPinzas += 0.02;
+			console.log(levantarContainer())
+
 		}
 	}
 	
@@ -163,10 +167,17 @@ function handleKeyPresses(){
 }
 
 function levantarContainer(){
-	var containers=bufferContainers;
+	console.log(garras.getPositionX())
 	for (i = 0; i < bufferContainers.length ; i++){
-		//me fijo si la posicion de algun container coincide con la de la pinza
+		container= bufferContainers[i]
+		if( distance(container.getPositionX(),container.getPositionY(),container.getPositionZ()) <= 0.5)
+			return true
     }
+    return false
+}
+
+function distance(posX,posY,posZ){
+	return Math.sqrt(posX-garras.getPositionX())*(posX-garras.getPositionX())+(posY-garras.getPositionY())*(posY-garras.getPositionY())+(posZ-garras.getPositionZ())*(posZ-garras.getPositionZ())
 }
 
 function actualizarPosicionContainer(){

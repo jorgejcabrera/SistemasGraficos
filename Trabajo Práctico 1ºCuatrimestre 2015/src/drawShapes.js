@@ -188,7 +188,7 @@ function drawCabin(posX,posY,posZ,height, texture){
 	garras.draw([posXRearWall+longitudeRearWall-width, posYRearWall-longitudeRearWall*0.75-width+width*6,posZ-height+width],[width*0.25,width*0.25,posZ*scaleDeLasPinzas],pinzaTexture);
 
 	//SETEO LA POSICION DEL PUNTO INTERMEDIO ENTRE AMBAS PINZAS
-	cubo.setPosition([posXRearWall, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)]);
+	garras.setPosition([posXRearWall, posYRearWall-longitudeRearWall*0.75-width,(posZ*0.5-(height-width)-posZ*scaleDeLasPinzas+2)]);
 }
 
 

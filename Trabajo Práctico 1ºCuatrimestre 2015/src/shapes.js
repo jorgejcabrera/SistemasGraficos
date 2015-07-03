@@ -195,10 +195,10 @@ function pinza () {
 	this.webgl_normal_buffer = gl.createBuffer();
 	this.webgl_texture_coord_buffer = gl.createBuffer();
 	this.webgl_index_buffer = gl.createBuffer();
+	
 	this.positionX=null;
 	this.positionY=null;
 	this.positionZ=null;
-	
 	this.getPositionZ = function(){
 		return this.positionZ
 	}
